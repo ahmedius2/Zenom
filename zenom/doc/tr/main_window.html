@@ -1,0 +1,60 @@
+<!-- InstanceBegin template="/Templates/zenom_tr_template.dwt" codeOutsideHTMLIsLocked="false" --><head>
+<title>Zenom - Real Time Simulation Environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="zenom, real time simulation, xenomai" />
+<meta name="description" content="Zenom is a free real time simulation environment" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="templatemo_wrapper">
+  <div id="sidebar"> 
+    <!-- site_title -->
+    <div id="site_title"> <img src="images/logo.png" alt="logo" /> </div>
+    <!-- end of site_title --> 
+    <!-- menu -->
+    <div class="sidebar_box">
+      <h3><a href="getting_started.html">Başlarken</a></h3>
+      <h3><a href="installation.html">Kurulum</a></h3>
+      <h3><a href="control_program.html">Kontrol Programı</a></h3>
+      <h3><a href="main_window.html">Zenom Kullanıcı Arayüzü</a></h3>
+      <div class="sidebar_content">
+        <h6><a href="main_window.html">Ana Pencere</a></h6>
+        <h6><a href="log_variable_window.html">Kayıt Parametre Penceresi</a></h6>
+        <h6><a href="control_variable_window.html">Kontrol Parametre Penceresi</a></h6>
+        <h6><a href="watch_window.html">Ölçek Penceresi</a></h6>
+        <h6><a href="plot_window.html">Grafik Penceresi</a></h6>
+        <h6><a href="scene_window.html">Sahne Penceresi</a></h6>
+      </div>
+      <h3><a href="">Örnekler</a></h3>
+    </div>
+    <!-- end of menu --> 
+  </div>
+  <div id="content"> 
+    <!-- language selection --><!-- InstanceBeginEditable name="LanguageRegion" -->
+    <div id="language_selection"><a href="#">English</a></div>
+    <!-- InstanceEndEditable --><!-- end of language selection -->
+    <div class="content_box">
+    <!-- InstanceBeginEditable name="ContentRegion" -->
+      <h2>Zenom</h2>
+      <div class="content_box_inner">
+        <p>Zenom, kullanıcıya ait kontrol programını çalıştırıp  kayıt değişkenlerinin değerlerini ölçek, grafik ve sahne pencerelerinde gösteren arayüzdür. Kullanıcıya kontrol değişkenlerinin değerlerini değiştirme imkanı sunar. </p>
+        <p>Komut satırına <strong>sudo zenom</strong> yazılarak  Zenom çalıştırılır. Zenom'da  proje açmak için, <strong>File</strong> menüsünden <strong>Open Project...</strong> seçilir. Kontrol programına ait konfigürasyon  dosyası (.znm) seçilir.  Aşağıda BouncingBall kontrol programına ait Zenom ekran görüntüsü görülmektedir.</p>
+        <div class="image" align="center"><img src="images/main_window.png"></div>
+        <p><img src="images/main_window_start.png"> düğmesi ile benzetim başlatılır, <img src="images/main_window_stop.png"> düğmesi ile benzetim durdurulur. Benzetim başlatıldıktan sonra <img src="images/main_window_start.png"> düğmesi <img src="images/main_window_pause.png"> düğmesine dönüşür ve bu düğmeye basılarak benzetim duraklatılabilir. Frequency ve Duration alanları ile  benzetimin çalışma frekansı (Hertz) ve süresi (saniye) ayarlanır.</p>
+        <p>Pencerenin alt kısmında bulunan durum çubuğunda <strong>T </strong> (Time) ifadesi benzetimde geçen süreyi gösterir. <strong>O</strong> (Overrun) ifadesi kontrol programındaki <strong>doloop</strong> fonksiyonunun girilen frekans aralığından daha uzun sürede tamamlanmasından dolayı oluşan zaman aşımı sayısını gösterir.</p>
+        <p>Proje ayarlarını kaydetmek için, <strong>File</strong> menüsünden <strong>Save</strong> seçeneği seçilir. Bu seçimle kontrol değişkenlerinin değerleri, kayıt parametre penceresindeki kayıt argümanları, ölçek pencerelerinin görünümleri, grafik penceresine çizim için eklenmiş kayıt değişkenleri ve sahne penceresindeki modele bağlı değişkenler zenom konfigürasyon  dosyasına (.znm) kaydedilir.</p>
+        <p><strong>View</strong> menüsünden <strong>Watch...</strong> seçeneği ile kayıt değişkeni değerlerini radyal, doğrusal ve numerik ölçeklerde gösteren <a href="watch_window.html">Ölçek Pencereleri</a>, <strong>Plot </strong>seçeneği ile kayıt değişkeni değerlerinin zamana göre değişimlerini iki boyutlu gösteren <a href="plot_window.html">Grafik Pencereleri</a>, <strong>Scene</strong> seçeneği ile kayıt değişkenlerinin değerlerini üç boyutlu model üzerinde gösteren <a href="scene_window.html">Sahne Pencereleri</a>, <strong>Control Variables</strong> seçeneği ile  kontrol parametrelerinin değerlerini değiştirme imkanı sunan <a href="control_variable_window.html">Kontrol Parametre Penceresi</a> ve <strong>Log Variables</strong> seçeneği ile kayıt değişkenlerinin listesini ve kayıt parametreleri girilebilen <a href="log_variable_window.html">Kayıt Parametre Penceresi</a> açılır.</p>
+        <div class="cleaner"></div>
+      </div>
+      <!-- InstanceEndEditable -->
+    </div>
+    </div>
+  <div class="cleaner"></div>
+</div>
+<div id="footer_wrapper"> 
+  <!-- footer -->
+  <div id="footer"> Zenom, Ekim 2013</div>
+  <!-- end of footer --> 
+</div>
+</body>
+<!-- InstanceEnd --></html>

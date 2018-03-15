@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**************************************************************************
+**
+** This file is part of Zenom - Hard Real-Time Simulation Enviroment
+**
+**************************************************************************/
+
+Custom project wizard configuration example file. Note that by convention,
+the project file goes last.
+The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and
+leave room for the Qt 4 target page.
+-->
+<wizard version="1" kind="project"
+        class="qt4project" firstpage="10"
+        id="A.Zenom" category="B.CustomProjects">
+    <icon>logo.png</icon>
+    <description>Creates a project that contains the skeleton class for Zenom - Hard Real-Time Simulation Enviroment.</description>
+    <displayname>Zenom</displayname>;
+    <displaycategory>Custom Projects</displaycategory>
+    <files>
+        <file source="main.cpp" openeditor="true"/>
+        <file source="project.pro" target="%ProjectName%.pro" openproject="true"/>
+        <file source="project.znm" target="%ProjectName%.znm"/>
+    </files>
+</wizard>

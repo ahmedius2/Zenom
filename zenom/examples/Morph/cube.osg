@@ -1,0 +1,69 @@
+Geode {
+  nodeMask 0xffffffff
+  cullingActive TRUE
+  num_drawables 1
+  Geometry {
+    useDisplayList TRUE
+    useVertexBufferObjects FALSE
+    PrimitiveSets 6
+    {
+      DrawElementsUShort QUADS 4
+      {
+        0 1 2 3 
+      }
+      DrawElementsUShort QUADS 4
+      {
+        4 5 6 7 
+      }
+      DrawElementsUShort QUADS 4
+      {
+        1 5 6 2 
+      }
+      DrawElementsUShort QUADS 4
+      {
+        0 4 7 3 
+      }
+      DrawElementsUShort QUADS 4
+      {
+        0 4 5 1 
+      }
+      DrawElementsUShort QUADS 4
+      {
+        2 6 7 3 
+      }
+    }
+    VertexArray Vec3Array 8
+    {
+      -1 1 1
+      1 1 1
+      1 1 -1
+      -1 1 -1
+      -1 -1 1
+      1 -1 1
+      1 -1 -1
+      -1 -1 -1
+    }
+    NormalBinding PER_PRIMITIVE_SET
+    NormalArray Vec3Array 6
+    {
+      0 1 0
+      0 -1 0
+      1 0 0
+      -1 0 0
+      0 0 1
+      0 0 -1
+    }
+    ColorBinding PER_VERTEX
+    ColorArray Vec4Array 8
+    {
+      0 1 0 1
+      0 1 0 1
+      1 0 0 1
+      1 0 0 1
+      0 1 0 1
+      0 1 0 1
+      1 0 0 1
+      1 0 0 1
+    }
+  }
+}

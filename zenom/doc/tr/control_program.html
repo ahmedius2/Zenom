@@ -1,0 +1,99 @@
+<!-- InstanceBegin template="/Templates/zenom_tr_template.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<title>Zenom - Real Time Simulation Environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="zenom, real time simulation, xenomai" />
+<meta name="description" content="Zenom is a free real time simulation environment" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="templatemo_wrapper">
+  <div id="sidebar"> 
+    <!-- site_title -->
+    <div id="site_title"> <img src="images/logo.png" alt="logo" /> </div>
+    <!-- end of site_title --> 
+    <!-- menu -->
+    <div class="sidebar_box">
+      <h3><a href="getting_started.html">Başlarken</a></h3>
+      <h3><a href="installation.html">Kurulum</a></h3>
+      <h3><a href="control_program.html">Kontrol Programı</a></h3>
+      <h3><a href="main_window.html">Zenom Kullanıcı Arayüzü</a></h3>
+      <div class="sidebar_content">
+        <h6><a href="main_window.html">Ana Pencere</a></h6>
+        <h6><a href="log_variable_window.html">Kayıt Parametre Penceresi</a></h6>
+        <h6><a href="control_variable_window.html">Kontrol Parametre Penceresi</a></h6>
+        <h6><a href="watch_window.html">Ölçek Penceresi</a></h6>
+        <h6><a href="plot_window.html">Grafik Penceresi</a></h6>
+        <h6><a href="scene_window.html">Sahne Penceresi</a></h6>
+      </div>
+      <h3><a href="">Örnekler</a></h3>
+    </div>
+    <!-- end of menu --> 
+  </div>
+  <div id="content"> 
+    <!-- language selection --><!-- InstanceBeginEditable name="LanguageRegion" -->
+    <div id="language_selection"><a href="#">English</a></div>
+    <!-- InstanceEndEditable --><!-- end of language selection -->
+    <div class="content_box"> <!-- InstanceBeginEditable name="ContentRegion" -->
+      <h2>Kontrol Programı</h2>
+      <div class="content_box_inner">
+        <p>Kontrol programı  benzetim kodlarının yazıldığı kısımdır.   Kullanıcı  c++ programlama dilini kullanarak benzetim modelini oluşturur. Kontrol sınıfının arayüzünde sunulan fonksiyonları doldurur. Daha sonra Zenom grafik arayüzü ile kontrol programını çalıştırarak benzetim sonuçlarını inceleyebilir.</p>
+        <p>&nbsp;</p>
+<div class="horizontal_line"></div>
+        <h3> Yeni Kontrol Programı Oluşturmak</h3>
+        <p>Zenom'da yeni bir kontrol projesi yaratmak için <strong>znm-project</strong> programı kullanılır. znm-project  programı proje ismini parametre olarak alır,   verilen isimde bir klasör oluşturur ve gerekli olan dosyaları bu klasör içersinde otomatik üretir.</p>
+        <p>Aşağıda HelloWorld isimli bir proje oluşturmak için komut satırına yazılması gereken  komut bulunmaktadır. Bu komut ile HelloWorld isimli bir klasör oluşturulur ve  klasör içersinde makefile, main.cpp ve HelloWorld.znm dosyaları üretilir. makefile, kontrol programını derlemek için kullanılan dosyadır. main.cpp, kullanıcının dolduracağı fonksiyonları   içeren sınıfın bulunduğu dosyadır. HelloWorld.znm ise arayüzdeki parametrelerin kayıt edildiği konfigürasyon dosyasıdır.</p>
+        <div class="code">
+          <p> znm-project HelloWorld</p>
+        </div>
+        <p>Aşağıdaki klasör yapısını oluşturur. </p>
+                <div class="code">
+          <p>HelloWorld<br>
+            |<br>
+            |-- makefile<br>
+            |-- main.cpp<br>
+            |-- HelloWorld.znm</p>
+</div>
+        <p>Otomatik üretilen main.cpp içindeki fonksiyonlar kullanıcı tarafından doldurulur. (Bu fonksiyonlar hakkında daha detaylı bilgi bir sonraki bölümde bulabilirsiniz.) Fonksiyonlar doldurulduktan sonra make komutu ile kontrol programı derlenir. Derleme işlemi başarılı sonuçlandığında HelloWorld isimli program oluşur. Zenom arayüzü ile proje açılarak, kontrol programı çalıştırılır, tanımlanan kayıt değişkenleri sonuçları gözlemlenir.</p>
+        <div class="horizontal_line"></div>
+        <h3>Kontrol Programı Yazılması</h3>
+        <p>znm-project programı ile yaratılan main.cpp içersinde initialize, start, doloop, stop ve terminate olmak üzere 5 fonksiyon vardır. Zenom arayüzünden kontrol programı yüklendiğinde  bu fonksiyonların çağrımları aşağıdaki resimde gösterilmektedir.</p>
+        <p>&nbsp;</p>
+        <p>Kontrol programı zenom arayüzünde yüklendiğinde initialize fonksiyonu çağrılır. Kayıt değişkenleri ve kontrol değişkenlerinin tanımları initialize fonksiyonu içersinde yapılır. Arayüzden start düğmesine basıldığında start fonksiyonu, stop düğmesine basıldığında stop fonksiyonu çağrılır. Kontrol programının çalışması boyunca doloop fonksiyonu çağrılır. Arayüz kapatıldığında terminate fonksiyonu çağrılır. HelloWorld örneği ile arayüzün kontrol programda çağırdığı fonksiyon rutini gözlemlenebilir.</p>
+<div class="horizontal_line"></div>
+        <h3>Kayıt Değişkeni Nedir?</h3>
+        <p> Kontrol programının çalışması esnasında kullanıcı için değişimi önemli olan ve kaydedilen değişkenlerdir. Kayıt değişkenlerinin değerleri saklanarak arayüzdeki ölçek, grafik ve sahne pencereleri ile değerler gözlemlenebilir. </p>
+<p>Kontrol programdaki bir değişken <strong>registerLogVariable</strong> fonksiyonu ile kayıt değişkeni olarak tanımlanır. Sine örneğinde tanımlanan &quot;sine&quot; değişkeninin kayıt değişkeni olarak tanımlanması aşağıda gösterilmektedir.</p>
+        <div class="code">
+          <p> registerLogVariable(&amp;sine, &quot;sine&quot;); </p>
+        </div>
+        <p><strong>registerLogVariable</strong> fonksiyonunun ilk parametresi değişkenin kendisi, ikinci parametresi değişkenin arayüz üzerinde gözükecek ismidir. dfsdf saf6as54f6a5s4 6</p>
+        <p>Dizi ve matrislerde kayıt değişkeni olarak tanımlanabilir. matrix[2][3] ve array[5] değişkenleri aşağıdaki şekilde kayıt değişkeni olarak tanımlanır.</p>
+        <div class="code">
+          <p>registerLogVariable((double *) matrix, &quot;matrix&quot;, 2, 3); </p>
+          <p> registerLogVariable((double *) array, &quot;array&quot;, 5); </p>
+        </div>
+        <p>Kayıt değişkenleri kontrol programdaki <strong>initialize()</strong> fonksiyonunda tanımlanmalıdır. </p>
+        <p>Tanımlanan kayıt değişkenleri arayüzde Kayıt Parametre Penceresinde görülür ve değişkenin kayıt süresi ve kaydın başlama zamanı değiştirilebilir. Daha detaylı bilgi için<a href="log_variable_window.html"> Kayıt Parametre Penceresi</a> sayfasını okuyunuz.</p>
+        <div class="horizontal_line"></div>
+        <h3>Kontrol Değişkeni Nedir?</h3>
+        <p>Kontrol Değişkeni, kontrol programının çalışması esnasında değeri arayüz üzerinden değiştirilebilen değişkenlerdir. Kontrol programdaki bir değişken <strong>registerControlVariable</strong> fonksiyonu kontrol değişkeni olarak tanımlanır. Sine örneğinde tanımlanan &quot;amplitude&quot; değişkeninin kontrol değişkeni olarak tanımlanması aşağıda gösterilmektedir.</p>
+                <div class="code">
+          <p> registerControlVariable(&amp;amplitude, &quot;amplitude&quot;); </p>
+        </div>
+        <p><a href="control_variable_window.html">Kontrol Parametre Penceresi</a>nden  kontrol değişkenlerinin  değerleri değiştirilebilir.</p>
+        <p>Kontrol değişkeni kaydı kontrol programdaki <strong>initialize()</strong> fonksiyonunda yapılmalıdır.</p>
+        <div class="cleaner"></div>
+      </div>
+      <!-- InstanceEndEditable --> </div>
+  </div>
+  <div class="cleaner"></div>
+</div>
+<div id="footer_wrapper"> 
+  <!-- footer -->
+  <div id="footer"> Zenom, Ekim 2013</div>
+  <!-- end of footer --> 
+</div>
+</body>
+<!-- InstanceEnd -->
+</html>

@@ -1,0 +1,10 @@
+
+Döküman yazma iþlemi bitmedi, main window, log variable window, control variable window, 
+gauge ve plot pencereleri için dökümanlar hazýr. Diðer sayfalar daha yazýlmadý.
+
+Beni þaþýrtýp döküman yazmak istiyorsan, html dökümanlarý Dreamweaver kullanýlarak þablonlardan üretilmiþtir. 
+html sayfalarýnda InstanceBeginEditable etiketi içinde kalan alan dýþýnda deðiþiklik yapma!
+Olmazsa word dökümaný olarak yaz, ben askerden geldikten sonra beraber html haline çeviririz. :)
+
+
+cüneyt

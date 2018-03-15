@@ -1,0 +1,114 @@
+<!-- InstanceBegin template="/Templates/zenom_tr_template.dwt" codeOutsideHTMLIsLocked="false" --><head>
+<title>Zenom - Real Time Simulation Environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="zenom, real time simulation, xenomai" />
+<meta name="description" content="Zenom is a free real time simulation environment" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="templatemo_wrapper">
+  <div id="sidebar"> 
+    <!-- site_title -->
+    <div id="site_title"> <img src="images/logo.png" alt="logo" /> </div>
+    <!-- end of site_title --> 
+    <!-- menu -->
+    <div class="sidebar_box">
+      <h3><a href="getting_started.html">Başlarken</a></h3>
+      <h3><a href="installation.html">Kurulum</a></h3>
+      <h3><a href="control_program.html">Kontrol Programı</a></h3>
+      <h3><a href="main_window.html">Zenom Kullanıcı Arayüzü</a></h3>
+      <div class="sidebar_content">
+        <h6><a href="main_window.html">Ana Pencere</a></h6>
+        <h6><a href="log_variable_window.html">Kayıt Parametre Penceresi</a></h6>
+        <h6><a href="control_variable_window.html">Kontrol Parametre Penceresi</a></h6>
+        <h6><a href="watch_window.html">Ölçek Penceresi</a></h6>
+        <h6><a href="plot_window.html">Grafik Penceresi</a></h6>
+        <h6><a href="scene_window.html">Sahne Penceresi</a></h6>
+      </div>
+      <h3><a href="">Örnekler</a></h3>
+    </div>
+    <!-- end of menu --> 
+  </div>
+  <div id="content"> 
+    <!-- language selection --><!-- InstanceBeginEditable name="LanguageRegion" -->
+    <div id="language_selection"><a href="#">English</a></div>
+    <!-- InstanceEndEditable --><!-- end of language selection -->
+    <div class="content_box">
+    <!-- InstanceBeginEditable name="ContentRegion" -->
+      <h2>Grafik Penceresi</h2>
+      <div class="content_box_inner">
+        <p>Grafik  penceresi kayıt değişkenlerinin değişimlerini zamana bağlı olarak iki boyutlu şekilde gösterir.  Değişimler benzetim  koşumu esnasında anlık olarak veya durdurulduktan sonra gösterilebilir. Grafik  üzerinde yakınlaştırma, uzaklaştırma ve dolaşım imkanı vardır. Ayrıca grafik  Zenom Plot File(.zplot), resim(.jpeg, .png) ve Matlab (.m) dosya formatlarına  uygun olarak kayıt edilebilir ve Zenom Plot File(.zplot) formatındaki  dosyalar grafiğe yüklenebilir.</p>
+        <p>Zenom  ana penceresindeki <strong>View</strong> menüsünden <strong>Plot </strong>seçimi ile aşağıdaki resimde gösterilen  grafik penceresi açılır.</p>
+        <div class="image" align="center"><img src="images/plot.png"></div>
+        <div class="horizontal_line"></div>
+        
+        <!-- Grafiğe Kayıt Değişkeni Ekleme/Çıkarma -->
+        <h3>Grafiğe Kayıt Değişkeni Ekleme/Silme</h3>
+        <p>Grafik  alana kayıt değişkeni eklemek için,</p>
+        <ol>
+          <li><strong>Plot</strong> menüsünden <strong>Attach Log Variable…</strong> seçilir veya araç çubuğundaki <img src="images/plot_icon_attach.png"> simgesine tıklanır. Aşağıda gösterilen <strong>Select a  Variable(s) to Attach </strong>penceresi açılır.</li>
+          <p>
+          <div class="image" align="center"><img src="images/plot_attach_variable.png"></div>
+          </p>
+          <li>Listeden istenilen kayıt  değişkenleri seçilir. <strong>Ctrl </strong>tuşuna  basılarak birden fazla seçim yapılabilir.</li>
+          <li><strong>OK </strong>butonuna  basılır. Seçilen kayıt değişkenleri grafikte gösterilir ve sağ tarafta yer alan listeye eklenir.</li>
+        </ol>
+        <p>Grafik penceresinin sağ tarafında yer alan kayıt değişkenleri listesindeki <img src="images/plot_icon_erase.png"> düğmesine basılarak ilgili kayıt değişkenine ait çizim kaldırılabilir. </p>
+        <p>Kayıt değişkenleri listesinde çizim rengini belirten renk düğmesine basılarak çizim rengi değiştirilebilir.</p>
+<div class="horizontal_line"></div>
+        
+        <!-- Ölçeklendirme ve Navigasyon -->
+        <h3>Ölçeklendirme ve Navigasyon</h3>
+        <p>Grafik alanın içerisinde farenin sol tuşuna basılıp bu tuş bırakılmadan fare hareket ettirilerek grafik üzerinde dolaşılabilir. Ayrıca farenin sağ  tuşuna basılıp bu tuş bırakılmadan fare hareket ettirilerek veya fare tekerleği  kullanılarak grafik alanda yakınlaştırılma/uzaklaştırılma yapılabilir.</p>
+        <p><strong>AutoScale</strong> modu aktif iken x-ekseninde belirtilen zaman aralığındaki kayıt değişkeni değerleri  gösterilir. Örneğin zaman aralığı 20 saniye girildiğinde grafik ekranda son 20  saniyelik veri sergilenir. <strong>AutoScale</strong> modu <strong>Plot</strong> menüsünden veya araç çubuğundaki <img src="images/plot_icon_autoscale.png"> düğmesi ile aktif hale getirilir. </p>
+        <p>Zaman aralığını değiştirmek için, </p>
+        <ol>
+          <li><strong>Plot</strong> menüsünden <strong>Set  Time Interval</strong> seçeneği seçilir veya araç çubuğundaki <img src="images/plot_icon_time_interval.png"> simgesine tıklanır. Aşağıda gösterilen <strong>Set Time Interval</strong> penceresi  açılır.  </li>
+          <p>
+          <div class="image" align="center"><img src="images/plot_set_time_interval.png"></div>
+          </p>
+          <li>İstenilen  zaman değeri girilir.</li>
+          <li><strong>OK </strong>düğmesine  basılır. X-eksenindeki zaman aralığı girilen değere göre değişir.</li>
+        </ol>
+        <div class="horizontal_line"></div>
+        
+        <!-- Grafiği Kaydetme -->
+        <h3>Grafiği Kaydetme</h3>
+        <p>Grafikteki  çizimler Zenom Plot(.zplot) dosya formatı ile kayıt edilip, tekrar geri  yüklenebilir.<br>
+          Grafiği  kaydetmek için,</p>
+        <ol>
+          <li><strong>File</strong> menüsünden <strong>Save</strong> seçeneği seçilir. <strong>Save Zenom Plot File</strong> penceresi görünür.</li>
+          <li>İstenilen dosya ismi girilir.</li>
+          <li><strong>OK </strong>düğmesine  basılır.<strong></strong></li>
+        </ol>
+        <p>Grafiği  açmak için,</p>
+        <ol>
+          <li><strong>File</strong> menüsünden <strong>Open</strong> seçeneği seçilir. <strong>Open Zenom Plot File</strong> penceresi görünür.</li>
+          <li>İstenilen dosya seçilir.</li>
+          <li><strong>OK</strong> düğmesine  basılır. </li>
+        </ol>
+        <div class="horizontal_line"></div>
+        
+        <!-- Grafiği Farklı Formatlarda Kaydetme -->
+        <h3>Grafiği Farklı Formatlarda Kaydetme</h3>
+        <p>Grafik,  resim (.jpeg, .png) veya Matlab (.m) dosya formatı olarak kaydedilebilir. Grafiği  farklı formatta kaydetmek için,</p>
+        <ol>
+          <li><strong>File</strong> menüsünden <strong>Export </strong>seçeneği seçilir. <strong>Export Zenom Plot </strong>penceresi görünür.</li>
+          <li>İstenilen dosya ismi girilir.</li>
+          <li>İstenilen dosya formatı seçilir.</li>
+          <li><strong>OK </strong>düğmesine  basılır.<strong></strong></li>
+        </ol>
+        <div class="cleaner"></div>
+      </div>
+      <!-- InstanceEndEditable -->
+    </div>
+    </div>
+  <div class="cleaner"></div>
+</div>
+<div id="footer_wrapper"> 
+  <!-- footer -->
+  <div id="footer"> Zenom, Ekim 2013</div>
+  <!-- end of footer --> 
+</div>
+</body>
+<!-- InstanceEnd --></html>

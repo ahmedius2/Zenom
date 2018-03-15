@@ -1,0 +1,67 @@
+Geode {
+  UniqueID Geode_0
+  nodeMask 0xffffffff
+  cullingActive TRUE
+  num_drawables 3
+  ShapeDrawable {
+    DataVariance STATIC
+    Box {
+      Center 0 -0.124 0
+      HalfLengths 0.005 0.005 0.05
+      Rotation 0 0 0 1
+    }
+    useDisplayList TRUE
+    useVertexBufferObjects FALSE
+    color 0.00200167 0.0121456 0.8 1
+  }
+  ShapeDrawable {
+    DataVariance STATIC
+    Sphere {
+      Center 0 -0.124 -0.075
+      Radius 0.05
+    }
+    useDisplayList TRUE
+    useVertexBufferObjects FALSE
+    color 0.8 0.227639 0.258837 1
+  }
+  Geometry {
+    UniqueID Geometry_1
+    DataVariance STATIC
+    StateSet {
+      DataVariance STATIC
+      rendering_hint DEFAULT_BIN
+      renderBinMode INHERIT
+      GL_LIGHTING OFF
+      LineWidth {
+        width 3
+      }
+    }
+    useDisplayList TRUE
+    useVertexBufferObjects FALSE
+    PrimitiveSets 1
+    {
+      DrawElementsUShort LINES 28
+      {
+        0 0 0 0 0 1 1 2 2 3
+        3 0 4 5 5 6 6 7 7 4
+        0 4 1 5 2 6 3 7 
+      }
+    }
+    VertexArray Vec3Array 8
+    {
+      -0.25 0.085 0.235
+      0.25 0.085 0.235
+      0.25 0.085 -0.215
+      -0.25 0.085 -0.215
+      -0.25 -0.335 0.235
+      0.25 -0.335 0.235
+      0.25 -0.335 -0.215
+      -0.25 -0.335 -0.215
+    }
+    ColorBinding OVERALL
+    ColorArray Vec4Array 1
+    {
+      0.6 0.6 0.6 1
+    }
+  }
+}

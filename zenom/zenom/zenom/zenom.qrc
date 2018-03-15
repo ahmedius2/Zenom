@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/zenom">
+        <file>resources/viewpoint.png</file>
+        <file>resources/previous.png</file>
+        <file>resources/next.png</file>
+        <file>resources/link.png</file>
+        <file>resources/return.png</file>
+        <file>resources/logo.png</file>
+        <file>resources/logo2x.png</file>
+    </qresource>
+    <qresource prefix="/gauge">
+        <file>resources/lineargauge.png</file>
+        <file>resources/radialgauge.png</file>
+        <file>resources/numericgauge.png</file>
+    </qresource>
+    <qresource prefix="/plot">
+        <file>resources/timeinterval.png</file>
+        <file>resources/autoscale.png</file>
+        <file>resources/close.png</file>
+    </qresource>
+</RCC>

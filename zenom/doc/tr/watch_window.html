@@ -1,0 +1,237 @@
+<!-- InstanceBegin template="/Templates/zenom_tr_template.dwt" codeOutsideHTMLIsLocked="false" --><head>
+<title>Zenom - Real Time Simulation Environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="zenom, real time simulation, xenomai" />
+<meta name="description" content="Zenom is a free real time simulation environment" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="templatemo_wrapper">
+  <div id="sidebar"> 
+    <!-- site_title -->
+    <div id="site_title"> <img src="images/logo.png" alt="logo" /> </div>
+    <!-- end of site_title --> 
+    <!-- menu -->
+    <div class="sidebar_box">
+      <h3><a href="getting_started.html">Başlarken</a></h3>
+      <h3><a href="installation.html">Kurulum</a></h3>
+      <h3><a href="control_program.html">Kontrol Programı</a></h3>
+      <h3><a href="main_window.html">Zenom Kullanıcı Arayüzü</a></h3>
+      <div class="sidebar_content">
+        <h6><a href="main_window.html">Ana Pencere</a></h6>
+        <h6><a href="log_variable_window.html">Kayıt Parametre Penceresi</a></h6>
+        <h6><a href="control_variable_window.html">Kontrol Parametre Penceresi</a></h6>
+        <h6><a href="watch_window.html">Ölçek Penceresi</a></h6>
+        <h6><a href="plot_window.html">Grafik Penceresi</a></h6>
+        <h6><a href="scene_window.html">Sahne Penceresi</a></h6>
+      </div>
+      <h3><a href="">Örnekler</a></h3>
+    </div>
+    <!-- end of menu --> 
+  </div>
+  <div id="content"> 
+    <!-- language selection --><!-- InstanceBeginEditable name="LanguageRegion" -->
+    <div id="language_selection"><a href="#">English</a></div>
+    <!-- InstanceEndEditable --><!-- end of language selection -->
+    <div class="content_box">
+    <!-- InstanceBeginEditable name="ContentRegion" -->
+      <h2>Ölçek Penceresi</h2>
+      <div class="content_box_inner">
+        <p>Ölçek  pencereleri  kayıt değişkenleri  değerlerini göstermek için   kullanılır. Aşağıda resimde gözüktüğü gibi radyal,  doğrusal ve numerik   olmak üzere 3 tip ölçek vardır. Ölçeklerin renk, yön vb.  özelliklerini   değiştirerek görünümlerini özelleştirebilirsiniz.</p>
+        <p>
+        <div class="image" align="center"><img src="images/gauge_linear.png"><img src="images/gauge_radial.png" hspace="20"><img src="images/gauge_numeric.png"></div>
+        </p>
+        <div class="horizontal_line"></div>
+        <h3>Ölçek Penceresi Açma</h3>
+        <p>Bir ölçek  penceresi açmak için;</p>
+        <ol>
+          <li>Zenom ana penceresindeki <strong>View</strong> menüsünden <strong>Watch… </strong>seçeneği seçilir. Aşağıda gösterilen <strong>Create Gauge</strong> penceresi açılır. </li>
+          <p>
+          <div class="image" align="center"><img src="images/gauge_create.png"></div>
+          </p>
+          <li>Ölçek listesinden <strong>Radial</strong>, <strong>Linear</strong> ve <strong>Numeric</strong> ölçek  tiplerinden biri seçilir.</li>
+          <li>Kayıt değişkenleri listesinden bir kayıt  değişkeni seçilir.</li>
+          <li>Ölçek parametrelerinden istenilen ölçek  özellikleri ayarlanır.</li>
+          <li><strong>OK </strong>düğmesine  basılır. Ölçek penceresi açılır.</li>
+        </ol>
+        <div class="horizontal_line"></div>
+        <h3> Ölçek Pencerelerini Özelleştirme</h3>
+        <p>Açık olan bir ölçek penceresini özelleştirmek için;</p>
+        <ol>
+          <li>Ölçek penceresi sağ tıklanır. Aşağıda gösterilen menü açılır.</li>
+          <p>
+          <div class="image" align="center"><img src="images/gauge_edit_menu.png"></div>
+          </p>
+          <li>Açılan menüden <strong>Edit</strong> seçeneği seçilir. Aşağıda gösterilen <strong>Edit Gauge</strong> penceresi açılır. </li>
+          <p>
+          <div class="image" align="center"><img src="images/gauge_edit.png"></div>
+          </p>
+          <li>Ölçek parametrelerinden istenilen ölçek  özellikleri ayarlanır.</li>
+          <li><strong>OK</strong> düğmesine  basılır.</li>
+        </ol>
+        <div class="horizontal_line"></div>
+        <h3> Ölçek Tipleri ve Özellikleri</h3>
+        <h4> Radyal Ölçek</h4>
+        <p>Kayıt değişkeni değerini radyal olarak gösteren ölçektir. Radyal ölçeğin maksimum ve minimum değerleri değiştirilebilir. Farklı iğne tipleri  mevcuttur. Ayrıca arka plan ve metin renkleri de değiştirilebilir. Aşağıdaki tabloda radyal ölçeğin değiştirilebilen özellikleri anlatılmaktadır.</p>
+        <p>
+        <table class="properties" cellpadding="4">
+          <tr valign="top">
+            <th width="%20">Sekme</th>
+            <th width="%20">Özellik</th>
+            <th width="%60">Tanım</th>
+          </tr>
+          <tr valign="top">
+            <td rowspan="3"><strong>Scale</strong></td>
+            <td>Direction</td>
+            <td>Ölçek yönünü belirtir. Saat yönü ve saat yönü tersine seçimi yapılır.</td>
+          </tr>
+          <tr valign="top">
+            <td>Range</td>
+            <td>Ölçek aralığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Scale Arc</td>
+            <td>Yay açısı ve yayın başlangıç açısını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="2"><strong>Ticks</strong></td>
+            <td>Max. Tick Count</td>
+            <td>Ölçek üzerindeki majör ve minör çizgilerin sayısını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Labels</td>
+            <td>Ölçek  üzerindeki metinlerin görünürlüğünü açar, kapatır. Yazı tipi ve boyutunu  değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="4"><strong>Needle</strong></td>
+            <td>Type</td>
+            <td>İğne tipini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Style</td>
+            <td>İğne şeklini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Color1</td>
+            <td>İğne  rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Color2</td>
+            <td>İğne  rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="3"><strong>General</strong></td>
+            <td>Title</td>
+            <td>Ölçek penceresinin başlığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Text</td>
+            <td>Metin rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Background</td>
+            <td>Ölçeğin arka plan rengini değiştirir.</td>
+          </tr>
+        </table>
+        </p>
+        <h4> Doğrusal Ölçek</h4>
+        <p>Kayıt değişkeni değerini doğrusal olarak gösteren ölçektir. Doğrusal ölçeğin maksimum ve minimum değerleri,  arka plan ve metin renkleri değiştirilebilir.  Aşağıdaki tabloda doğrusal ölçeğin değiştirilebilen özellikleri anlatılmaktadır.</p>
+        <p>
+        <table class="properties" cellpadding="4">
+          <tr valign="top">
+            <th width="%20">Sekme</th>
+            <th width="%20">Özellik</th>
+            <th width="%60">Tanım</th>
+          </tr>
+          <tr valign="top">
+            <td rowspan="3"><strong>Scale</strong></td>
+            <td>Orientation</td>
+            <td>Ölçek yönünü belirtir. Yatay ve dikey yön  seçimi yapılır.</td>
+          </tr>
+          <tr valign="top">
+            <td>Position</td>
+            <td>Ölçek  üzerindeki metinlerin ve çizgilerin konumunu değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Range</td>
+            <td>Ölçek aralığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="2"><strong>Ticks</strong></td>
+            <td>Max. Tick Count</td>
+            <td>Ölçek üzerindeki majör ve minör çizgilerin sayısını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Labels</td>
+            <td>Ölçek üzerindeki metinlerin görünürlüğünü açar, kapatır. Yazı tipi ve boyutunu değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="2"><strong>Pipe</strong></td>
+            <td>Width</td>
+            <td>Çubuk kalınlığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Color</td>
+            <td>Çubuk rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="3"><strong>General</strong></td>
+            <td>Title</td>
+            <td>Ölçek penceresinin başlığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Text</td>
+            <td>Metin rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Background</td>
+            <td>Ölçeğin arka plan rengini değiştirir.</td>
+          </tr>
+        </table>
+        </p>
+        <h4>Numerik Ölçek </h4>
+        <p>Kayıt değişkeni değerini numerik olarak gösteren ölçektir. Numerik ölçeğin arka plan ve metin renkleri değiştirilebilir.  Aşağıdaki tabloda numerik ölçeğin değiştirilebilen özellikleri anlatılmaktadır.</p>
+        <p>
+        <table class="properties" cellpadding="4">
+          <tr valign="top">
+            <th width="%20">Sekme</th>
+            <th width="%20">Özellik</th>
+            <th width="%60">Tanım</th>
+          </tr>
+          <tr valign="top">
+            <td rowspan="2"><strong>Display</strong></td>
+            <td>Mode</td>
+            <td>Gösterim notasyonunu değiştirir. <strong>Hexadecimal</strong>, <strong>Decimal</strong>, <strong>Octal</strong> olmak üzere 3 gösterim modu vardır. </td>
+          </tr>
+          <tr valign="top">
+            <td>Decimal</td>
+            <td>Ondalık  kısımdaki hassasiyeti değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td rowspan="3"><strong>General</strong></td>
+            <td>Title</td>
+            <td>Ölçek penceresinin başlığını değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Text</td>
+            <td>Metin rengini değiştirir.</td>
+          </tr>
+          <tr valign="top">
+            <td>Background</td>
+            <td>Ölçeğin arka plan rengini değiştirir.</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+      <!-- InstanceEndEditable -->
+    </div>
+    </div>
+  <div class="cleaner"></div>
+</div>
+<div id="footer_wrapper"> 
+  <!-- footer -->
+  <div id="footer"> Zenom, Ekim 2013</div>
+  <!-- end of footer --> 
+</div>
+</body>
+<!-- InstanceEnd --></html>
