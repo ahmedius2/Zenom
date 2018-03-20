@@ -1,18 +1,14 @@
 #ifndef _QUANSER_Q8_DRIVER_H_
 #define _QUANSER_Q8_DRIVER_H_
 
-#define DRV_NAME        "q8_driver"
+#include <linux/types.h>
+
+#define DRV_NAME        "pci_q8_hil_card_drv"
 #define Q8_VENDOR_ID_QUANSER  0x11E3
 #define Q8_SUBVENDOR_ID_QUANSER 0x5155
 #define Q8_DEVICE_ID     0x0010
 #define Q8_SUBDEVICE_ID   0x0200
 #define Q8_BAR            0x00
-/**
- * IOCTL stuff
- */
-static int  Q8_probe(struct pci_dev *dev,
-                                      const struct pci_device_id *id);/*__devinit*/
-static void  Q8_remove(struct pci_dev *dev); /* __devexit */
 
 uint32_t cntrl=0;
 int i;
