@@ -74,7 +74,7 @@ int Sphere::initialize()
     registerLogVariable( rotation, "rotation", 1, 4 );
     registerLogVariable( F.getElementsPointer(), "F", 1, 5 );
 
-    hapticWand.open();                  // Open the q8 card
+    hapticWand.openDevice();                  // Open the q8 card
     hapticWand.calibrateWand();         // Calibrate the haptic wand
 
     return 0;
@@ -192,7 +192,7 @@ int Sphere::stop()
  */
 int Sphere::terminate()
 {
-    hapticWand.close();
+    hapticWand.closeDevice();
     
     return 0;
 }

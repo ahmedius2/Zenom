@@ -1,8 +1,6 @@
 #ifndef Q8CONFIG_H
 #define Q8CONFIG_H
 
-#include <rtdm/rtdm.h>
-
 /**
  * Communication struct
  */

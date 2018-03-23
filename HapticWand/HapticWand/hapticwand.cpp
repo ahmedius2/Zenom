@@ -42,9 +42,9 @@ HapticWand::HapticWand()
 
 }
 
-void HapticWand::open(const char *cardType, const int cardIdentifier)
+void HapticWand::openDevice(const char *cardType, const int cardIdentifier)
 {
-    HIL::open( cardType, cardIdentifier );
+    HIL::openDevice( cardType, cardIdentifier );
 
     // Configures digital I/O lines as outputs.
     setDigitalOutputDirection( digitalOutputChannels, NUM_DIGITAL_OUTPUT );

@@ -28,11 +28,6 @@ HEADERS += controlbase.h\
     lifecycletask.h \
     looptask.h
 
-# Xenomai
-INCLUDEPATH +=  $${XENOMAI_HEADERS}
-DEPENDPATH += $${XENOMAI_HEADERS}
-LIBS += -L$${XENOMAI_LIBS} -lnative
-
 # Zenom Core Library
 INCLUDEPATH += ../znm-core
 DEPENDPATH += ../znm-core

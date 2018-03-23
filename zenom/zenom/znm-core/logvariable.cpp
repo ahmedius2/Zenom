@@ -64,7 +64,7 @@ void LogVariable::createHeap()
     int heapSize = ((size() + 1) * frequency() * duration() + 1) * sizeof(double);
 
 	mHeap.create( mName, heapSize );
-    mHeapBeginAddr = (double*)mHeap.alloc(heapSize);
+    mHeapBeginAddr = (double*)mHeap.ptrToShMem();
 
 	// Heap was created successfully.
     mHeapBeginAddr[0] = 0;      // size
@@ -75,12 +75,7 @@ void LogVariable::createHeap()
 
 void LogVariable::deleteHeap()
 {
-    if ( mHeapBeginAddr )
-    {
-        mHeap.free( mHeapBeginAddr );
-        mHeap.deleteHeap();
-        mHeapBeginAddr = NULL;
-    }
+    mHeap.unlink();
 }
 
 void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
@@ -108,7 +103,7 @@ void LogVariable::bindHeap()
 {
     // first address is size address.
 	mHeap.bind( mName );
-    mHeapBeginAddr = (double*)mHeap.alloc( 0 );
+    mHeapBeginAddr = (double*)mHeap.ptrToShMem();
     mHeapAddr = mHeapBeginAddr + 1;
 
     mLogCounter = 0;

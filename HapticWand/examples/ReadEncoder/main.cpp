@@ -10,7 +10,7 @@ int main()
     try
     {
         HIL card;
-        card.open( "Q80", 0 );
+        card.openDevice( "Q80", 0 );
 
         // read one encoder channel
         int count = card.readEncoder( 0 );
@@ -25,7 +25,7 @@ int main()
             printf("ENC[%d] : %d V\n", encoderChannels[i], counts[i]);
         }
 
-        card.close();
+        card.closeDevice();
     }
     catch( HILException& ex )
     {

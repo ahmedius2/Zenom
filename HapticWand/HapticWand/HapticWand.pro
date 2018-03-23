@@ -6,7 +6,7 @@
 
 include( ../HapticWand.pri )
 
-QT       -= core gui
+#QT       -= core gui
 
 TARGET = HapticWand
 TEMPLATE = lib
@@ -25,10 +25,6 @@ HEADERS += hapticwand.h\
     q8Config.h \
     hapticwand_utils.h
 
-# Xenomai
-INCLUDEPATH +=  $${XENOMAI_HEADERS}
-DEPENDPATH += $${XENOMAI_HEADERS}
-LIBS += -L$${XENOMAI_LIBS} -lrtdm
 
 # build directory
 DESTDIR = ../lib

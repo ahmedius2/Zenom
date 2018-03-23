@@ -3,7 +3,8 @@
 
 #include <linux/types.h>
 
-#define DRV_NAME        "pci_q8_hil_card_drv"
+#define DRV_NAME        "q8_hil_card"
+#define MAJOR_NUM     231
 #define Q8_VENDOR_ID_QUANSER  0x11E3
 #define Q8_SUBVENDOR_ID_QUANSER 0x5155
 #define Q8_DEVICE_ID     0x0010

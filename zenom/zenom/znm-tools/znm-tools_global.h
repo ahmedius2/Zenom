@@ -1,6 +1,7 @@
 #ifndef ZNMTOOLS_GLOBAL_H
 #define ZNMTOOLS_GLOBAL_H
 
+#include <fcntl.h>           /* For O_* constants */
 #include <QtCore/qglobal.h>
 
 #if defined(ZNMTOOLS_LIBRARY)
@@ -11,11 +12,10 @@
 
 namespace znm_tools
 {
-    enum State
+    enum Mode
     {
-        CREATED,
-        BINDED,
-        NONE
+        READ_ONLY = O_RDONLY,
+        READ_AND_WRITE = O_RDWR
     };
 
 }

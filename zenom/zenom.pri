@@ -24,12 +24,6 @@ ZENOM_INSTALL_LIBS      = $${ZENOM_INSTALL_PREFIX}/lib64
 ZENOM_INSTALL_BINS      = $${ZENOM_INSTALL_PREFIX}/bin
 
 #--------------------------------------------------------------
-# Xenomai path
-#--------------------------------------------------------------
-XENOMAI_HEADERS   = /usr/xenomai/include
-XENOMAI_LIBS      = /usr/xenomai/lib
-
-#--------------------------------------------------------------
 # Qwt path
 #--------------------------------------------------------------
 QWT_HEADERS   = /usr/include/qwt
@@ -41,8 +35,7 @@ QWT_LIBS      = /usr/lib64/
 OSG_HEADERS   = /usr/include
 OSG_LIBS      = /usr/lib64/
 
-
 #--------------------------------------------------------------
 # QtCreator Wizards Plugin Path
 #--------------------------------------------------------------
-QTCREATOR_WIZARDS_PATH = /usr/share/qtcreator/templates/wizards
+QTCREATOR_WIZARDS_PATH = /opt/Qt/Tools/QtCreator/templates/wizards

@@ -10,5 +10,5 @@ default:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules	
 
 clean:
-	$(RM) $(OBJS) *.cmd *.o *.ko *.mod.c
+	$(RM) $(OBJS) *.cmd *.o *.ko *.mod.c Module.symvers modules.order
 	$(RM) -R .tmp*

@@ -10,7 +10,7 @@ int main()
     try
     {
         HIL card;
-        card.open( "Q80", 0 );
+        card.openDevice( "Q80", 0 );
 
         // read one analog channel
         float voltage = card.readAnalog( 0 );
@@ -25,7 +25,7 @@ int main()
             printf("ADC[%d] : %f V\n", analogChannels[i], voltages[i]);
         }
 
-        card.close();
+        card.closeDevice();
     }
     catch( HILException& ex )
     {

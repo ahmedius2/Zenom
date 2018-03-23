@@ -32,14 +32,14 @@ namespace Hardware
          *
          * @throws HILException     If the open cannot be performed then an exception is thrown.
          */
-        virtual void open(const char* cardType = "Q80", const int cardIdentifier = 0);
+        virtual void openDevice(const char* cardType = "q8_hil_card", const int cardIdentifier = 0);
 
         /**
          * Closes the card.
          *
          * @throws HILException     If the close cannot be performed then an exception is thrown.
          */
-        virtual void close();
+        virtual void closeDevice();
 
         //========================================================================
         //  ANALOG FUNCTIONS
@@ -256,14 +256,14 @@ namespace Hardware
          *
          * @throws HILException     If the read cannot be performed then an exception is thrown.
          */
-        void read();
+        void readFromDevice();
 
         /**
          * Writes the q8_config to the device.
          *
          * @throws HILException     If the write cannot be performed then an exception is thrown.
          */
-        void write();
+        void writeToDevice();
 
         /**
          * Communication struct.
@@ -271,7 +271,7 @@ namespace Hardware
         struct_Q8_Config q8_config;
 
         /**
-         * Device file descriptor as returned by rt_dev_open().
+         * Device file descriptor as returned by open().
          */
         int fd;
 

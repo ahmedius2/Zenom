@@ -42,9 +42,9 @@ void DataRepository::createMainControlHeap()
     // Log Variables
     size += mLogVariables.size() * 3;
 
-    mMainControlHeap.create( mProjectName + "MainControlHeap", size * sizeof(double) );
-    mMainControlHeapAddr = (double*)mMainControlHeap.alloc( size * sizeof(double) );
-
+    mMainControlHeap.create( mProjectName + "MainControlHeap",
+                             size * sizeof(double) );
+    mMainControlHeapAddr = (double*)mMainControlHeap.ptrToShMem();
     setFrequency( 1 );
     setDuration( 100 );
     setElapsedTimeSecond( 0 );
@@ -54,18 +54,15 @@ void DataRepository::createMainControlHeap()
 
 void DataRepository::deleteMainControlHeap()
 {
-    if( mMainControlHeap.isCreated() )
-    {
-        mMainControlHeap.free( mMainControlHeapAddr );
-        mMainControlHeap.deleteHeap();
-    }
+    if (mMainControlHeap.unlink() == -1)
+        std::cerr << "Couldn't unlink shared memory (DataRepository)" << endl;
 }
 
 void DataRepository::bindMainControlHeap()
 {
     // first address is size
-    mMainControlHeap.bind( mProjectName + "MainControlHeap" );
-    mMainControlHeapAddr = (double*)mMainControlHeap.alloc( 0 );
+    mMainControlHeap.bind( mProjectName + "MainControlHeap");
+    mMainControlHeapAddr = (double*)mMainControlHeap.ptrToShMem();
 
     assignHeapAddressToVariables();
 }
@@ -90,10 +87,7 @@ void DataRepository::assignHeapAddressToVariables()
 
 void DataRepository::unbindMainControlHeap()
 {
-    if( mMainControlHeap.isBinded() )
-    {
-        mMainControlHeap.unbind();
-    }
+    mMainControlHeap.unbind();
 }
 
 void DataRepository::createLogVariablesHeap()
@@ -162,8 +156,12 @@ void DataRepository::unbindLogVariableHeap()
 
 void DataRepository::createMessageQueues()
 {
-    mSender.create( mProjectName + "GuiToControl", sizeof( StateRequest ) * 25, Q_UNLIMITED, Q_SHARED );
-    mReceiver.create( mProjectName + "ControlToGui", sizeof( StateRequest ) * 25, Q_UNLIMITED, Q_SHARED );
+    mSender.create( mProjectName + "GuiToControl",
+                    sizeof( StateRequest ) * 25,
+                    Q_UNLIMITED, Q_SHARED );
+    mReceiver.create( mProjectName + "ControlToGui",
+                      sizeof( StateRequest ) * 25,
+                      Q_UNLIMITED, Q_SHARED );
 }
 
 void DataRepository::deleteMessageQueues()

@@ -24,12 +24,6 @@ HAPTIC_WAND_INSTALL_LIBS      = $${HAPTIC_WAND_INSTALL_PREFIX}/lib64
 HAPTIC_WAND_INSTALL_BINS      = $${HAPTIC_WAND_INSTALL_PREFIX}/bin
 
 #--------------------------------------------------------------
-# Xenomai path
-#--------------------------------------------------------------
-XENOMAI_HEADERS   = /usr/xenomai/include
-XENOMAI_LIBS      = /usr/xenomai/lib
-
-#--------------------------------------------------------------
 # Zenom path
 #--------------------------------------------------------------
 ZENOM_HEADERS   = /usr/include/zenom

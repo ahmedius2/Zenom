@@ -9,7 +9,7 @@
 #define LOGVARIABLE_H_
 
 #include "variable.h"
-#include <HeapXn.h>
+#include <SharedMem.h>
 
 class ZNMCORESHARED_EXPORT LogVariable: public Variable
 {
@@ -86,7 +86,7 @@ public:
 
 protected:
 
-    HeapXn mHeap;
+    SharedMem mHeap;
     double* mHeapBeginAddr;
     double* mHeapAddr;
 

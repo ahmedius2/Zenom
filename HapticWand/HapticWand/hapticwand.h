@@ -31,7 +31,7 @@ namespace Hardware
          * @param cardIdentifier    An integer identifying the particular
          *                          board among all the boards of the same type.
          */
-        virtual void open(const char* cardType = "Q80", const int cardIdentifier = 0);
+        virtual void openDevice(const char* cardType = "/dev/q8_hil_card", const int cardIdentifier = 0);
 
         /**
          * Enable a motor amplifiers.

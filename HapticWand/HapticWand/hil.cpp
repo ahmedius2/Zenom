@@ -1,3 +1,8 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 #include "hil.h"
 
 using namespace Hardware;
@@ -16,10 +21,10 @@ HIL::HIL() : fd(-1)
         analogOutputRanges[i] = BIPOLAR_10V;
 }
 
-void HIL::open(const char *cardType, const int cardIdentifier)
+void HIL::openDevice(const char *cardType, const int cardIdentifier)
 {
     q8_config.iCardNum = cardIdentifier;
-    fd = rt_dev_open(cardType, O_RDWR);
+    fd = open(cardType, O_RDWR);
 
     // If the open cannot be performed then an exception is thrown.
     if ( fd < 0 )
@@ -28,9 +33,9 @@ void HIL::open(const char *cardType, const int cardIdentifier)
     }
 }
 
-void HIL::close()
+void HIL::closeDevice()
 {
-    int ret = rt_dev_close( fd );
+    int ret = close( fd );
 
     // If the close cannot be performed then an exception is thrown.
     if (ret < 0) {
@@ -52,13 +57,13 @@ void HIL::setAnalogOutputRange(const unsigned int channelNumber, HIL::AnalogRang
     q8_config.iChannelNum = channelNumber;
     q8_config.uiFuncIndex = 30;
 
-    write();
+    writeToDevice();
 }
 
 double HIL::readAnalog(const unsigned int channelNumber)
 {
     q8_config.uiFuncIndex = channelNumber+8;
-    read();
+    readFromDevice();
 
     return q8_config.wValueSigned * (10.0 / 8192);
 }
@@ -108,7 +113,7 @@ void HIL::writeAnalog(const unsigned int channelNumber, const double voltage)
         }
     }
 
-    write();
+    writeToDevice();
 }
 
 void HIL::writeAnalog(const unsigned int *channelNumbers, const double *voltages, const int channelNumbersLength)
@@ -136,13 +141,13 @@ void HIL::encoderConfig(const unsigned int channelNumber, HIL::CounterMode count
     q8_config.ubIndexEnable = indexMode;
     q8_config.ubIndexPolarity = indexPolarity;
 
-    write();
+    writeToDevice();
 }
 
 int HIL::readEncoder(const unsigned int channelNumber)
 {
     q8_config.uiFuncIndex = channelNumber+16;
-    read();
+    readFromDevice();
 
     return q8_config.dwNvalue;
 }
@@ -158,7 +163,7 @@ void HIL::readEncoder(const unsigned int *channelNumbers, int *counts, const int
 void HIL::resetEncoder(const unsigned int channelNumber)
 {
     q8_config.uiFuncIndex = channelNumber+31;
-    write();
+    writeToDevice();
 }
 
 void HIL::resetEncoder(const unsigned int *channelNumbers, const int channelNumbersLength)
@@ -181,7 +186,7 @@ bool HIL::readDigital(const unsigned int channelNumber)
     q8_config.uiFuncIndex = 25;
     q8_config.onlyDigitalData = -1;
     q8_config.udwDataDirection = mask;
-    read();
+    readFromDevice();
 
     return q8_config.udwDataRegister & mask;
 }
@@ -209,7 +214,7 @@ void HIL::setDigitalOutputDirection(const unsigned int *outputChannels, const in
     q8_config.udwDataRegister = 0;
     q8_config.udwDataDirection = digOutChannelCurrent;
 
-    write();
+    writeToDevice();
 }
 
 void HIL::writeDigital(const unsigned int *outputChannels, const bool *bits, const int outputChannelsLength)
@@ -233,25 +238,25 @@ void HIL::writeDigital(const unsigned int *outputChannels, const bool *bits, con
     q8_config.udwDataRegister = digOutDataCurrent;
     q8_config.udwDataDirection = digOutChannelCurrent;
 
-    write();
+    writeToDevice();
 }
 
 //========================================================================
 //  DEVICE READ/WRITE FUNCTIONS
 //========================================================================
 
-void HIL::read()
+void HIL::readFromDevice()
 {
-    int ret = rt_dev_read(fd, &q8_config, sizeof(struct_Q8_Config));
+    int ret = read(fd, &q8_config, sizeof(struct_Q8_Config));
     // If the read cannot be performed then an exception is thrown.
     if (ret < 0) {
         throw HILException( -ret );
     }
 }
 
-void HIL::write()
+void HIL::writeToDevice()
 {
-    int ret = rt_dev_write( fd, &q8_config, sizeof(struct_Q8_Config) );
+    int ret = write( fd, &q8_config, sizeof(struct_Q8_Config) );
     // If the write cannot be performed then an exception is thrown.
     if (ret < 0) {
         throw HILException( -ret );

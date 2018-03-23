@@ -56,7 +56,7 @@ static int  Q8_probe(struct pci_dev *dev, const struct pci_device_id *id);/*__de
 static void  Q8_remove(struct pci_dev *dev); /* __devexit */
 
 static struct pci_driver quanser_Q8_driver = {
-    .name = "pci_q8_hil_card_drv",
+    .name = DRV_NAME,
     .id_table = QUANSER_ids,
     .probe = Q8_probe,
     .remove = Q8_remove, /*__devexit_p*/
@@ -76,6 +76,7 @@ struct Q8_context {
 
 struct Q8_context Q8_struct;
 struct Q8_context* q8Con = &Q8_struct;
+int major_num = 231;
 
 #include "Q8config.h"
 ///========================== FUNCTION HEADER
@@ -1079,7 +1080,6 @@ static ssize_t Q8_write(struct file *filp, const char __user *buff, size_t count
   return 0;
 }
 
-
 ///========================== FUNCTION HEADER
 ///=====================================================================
 /// Name        : Q8_probe
@@ -1098,13 +1098,15 @@ static int Q8_probe(struct pci_dev* dev, const struct pci_device_id* id) { /*__d
     return ret_loop_val;
   }
   first_loop = 1;
+
+  strncpy(dev->dev.kobj.name, DRV_NAME, strlen(DRV_NAME)+1);
   // wake up the device
   ret_val = pci_enable_device(dev);
   if (ret_val != 0) {
     printk(KERN_WARNING "Q8_driver: function pci_enable_device failed\n");
     goto pci_enable_device_err;
   }
-  printk(KERN_DEBUG "device woke up!\n");
+  printk(KERN_DEBUG "Q8 device woke up!\n");
   // initialization of location and mem_size
   q8Con->location = pci_resource_start(dev, Q8_BAR);
   q8Con->mem_size = pci_resource_len(dev, Q8_BAR);
@@ -1116,7 +1118,7 @@ static int Q8_probe(struct pci_dev* dev, const struct pci_device_id* id) { /*__d
   printk("Q8 irq line number is: %d, but I didn't register any interrupt.\n ", q8Con->irq_line);
   // allocate memory region for CPCI card
   if (request_mem_region(q8Con->location, q8Con->mem_size,
-                         "Q80") == NULL) {
+                         DRV_NAME) == NULL) {
     printk(KERN_WARNING "Q8_driver: device memory allocation failed!\n");
     ret_val = -EBUSY;
     goto request_mem_region_err;
@@ -1262,10 +1264,10 @@ static void Q8_remove(struct pci_dev* dev) /*__devexit*/
   iowrite32(ENC_RLD_RESET_CNTR, &(q8Con->Q8reg->encoderControl.one.enc5));
   iowrite32(ENC_RLD_RESET_CNTR, &(q8Con->Q8reg->encoderControl.one.enc6));
   iowrite32(ENC_RLD_RESET_CNTR, &(q8Con->Q8reg->encoderControl.one.enc7));
-  unregister_chrdev (231, "pci_q8_hil_card_drv");
   // release virtual memory
-  iounmap(q8Con->base_address);
+  //iounmap(q8Con->base_address); // I COMMENTED IT BECAUSE IT LOOKS LIKE UNNECESSARY??!!
   iounmap(q8Con->Q8reg);  // cok onemli
+  unregister_chrdev (major_num, DRV_NAME);
   // release memory region
   release_mem_region(q8Con->location, q8Con->mem_size);
 }
@@ -1273,11 +1275,23 @@ static void Q8_remove(struct pci_dev* dev) /*__devexit*/
  * Init module function
  */
 static int Q8_driver_init_module(void) {
-  int ret_val;
+  int i_result;
+ 
 
-  register_chrdev (231, "pci_q8_hil_card_drv", &fops);
-  ret_val = pci_register_driver(&quanser_Q8_driver);
-  return ret_val;
+  if ((i_result = register_chrdev (major_num, DRV_NAME, &fops)) < 0)
+  {
+    // dynamic major number allocation
+    i_result = register_chrdev (0, DRV_NAME, &fops);
+    major_num = i_result;
+    if (i_result < 0)
+    {
+      printk (KERN_CRIT "q8_hil_card: Cannot register device.\n");
+      return (i_result);
+    }
+  }
+
+  i_result = pci_register_driver(&quanser_Q8_driver);
+  return i_result;
 }
 /**
  * Exit module function
@@ -1285,7 +1299,8 @@ static int Q8_driver_init_module(void) {
 
 static void Q8_driver_exit_module(void) {
   pci_unregister_driver(&quanser_Q8_driver);
-  unregister_chrdev (231, "pci_q8_hil_card_drv");
+  unregister_chrdev (major_num, DRV_NAME);
+  printk(KERN_DEBUG "Q8 hil card exit\n");
 }
 
 module_init(Q8_driver_init_module);

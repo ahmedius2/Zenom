@@ -12,9 +12,9 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 # Xenomai
-INCLUDEPATH +=  /usr/xenomai/include
-DEPENDPATH += /usr/xenomai/include
-LIBS += -L/usr/xenomai/lib -lnative -lxenomai
+INCLUDEPATH +=  %XENOMAI_HEADERS%
+DEPENDPATH += %XENOMAI_HEADERS%
+LIBS += -L%XENOMAI_LIBS% -lnative -lxenomai
 
 # Zenom
 INCLUDEPATH += /usr/include/zenom

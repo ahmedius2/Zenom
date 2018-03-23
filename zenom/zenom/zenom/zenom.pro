@@ -133,11 +133,6 @@ FORMS    += zenom.ui \
 RESOURCES += \
     zenom.qrc
 
-# Xenomai
-INCLUDEPATH +=  $${XENOMAI_HEADERS}
-DEPENDPATH += $${XENOMAI_HEADERS}
-LIBS += -L$${XENOMAI_LIBS} -lnative -lxenomai
-
 # Qwt
 INCLUDEPATH +=  $${QWT_HEADERS}
 DEPENDPATH += $${QWT_HEADERS}

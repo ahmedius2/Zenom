@@ -10,7 +10,7 @@ int main()
     try
     {
         HIL card;
-        card.open( "Q80", 0 );
+        card.openDevice( "Q80", 0 );
 
         // Writes to the digital output channels
         unsigned int outputChannels[] = { 0, 1, 2, 3, 4, 5 };
@@ -37,7 +37,7 @@ int main()
             printf("DIG[%d] : %d V\n", inputChannels[i], inputBuffer[i]);
         }
 
-        card.close();
+        card.closeDevice();
     }
     catch( HILException& ex )
     {

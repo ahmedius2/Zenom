@@ -8,7 +8,6 @@
 
 #ifndef MESSAGEQUEUEXN_H_
 #define MESSAGEQUEUEXN_H_
-#include <native/queue.h>
 #include <string>
 #include "znm-tools_global.h"
 #include "znmException.h"

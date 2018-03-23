@@ -76,7 +76,7 @@ private:
     LogVariableList mLogVariables;
     ControlVariableList mControlVariables;
 
-    HeapXn mMainControlHeap;
+    SharedMem mMainControlHeap;
     double* mMainControlHeapAddr;
 
     MessageQueueXn mSender;

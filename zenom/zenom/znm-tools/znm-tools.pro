@@ -22,19 +22,15 @@ DEFINES += ZNMTOOLS_LIBRARY
 SOURCES += \
     TaskXn.cpp \
     MessageQueueXn.cpp \
-    HeapXn.cpp
+    SharedMem.cpp
 
 HEADERS +=\
         znm-tools_global.h \
     znmException.h \
     TaskXn.h \
     MessageQueueXn.h \
-    HeapXn.h
+    SharedMem.h
 
-# Xenomai
-INCLUDEPATH +=  $${XENOMAI_HEADERS}
-DEPENDPATH += $${XENOMAI_HEADERS}
-LIBS += -L$${XENOMAI_LIBS} -lnative
 
 # build directory
 DESTDIR = ../../lib

@@ -61,7 +61,7 @@ int Tracker::initialize()
 
     registerControlVariable( setPoint.trajectory_space.getElementsPointer(), "trajectory_space", 1, 5 );
 
-    hapticWand.open();              // Open the q8 card
+    hapticWand.openDevice();              // Open the q8 card
     hapticWand.calibrateWand();     // Calibrate the haptic wand
     
     return 0;
@@ -148,7 +148,7 @@ int Tracker::stop()
  */
 int Tracker::terminate()
 {
-    hapticWand.close();
+    hapticWand.closeDevice();
     
     return 0;
 }

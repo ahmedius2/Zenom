@@ -10,7 +10,7 @@ int main()
     try
     {
         HIL card;
-        card.open( "Q80", 0 );
+        card.openDevice( "Q80", 0 );
 
 
         printf("The voltages written are:\n");
@@ -29,7 +29,7 @@ int main()
             printf("DAC[%d] : %f V\n", analogChannels[i], voltages[i]);
         }
 
-        card.close();
+        card.closeDevice();
     }
     catch( HILException& ex )
     {
