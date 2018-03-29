@@ -21,15 +21,15 @@ DEFINES += ZNMTOOLS_LIBRARY
 
 SOURCES += \
     TaskXn.cpp \
-    MessageQueueXn.cpp \
-    SharedMem.cpp
+    SharedMem.cpp \
+    MsgQueue.cpp
 
 HEADERS +=\
         znm-tools_global.h \
     znmException.h \
     TaskXn.h \
-    MessageQueueXn.h \
-    SharedMem.h
+    SharedMem.h \
+    MsgQueue.h
 
 
 # build directory

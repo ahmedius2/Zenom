@@ -4,7 +4,7 @@
 #include <vector>
 #include <logvariable.h>
 #include <controlvariable.h>
-#include <MessageQueueXn.h>
+#include <MsgQueue.h>
 
 typedef std::vector<ControlVariable*> ControlVariableList;
 typedef std::vector<LogVariable*> LogVariableList;
@@ -79,8 +79,8 @@ private:
     SharedMem mMainControlHeap;
     double* mMainControlHeapAddr;
 
-    MessageQueueXn mSender;
-    MessageQueueXn mReceiver;
+    MsgQueue mSender;
+    MsgQueue mReceiver;
 };
 
 #endif // DATAREPOSITORY_H

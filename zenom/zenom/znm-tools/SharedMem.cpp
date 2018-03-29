@@ -26,85 +26,112 @@ SharedMem::~SharedMem()
         unlink();
 }
 
-int SharedMem::create(const std::string &name,
+void SharedMem::create(const std::string &name,
                            size_t size,
-                           znm_tools::Mode mode)
+                           znm_tools::Flags flags)
 {
-    if (mIsBinded || mIsCreated)
-        return -1;
+    if (mIsBinded || mIsCreated){
+        if (!name.compare(mName))
+            return;
+        throw ZnmException("SharedMem::create, "
+                                  "already binded or created\n" );
+    }
+
     // 0666 is default linux file permission
-    mShmfd = shm_open(name.c_str(), mode | O_CREAT | O_EXCL, 0666);
+    mShmfd = shm_open(name.c_str(), flags | O_CREAT | O_EXCL, 0666);
     if (mShmfd == -1)
-        return -1;
+        throw ZnmException(name, "SharedMem::create, shm_open", errno );
 
-    if (ftruncate(mShmfd, size) == -1)
-        return -1;
+    if (ftruncate(mShmfd, size) == -1){
+        close(mShmfd);
+        shm_unlink(name.c_str());
+        throw ZnmException(name, "SharedMem::create, ftruncate", errno );
+    }
 
-    if (mode == znm_tools::Mode::READ_ONLY)
-        mPtrToShMem = mmap(nullptr, size, PROT_READ,
-                           MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
-                           mShmfd,0);
-    else if(mode == znm_tools::Mode::READ_AND_WRITE)
-        mPtrToShMem = mmap(nullptr, size, PROT_READ | PROT_WRITE,
-                           MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
-                           mShmfd,0);
-    else
-        return -1;
+    unsigned flags_ = 0;
+    if (flags == znm_tools::Flags::READ_ONLY)
+        flags_ = PROT_READ;
+    else if(flags == znm_tools::Flags::READ_AND_WRITE)
+        flags_ = PROT_READ | PROT_WRITE;
+    else{
+        close(mShmfd);
+        shm_unlink(name.c_str());
+        throw ZnmException("SharedMem::create, wrong mode");
+    }
 
-    if(mPtrToShMem == MAP_FAILED)
-        return -1;
+    mPtrToShMem = mmap(nullptr, size, flags_,
+                       MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
+                       mShmfd,0);
+    if(mPtrToShMem == MAP_FAILED){
+        close(mShmfd);
+        shm_unlink(name.c_str());
+        throw ZnmException(name, "SharedMem::create, mmap", errno );
+    }
 
+    mName = name;
     mSize = size;
     mIsCreated = true;
     mIsBinded = true;
-    return 0;
 }
 
 
-int SharedMem::bind(const std::string &name,
-                                 znm_tools::Mode mode)
+void SharedMem::bind(const std::string &name,
+                                 znm_tools::Flags flags)
 {
-    if (mIsBinded || mIsCreated)
-        return -1;
+    if (mIsBinded || mIsCreated){
+        if (!name.compare(mName))
+            return;
+        throw ZnmException(name ,"SharedMem::bind, "
+                                  "already binded or created\n" );
+    }
+
+
     // 0666 is default linux file permission
-    mShmfd = shm_open(name.c_str(), mode, 0666);
+    mShmfd = shm_open(name.c_str(), flags, 0666);
     if (mShmfd == -1)
-        return -1;
+        throw ZnmException(name, "SharedMem::bind, open", errno );
 
+    // Get size of existing shared mem
     struct stat shmMemInfo;
-    fstat(mShmfd,&shmMemInfo);
+    if(fstat(mShmfd,&shmMemInfo) == -1){
+        close(mShmfd);
+        throw ZnmException(name, "SharedMem::bind, fstat", errno );
+    }
 
-    if (mode == znm_tools::Mode::READ_ONLY)
-        mPtrToShMem = mmap(nullptr, shmMemInfo.st_size, PROT_READ,
-                           MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
-                           mShmfd,0);
-    else if(mode == znm_tools::Mode::READ_AND_WRITE)
-        mPtrToShMem = mmap(nullptr, shmMemInfo.st_size, PROT_READ | PROT_WRITE,
-                           MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
-                           mShmfd,0);
-    else
-        return -1;
+    unsigned flags_ = 0;
+    if (flags == znm_tools::Flags::READ_ONLY)
+        flags_ = PROT_READ;
+    else if(flags == znm_tools::Flags::READ_AND_WRITE)
+        flags_ = PROT_READ | PROT_WRITE;
+    else{
+        close(mShmfd);
+        throw ZnmException(name ,"SharedMem::bind, wrong mode");
+    }
 
-    if(mPtrToShMem == MAP_FAILED)
-        return -1;
+    mPtrToShMem = mmap(nullptr, size, flags_,
+                       MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
+                       mShmfd,0);
+    if(mPtrToShMem == MAP_FAILED){
+        close(mShmfd);
+        throw ZnmException(name, "SharedMem::bind, mmap", errno );
+    }
 
+    mName = name;
     mSize = shmMemInfo.st_size;
     mIsBinded = true;
-    return 0;
 }
 
-int SharedMem::unbind()
+void SharedMem::unbind()
 {
     if(!mIsBinded)
-        return -1;
-    int ret = munmap(mPtrToShMem,mSize);
-    ret += close(mShmfd);
-    if (ret == 0){
-        mIsBinded = false;
-        mSize = 0;
-        mPtrToShMem = nullptr;
-    }
-    return ret;
+        return;
+    if (munmap(mPtrToShMem,mSize) == -1)
+        throw ZnmException(mName, "SharedMem::unbind, munmap", errno );
+    if(close(mShmfd) == -1)
+        throw ZnmException(mName, "SharedMem::unbind, close", errno );
+    mIsBinded = false;
+    mPtrToShMem = nullptr;
+    mSize = 0;
 }
 
 void *SharedMem::ptrToShMem()
@@ -112,14 +139,15 @@ void *SharedMem::ptrToShMem()
     return mIsBinded ? nullptr : mPtrToShMem;
 }
 
-int SharedMem::unlink()
+void SharedMem::unlink()
 {
+    if(!mIsBinded && !mIsCreated)
+        return;
     if(mIsBinded)
         unbind();
-    int ret = shm_unlink(mName.c_str());
-    if(ret == 0)
-        mIsCreated = false;
-    return ret;
+    if(shm_unlink(mName.c_str()) == -1)
+        throw ZnmException(mName, "SharedMem::unlink, shm_unlink", errno );
+    mIsCreated = false;
 }
 
 bool SharedMem::isBinded()

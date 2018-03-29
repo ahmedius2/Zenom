@@ -12,7 +12,7 @@
 
 namespace znm_tools
 {
-    enum Mode
+    enum Flags
     {
         READ_ONLY = O_RDONLY,
         READ_AND_WRITE = O_RDWR

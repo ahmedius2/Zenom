@@ -12,7 +12,7 @@
 #include <QTimer>
 
 #include <datarepository.h>
-#include <MessageQueueXn.h>
+#include <MsgQueue.h>
 
 #include "messagelistenertask.h"
 class MessageListenerTask;

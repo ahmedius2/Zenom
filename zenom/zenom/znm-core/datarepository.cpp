@@ -156,18 +156,15 @@ void DataRepository::unbindLogVariableHeap()
 
 void DataRepository::createMessageQueues()
 {
-    mSender.create( mProjectName + "GuiToControl",
-                    sizeof( StateRequest ) * 25,
-                    Q_UNLIMITED, Q_SHARED );
-    mReceiver.create( mProjectName + "ControlToGui",
-                      sizeof( StateRequest ) * 25,
-                      Q_UNLIMITED, Q_SHARED );
+    mSender.create( mProjectName + "GuiToControl", 25,sizeof( StateRequest ));
+    mReceiver.create( mProjectName + "ControlToGui", 25, sizeof( StateRequest));
+
 }
 
 void DataRepository::deleteMessageQueues()
 {
-    mSender.deleteQueue();
-    mReceiver.deleteQueue();
+    mSender.unlink();
+    mReceiver.unlink();
 }
 
 void DataRepository::bindMessageQueues()
@@ -184,12 +181,16 @@ void DataRepository::unbindMessageQueues()
 
 void DataRepository::sendStateRequest(StateRequest pRequest)
 {
-    mSender.write( &pRequest, sizeof(StateRequest) );
+    mSender.send(&pRequest, sizeof(StateRequest) );
 }
 
 ssize_t DataRepository::readState(StateRequest* pState)
 {
-    return mReceiver.read( pState, sizeof(StateRequest), 1000000000LL ); // timeout 1 seconds
+    // timeout 1 seconds
+    static struct timespec to;
+    to.tv_nsec = 0;
+    to.tv_sec = 1;
+    return mReceiver.receive( pState, sizeof(StateRequest), &to );
 }
 
 void DataRepository::sampleLogVariable(double pSimTimeInSec)
@@ -283,7 +284,8 @@ bool DataRepository::readVariablesFromFile()
         getline( file, col );
         getline( file, desc );
 
-        mControlVariables.push_back( new ControlVariable(NULL, name, atoi(row.c_str()), atoi(col.c_str()), desc) );
+        mControlVariables.push_back( new ControlVariable(NULL, name,
+                                atoi(row.c_str()), atoi(col.c_str()), desc) );
     }
 
     getline( file, countString );
@@ -296,7 +298,8 @@ bool DataRepository::readVariablesFromFile()
         getline( file, col );
         getline( file, desc );
 
-        mLogVariables.push_back( new LogVariable(NULL, name, atoi(row.c_str()), atoi(col.c_str()), desc) );
+        mLogVariables.push_back( new LogVariable(NULL, name,
+                       atoi(row.c_str()), atoi(col.c_str()), desc) );
     }
 
     file.close();

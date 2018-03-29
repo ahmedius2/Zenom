@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <datarepository.h>
-#include <MessageQueueXn.h>
+#include <MsgQueue.h>
 #include "looptask.h"
 #include "lifecycletask.h"
 

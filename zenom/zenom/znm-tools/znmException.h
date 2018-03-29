@@ -9,8 +9,9 @@
 #define ZNMEXCEPTION_H_
 
 #include <exception>
-#include <errno.h>
+#include <cerrno>
 #include <string>
+#include <cstring>
 #include <iostream>
 
 class ZnmException : public std::exception
@@ -21,6 +22,11 @@ public:
 		mError = pName + " " + pFunction + ": " + strerror(pErrorNo);
 		mErrorNo = pErrorNo;
 	}
+
+    ZnmException(std::string pName, std::string pFunction)
+    {
+        mError = pName + " " + pFunction;
+    }
 
     ZnmException(int pErrorNo)
 	{

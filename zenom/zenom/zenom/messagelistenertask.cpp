@@ -1,5 +1,5 @@
 #include "messagelistenertask.h"
-#include <MessageQueueXn.h>
+#include <MsgQueue.h>
 #include <datarepository.h>
 #include <unistd.h>
 

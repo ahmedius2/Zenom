@@ -49,12 +49,10 @@ public:
      * @param name name of the shared memory
      * @param size size of the shared memory
      * @param mode read only or read-write
-     * @return 0 on success and -1 on error. you can look errno for the
-     * reason of the error
      */
-    int create(const std::string& name,
+    void create(const std::string& name,
                     size_t size,
-                    znm_tools::Mode mode = znm_tools::Mode::READ_AND_WRITE);
+                    znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     /**
      * @brief SharedMem::bind
@@ -63,29 +61,28 @@ public:
      * binding
      * @param   name  name of the shared memory
      * @param   mode  Read only or read-write
-     * @return  returns 0 on success and -1 on error
-     * you can look errno for the reason of error
      */
-    int  bind(const std::string& name,
-                   znm_tools::Mode mode = znm_tools::Mode::READ_AND_WRITE);
-    /**
-     * @brief unbind from already binded shared memory
-     * @return 0 on success and -1 on error
-     */
-    int unbind();
+    void  bind(const std::string& name,
+                   znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     /**
      * @brief ptrToShMem get pointer to shared memory
      * @return returns pointer to shared memory, returns nullptr if it
      * doesn't exist
      */
-    void* ptrToShMem();
+    void *ptrToShMem();
+
+    /**
+     * @brief unbind from already binded shared memory
+     * @return 0 on success and -1 on error
+     */
+    void unbind();
+
 
     /**
      * @brief unlink unlink the shared memory by hand
-     * @return 0 on success and -1 on error
      */
-    int unlink();
+    void unlink();
 
     /**
      * @brief isBinded
