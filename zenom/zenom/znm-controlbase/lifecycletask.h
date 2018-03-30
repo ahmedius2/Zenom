@@ -19,9 +19,8 @@ class LifeCycleTask: public TaskXn
 public:
 	LifeCycleTask( ControlBase* pControlBase );
 
-	virtual void run();
-
 private:
+    virtual void run();
 	ControlBase* mControlBase;
 };
 

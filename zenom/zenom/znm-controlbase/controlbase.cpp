@@ -70,6 +70,7 @@ void ControlBase::run(int argc, char *argv[])
         mDataRepository->setProjectName( argv[1] );
 
         LifeCycleTask* lifeCycleTask = new LifeCycleTask( this );
+
         lifeCycleTask->create( mDataRepository->projectName() + "LifeCycleTask");
 		lifeCycleTask->start();
 		lifeCycleTask->join();
@@ -92,16 +93,19 @@ void ControlBase::initializeControlBase()
         int error = initialize();	// User Function
         if( error )
         {
-            std::cerr << "The initialize() function returned non zero: " << error << std::endl;
+            std::cerr << "The initialize() function returned non zero: " <<
+                         error << std::endl;
         }
     }
     catch( std::exception& e )
     {
-        std::cerr << "An exception occured in the initialize() function: " << e.what() << std::endl;
+        std::cerr << "An exception occured in the initialize() function: " <<
+                     e.what() << std::endl;
     }
     catch (...)
     {
-        std::cerr << "An unknown exception occured in the initialize() function." << std::endl;
+        std::cerr << "An unknown exception occured in the initialize()"
+                     " function." << std::endl;
     }
 
     mDataRepository->writeVariablesToFile();
@@ -141,13 +145,15 @@ void ControlBase::startControlBase()
             // start() hata ile donerse program baslatilmaz.
             if ( error )
             {
-                std::cerr << "The start() function returned non zero: " << error << std::endl;
+                std::cerr << "The start() function returned non zero: " <<
+                             error << std::endl;
             }
         }
         catch( std::exception& e )
         {
             error = -1;
-            std::cerr << "An exception occured in the start() function: " << e.what() << std::endl;
+            std::cerr << "An exception occured in the start() function: " <<
+                         e.what() << std::endl;
         }
         catch (...)
         {

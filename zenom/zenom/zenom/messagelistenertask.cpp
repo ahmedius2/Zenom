@@ -28,7 +28,8 @@ void MessageListenerTask::run()
                     break;
 
                 default:
-                    std::cout << "Message Listener Unhandled message" << std::endl;
+                    std::cout << "Message Listener Unhandled message" <<
+                                 std::endl;
                     break;
             }
         }

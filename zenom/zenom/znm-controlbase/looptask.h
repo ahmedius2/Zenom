@@ -10,7 +10,6 @@
 
 #include <TaskXn.h>
 #include "controlbase.h"
-#include <native/timer.h>
 
 class ControlBase;
 
@@ -19,9 +18,8 @@ class LoopTask: public TaskXn
 public:
 	LoopTask( ControlBase* pControlBase );
 
-	void run();
-
 private:
+    void run();
 	ControlBase* mControlBase;
 };
 

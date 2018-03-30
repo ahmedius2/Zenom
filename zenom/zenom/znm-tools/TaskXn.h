@@ -11,9 +11,9 @@
 
 #include <string>
 #include <thread>
+#include <chrono>
 #include "znm-tools_global.h"
 #include "znmException.h"
-
 
 //==============================================================================
 // class TaskXn
@@ -25,59 +25,30 @@
 // \include TaskXn.t.cpp
 //==============================================================================
 
-#define TASK_TIMEOUT 10000000000LL  // Varsayilan zaman asimi olarak 10sn
-#define TASK_MODE_C    T_JOINABLE   // Varsayilan yaratilma modu
 #define TASK_PRIO    50
-#define TASK_STACK_SIZE  0
 
-class ZNMTOOLSSHARED_EXPORT TaskXn
+class TaskXn
 {
  public:
-	 TaskXn();
+     TaskXn(std::string name);
 
      virtual ~TaskXn();
 
-     void create(const std::string& pTaskName, int stksize = TASK_STACK_SIZE,
-                 int prio = TASK_PRIO, int mode = TASK_MODE_C);
+     void setPeriod();
 
-	 void deleteTask();
-
-     bool isCreated() { return mState == znm_tools::CREATED; }
-
-	 void start(void(*entry)(void *cookie), void *cookie);
-
-	 void start();
-
-	 void setPeriodic(RTIME idate, RTIME period);
-
-     int waitPeriod( unsigned long* pOverruns = NULL );
-
-	 void suspend();
-
-	 void resume();
+     void setPriority( int prio );
 
 	 void yield();
 
-	 void setPriority( int prio );
-
-	 RT_TASK* self();
-
-	 void slice(RTIME quantum);
-
 	 void join();
 
-	 RT_TASK_INFO inquire();
-
  protected:
-	 virtual void run() {};
+     virtual void run() = 0;
 
  private:
-	 static void taskRun(void *classPtr);
+     std::thread mTask;
+     std::string mName;
 
-  	 RT_TASK task;
-
-  	 std::string mTaskName;
-     znm_tools::State mState;
 };
 
 

@@ -23,7 +23,7 @@ void LoopTask::run()
 	double frequency = mControlBase->mFrequency;
 	double duration = mControlBase->mDuration;
 
-	this->setPeriodic( TM_NOW , SECOND_TO_NANO / frequency );
+	this->setPeriod( TM_NOW , SECOND_TO_NANO / frequency );
 	previous = rt_timer_read();
 
     while( mControlBase->mState != STOPPED )

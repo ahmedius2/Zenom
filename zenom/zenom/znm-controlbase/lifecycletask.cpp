@@ -21,7 +21,8 @@ void LifeCycleTask::run()
         while( mControlBase->mState != TERMINATED )
         {
             StateRequest stateRequest;
-            if ( DataRepository::instance()->readState( &stateRequest ) >= 0 )   // false (if an error occurred or the operation timed out).
+            if ( DataRepository::instance()->readState( &stateRequest ) >= 0 )
+                // false (if an error occurred or the operation timed out).
             {
                 switch (stateRequest)
                 {
@@ -54,7 +55,8 @@ void LifeCycleTask::run()
 	}
     catch (ZnmException e)
 	{
-        std::cerr << "Error occurred controlBase:"<< e.errorNo() << std::string(e.what()) << std::endl;
+        std::cerr << "Error occurred controlBase:"<< e.errorNo() <<
+                     std::string(e.what()) << std::endl;
 	}
     catch (std::exception e)
     {
