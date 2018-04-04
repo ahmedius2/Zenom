@@ -105,7 +105,7 @@ int Morph::doloop()
         {  0,  0,  0 },
     };
 
-    double val = amplitude * sin( M_PI * 2 * simTimeInSec() ) + 0.5;
+    double val = amplitude * sin( M_PI * 2 * elapsedTime() ) + 0.5;
 
     // Modifies vertex coordinates.
     for ( int i = 0; i < 8; ++i )

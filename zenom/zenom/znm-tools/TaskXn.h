@@ -25,30 +25,63 @@
 // \include TaskXn.t.cpp
 //==============================================================================
 
-#define TASK_PRIO    50
-
+/**
+ * @brief The TaskXn class is an abstract class that needs to be extended
+ * in order to write and run a task
+ */
 class TaskXn
 {
  public:
-     TaskXn(std::string name);
+    /**
+     * @brief TaskXn non periodic task constructor
+     * @param name
+     * @param priority
+     */
+    TaskXn(std::string name, int priority = 16);
 
-     virtual ~TaskXn();
+    /**
+     * @brief TaskXn the thread needs to be started after creation
+     * by calling the start function
+     * @param name
+     * @param period default is 16
+     * @param priority nanosconds on x86 linux
+     */
+    TaskXn(std::string name,
+           std::chrono::steady_clock::duration period,
+           int priority = 16);
 
-     void setPeriod();
+    /**
+     * @brief ~TaskXn to stop thread, it must be destructed
+     */
+    virtual ~TaskXn();
 
-     void setPriority( int prio );
+//    void setOverrunLimit(unsigned ovrLimit);
 
-	 void yield();
+    unsigned overruns();
 
-	 void join();
+    void join();
+
+    void detach();
+
+    std::chrono::steady_clock::duration elapsedTime();
+
+    static int maxPriority();
+
+    static int minPriority();
 
  protected:
-     virtual void run() = 0;
-
+    virtual void run() = 0;
+    void requestPeriodicTaskTermination();
  private:
-     std::thread mTask;
-     std::string mName;
+    void taskFunction();
+    void runTask(int priority);
 
+    std::string mName;
+    std::thread mTask;
+    std::chrono::steady_clock::duration mPeriod;
+    std::chrono::steady_clock::time_point mStartTime;
+    std::atomic<unsigned> mOverruns, mOverrunLimit;
+    std::atomic<bool> mWishToRun, mIsPeriodic;
 };
 
 

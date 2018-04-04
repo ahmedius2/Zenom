@@ -33,6 +33,16 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
  public:
     MsgQueue();
 
+    /**
+     * @brief operator = do not use it
+     */
+    MsgQueue & operator =(const MsgQueue&) = delete;
+
+    /**
+     * @brief MsgQueue do not use copy constructor
+     */
+    MsgQueue(const MsgQueue&) = delete;
+
     virtual ~MsgQueue();
 
     void create( const std::string& name, long maxNumOfMsgsInMQ,

@@ -38,6 +38,16 @@ public:
     SharedMem();
 
     /**
+     * @brief operator = do not use it
+     */
+    SharedMem & operator =(const SharedMem&) = delete;
+
+    /**
+     * @brief SharedMem do not use copy constructor
+     */
+    SharedMem(const SharedMem&) = delete;
+
+    /**
      * @brief ~SharedMem destructs shared memory object and unlinks the
      * shared memory if created by this object
      */

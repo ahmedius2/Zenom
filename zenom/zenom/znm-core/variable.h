@@ -14,7 +14,11 @@
 class ZNMCORESHARED_EXPORT Variable
 {
 public:
-    Variable(double* pAddr, const std::string& pName, const std::string& pDesc, unsigned int pRow, unsigned int pCol);
+    Variable(double* pAddr,
+             const std::string& pName,
+             const std::string& pDesc,
+             unsigned int pRow,
+             unsigned int pCol);
 
 	virtual ~Variable();
 

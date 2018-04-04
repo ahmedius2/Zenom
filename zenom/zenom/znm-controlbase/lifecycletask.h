@@ -17,7 +17,7 @@ class ControlBase;
 class LifeCycleTask: public TaskXn
 {
 public:
-	LifeCycleTask( ControlBase* pControlBase );
+    LifeCycleTask( ControlBase* pControlBase , std::string name);
 
 private:
     virtual void run();

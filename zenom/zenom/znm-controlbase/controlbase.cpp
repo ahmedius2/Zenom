@@ -1,16 +1,11 @@
 #include "controlbase.h"
 
 #include <sys/mman.h>
-#include <rtdk.h>
 
+using namespace std::chrono;
 ControlBase::ControlBase(/*int argc, char* argv[]*/)
 {
     mDataRepository = DataRepository::instance();
-
-	setFrequency( 1 );
-	setDuration( 10 );
-	setElapsedTime( 0 );	mElapsedTicks = 0;
-	setOverruns( 0 );
 }
 
 ControlBase::~ControlBase()
@@ -18,41 +13,42 @@ ControlBase::~ControlBase()
 
 }
 
-void ControlBase::registerLogVariable(double *pVariable, const std::string& pName, unsigned int pRow, unsigned int pCol, const std::string& pDesc)
+void ControlBase::registerLogVariable(double *pVariable,
+                                      const std::string& pName,
+                                      unsigned int pRow,
+                                      unsigned int pCol,
+                                      const std::string& pDesc)
 {
-    mDataRepository->insertLogVariable( new LogVariable( pVariable, pName, pRow, pCol, pDesc ) );
+    mDataRepository->insertLogVariable(
+                new LogVariable( pVariable, pName, pRow, pCol, pDesc )
+                );
 }
 
-void ControlBase::registerLogVariable(double& pVariable, const std::string& pName, const std::string& pDesc)
+void ControlBase::registerLogVariable(double& pVariable,
+                                      const std::string& pName,
+                                      const std::string& pDesc)
 {
     registerLogVariable(&pVariable, pName, 1, 1, pDesc);
 }
 
-void ControlBase::registerControlVariable(double *pVariable, const std::string& pName, unsigned int pRow, unsigned int pCol, const std::string& pDesc)
+void ControlBase::registerControlVariable(double *pVariable,
+                                          const std::string& pName,
+                                          unsigned int pRow,
+                                          unsigned int pCol,
+                                          const std::string& pDesc)
 {
-    mDataRepository->insertControlVariable( new ControlVariable( pVariable, pName, pRow, pCol, pDesc ) );
+    mDataRepository->insertControlVariable(
+                new ControlVariable( pVariable, pName, pRow, pCol, pDesc )
+                );
 }
 
-void ControlBase::registerControlVariable(double& pVariable, const std::string& pName, const std::string& pDesc)
+void ControlBase::registerControlVariable(double& pVariable,
+                                          const std::string& pName,
+                                          const std::string& pDesc)
 {
     registerControlVariable( &pVariable, pName, 1, 1, pDesc );
 }
 
-void ControlBase::setFrequency( double pFrequency )
-{
-	if ( pFrequency > 0 )
-	{
-		mFrequency = pFrequency;
-	}
-}
-
-void ControlBase::setDuration( int pDurationInSec )
-{
-	if ( pDurationInSec > 0 )
-	{
-		mDuration = pDurationInSec;
-	}
-}
 
 void ControlBase::run(int argc, char *argv[])
 {
@@ -63,22 +59,20 @@ void ControlBase::run(int argc, char *argv[])
     }
 
     mlockall ( MCL_CURRENT | MCL_FUTURE );
-    rt_print_auto_init(1);
-
 	try
 	{
         mDataRepository->setProjectName( argv[1] );
 
-        LifeCycleTask* lifeCycleTask = new LifeCycleTask( this );
-
-        lifeCycleTask->create( mDataRepository->projectName() + "LifeCycleTask");
-		lifeCycleTask->start();
-		lifeCycleTask->join();
-		delete lifeCycleTask;
+        mLifeCycleTask = new LifeCycleTask( this,
+                                   mDataRepository->projectName() +
+                                   "LifeCycleTask");
+        mLifeCycleTask->join(); // wait for execution to finish
+		delete mLifeCycleTask;
 	}
     catch (ZnmException e)
 	{
-        std::cout << "Life Task Error occurred: " << std::string(e.what()) << std::endl;
+        std::cout << "Life Task Error occurred: " << std::string(e.what())
+                  << std::endl;
 	}
 }
 
@@ -93,14 +87,15 @@ void ControlBase::initializeControlBase()
         int error = initialize();	// User Function
         if( error )
         {
-            std::cerr << "The initialize() function returned non zero: " <<
+            std::cerr << "The initialize() function returned non zero: "
+                      <<
                          error << std::endl;
         }
     }
     catch( std::exception& e )
     {
-        std::cerr << "An exception occured in the initialize() function: " <<
-                     e.what() << std::endl;
+        std::cerr << "An exception occured in the initialize() function: "
+                  << e.what() << std::endl;
     }
     catch (...)
     {
@@ -110,7 +105,8 @@ void ControlBase::initializeControlBase()
 
     mDataRepository->writeVariablesToFile();
     mDataRepository->bindMessageQueues();
-    mDataRepository->sendStateRequest( R_INIT ); // Send message to GUI to read variables
+    mDataRepository->sendStateRequest( R_INIT );
+    // Send message to GUI to read variables
     mDataRepository->bindMainControlHeap();
 
     // Control Variable degerleri heap'e kopyalanir.
@@ -119,7 +115,8 @@ void ControlBase::initializeControlBase()
         mDataRepository->controlVariables()[i]->copyToHeap();
     }
 
-    mDataRepository->sendStateRequest( R_INIT ); // Send message to GUI to read values
+    mDataRepository->sendStateRequest( R_INIT );
+    // Send message to GUI to read values
     mState = STOPPED;
 }
 
@@ -130,9 +127,6 @@ void ControlBase::startControlBase()
 {
 	if( mState != RUNNING )
     {
-        setElapsedTime( 0 );
-        mElapsedTicks = 0;
-        setOverruns( 0 );
         mDataRepository->bindLogVariablesHeap();
         syncMainHeap();
 
@@ -158,7 +152,8 @@ void ControlBase::startControlBase()
         catch (...)
         {
             error = -1;
-            std::cerr << "An unknown exception occured in the start() function." << std::endl;
+            std::cerr << "An unknown exception occured in the start() "
+                         "function." << std::endl;
         }
 
         // start() hata ile donerse program baslatilmaz.
@@ -172,9 +167,9 @@ void ControlBase::startControlBase()
         {
             mState = RUNNING;
 
-            mLoopTask = new LoopTask(this);
-            mLoopTask->create( mDataRepository->projectName() + "LoopTask" );
-            mLoopTask->start();
+            mLoopTask = new LoopTask(
+                        this,mDataRepository->projectName() + "LoopTask"
+                        );
         }
     }
 }
@@ -199,29 +194,16 @@ void ControlBase::syncMainHeap()
         mDataRepository->controlVariables()[i]->copyFromHeap();
     }
 
-    mFrequency = mDataRepository->frequency();
     mDuration = mDataRepository->duration();
 
-    mDataRepository->setElapsedTimeSecond( mElapsedTimeInSecond );
-    mDataRepository->setOverruns( mOverruns );
+    mDataRepository->setElapsedTimeSecond( mLifeCycleTask->elapsedTime() );
+    mDataRepository->setOverruns( mLoopTask->overruns() );
 }
 
-void ControlBase::setElapsedTime( RTIME pElapsedTimeNano )
-{
-	mElapsedTicks++;
-	mElapsedTimeInNano = pElapsedTimeNano;
-	mElapsedTimeInMiliSecond = (double)pElapsedTimeNano / MILLISECOND_TO_NANO;
-	mElapsedTimeInSecond = (double)pElapsedTimeNano / SECOND_TO_NANO;
-}
 
-void ControlBase::setOverruns( int pOverrun )
+void ControlBase::logVariables( steady_clock::duration pSimTime )
 {
-	mOverruns = pOverrun;
-}
-
-void ControlBase::logVariables( double pSimTime )
-{
-    mDataRepository->sampleLogVariable( pSimTime / SECOND_TO_NANO );
+    mDataRepository->sampleLogVariable( pSimTime );
 }
 
 
@@ -243,16 +225,19 @@ void ControlBase::stopControlBase()
             int error = stop();			// User Function
             if( error )
             {
-                std::cerr << "The stop() function returned non zero: " << error << std::endl;
+                std::cerr << "The stop() function returned non zero: "
+                          << error << std::endl;
             }
         }
         catch( std::exception& e )
         {
-            std::cerr << "An exception occured in the stop() function: " << e.what() << std::endl;
+            std::cerr << "An exception occured in the stop() function: "
+                      << e.what() << std::endl;
         }
         catch (...)
         {
-            std::cerr << "An unknown exception occured in the stop() function." << std::endl;
+            std::cerr << "An unknown exception occured in the stop() function."
+                      << std::endl;
         }
     }
 }

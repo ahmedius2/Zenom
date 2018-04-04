@@ -26,7 +26,7 @@ MsgQueue::~MsgQueue()
         unlink();
 }
 
-void create( const std::string& name, long maxNumOfMsgsInMQ, long maxMsgSize,
+void MsgQueue::create( const std::string& name, long maxNumOfMsgsInMQ, long maxMsgSize,
              int flags = znm_tools::Flags::READ_AND_WRITE )
 {
     if (mIsBinded || mIsCreated){
@@ -98,7 +98,7 @@ void MsgQueue::unlink()
     mIsCreated = false;
 }
 
-int send(void *buf, size_t size , unsigned int priority,
+int MsgQueue::send(void *buf, size_t size , unsigned int priority,
          struct timespec *timeout)
 {
     int bytesSend = 0;

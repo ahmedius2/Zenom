@@ -7,10 +7,13 @@
 
 #include "lifecycletask.h"
 #include <datarepository.h>
+#include <iostream>
 
-LifeCycleTask::LifeCycleTask( ControlBase* pControlBase )
+LifeCycleTask::LifeCycleTask( ControlBase* pControlBase , std::sting name)
+    : mControlBase(pControlBase)
+    ,TaskXn(name)
 {
-	mControlBase = pControlBase;
+
 }
 
 void LifeCycleTask::run()

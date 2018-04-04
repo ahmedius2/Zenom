@@ -16,7 +16,7 @@ class ControlBase;
 class LoopTask: public TaskXn
 {
 public:
-	LoopTask( ControlBase* pControlBase );
+    LoopTask( ControlBase* pControlBase , std::string name);
 
 private:
     void run();

@@ -104,7 +104,7 @@ int SineFilter::doloop()
     filter.setDampingRatio(dampingRatio);
 
     // ----- Geneates a noisy sine signal and uses filter -----
-    double time = simTimeInSec();
+    double time = elapsedTime();
     double noise = amplitude / 40 * sin(20 * time) + (rand() % 3) / 10.0;
     sine = amplitude * sin(2 * M_PI * time);
 

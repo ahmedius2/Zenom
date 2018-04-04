@@ -4,8 +4,10 @@
 #include <unistd.h>
 
 MessageListenerTask::MessageListenerTask( Zenom* pZenom )
+    :  mZenom(pZenom)
+    ,TaskXn("MessageListenerTask")
 {
-    mZenom = pZenom;
+
 }
 
 void MessageListenerTask::run()
