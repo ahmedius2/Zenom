@@ -1,0 +1,26 @@
+System Requirements
+==========================
+
+For the current version of Zenom, you will also need Xenomai 
+version 2.6.2, Qt version 4.8.4, Qwt version 6.0.1, and 
+OpenSceneGraph version 3.0.1 installed on your system. 
+
+
+Building Zenom
+==========================
+
+Zenom uses qmake to build all its components and examples. 
+
+If you don't already have qmake installed on your system you can grab 
+it from http://qt-project.org, use version 4.8.4 or later. 
+
+    qmake-qt4
+    make
+    make install
+
+If you have installed a shared library it's path has to be known to 
+the run-time linker of your operating system. On Linux systems read
+"man ldconfig" ( or google for it ). Another option is to use
+the LD_LIBRARY_PATH environment variable.
+
+Good luck !

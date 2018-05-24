@@ -10,7 +10,7 @@
 
 LoopTask::LoopTask( ControlBase* pControlBase, std::string name)
     : mControlBase(pControlBase)
-    , TaskXn(name, mControlBase->period())
+    , TaskXn(name, mControlBase->)
 {
 }
 
@@ -43,12 +43,12 @@ void LoopTask::run()
                              " function." << std::endl;
             }
 
-            mControlBase->logVariables( mControlBase->elapsedTime() );
+            mControlBase->logVariables( mControlBase->mDuration );
             mControlBase->syncMainHeap();
         }
 	}
 
-    if( mControlBase->mElapsedTimeInSecond > mControlBase->mDuration
+    if( mControlBase->mLifeCycleTask->elapsedTimeSec() > mControlBase->mDuration
             || error )
     {
         DataRepository::instance()->sendStateRequest( R_STOP );

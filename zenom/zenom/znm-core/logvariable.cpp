@@ -8,11 +8,15 @@
 #include "logvariable.h"
 
 
-LogVariable::LogVariable(double* pAddr, const std::string& pName, unsigned int pRow, unsigned int pCol, const std::string& pDesc)
+LogVariable::LogVariable(void* pAddr,
+                         const std::string& pName,
+                         unsigned int pRow,
+                         unsigned int pCol,
+                         const std::string& pDesc)
  : Variable(pAddr, pName, pDesc, pRow, pCol)
 {
-    mHeapBeginAddr = NULL;
-    mMainHeapAddr = NULL;
+    mHeapBeginAddr = nullptr;
+    mMainHeapAddr = nullptr;
 }
 
 LogVariable::~LogVariable()
@@ -61,7 +65,7 @@ void LogVariable::setDuration(double pDuration)
 void LogVariable::createHeap()
 {
     // (size + Time Stamp) * frequency * duration + index
-    int heapSize = ((size() + 1) * frequency() * duration() + 1) * sizeof(double);
+    int heapSize = ((size() + 1) * frequency() * duration() + 1)*sizeof(double);
 
 	mHeap.create( mName, heapSize );
     mHeapBeginAddr = (double*)mHeap.ptrToShMem();
@@ -90,7 +94,8 @@ void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
             mLogCounter -= pMainFreq;   // reset counter;
 
             unsigned int num = size();
-            memcpy( mHeapAddr, mVariableAddr, sizeof(double) * num );	// copy variable
+            memcpy( mHeapAddr, mVariableAddr, sizeof(double) * num );
+            // copy variable
             mHeapAddr[num] = pTimeInSec;			// copy time stamp
 
             mHeapAddr += (num + 1);	// set next address
@@ -103,7 +108,7 @@ void LogVariable::bindHeap()
 {
     // first address is size address.
 	mHeap.bind( mName );
-    mHeapBeginAddr = (double*)mHeap.ptrToShMem();
+    mHeapBeginAddr = mHeap.ptrToShMem();
     mHeapAddr = mHeapBeginAddr + 1;
 
     mLogCounter = 0;

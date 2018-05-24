@@ -14,8 +14,13 @@
 class ZNMCORESHARED_EXPORT ControlVariable: public Variable
 {
 public:
-    ControlVariable(double* pAddr, const std::string& pName, unsigned int pRow = 1, unsigned int pCol = 1, const std::string& pDesc = "");
-	virtual ~ControlVariable();
+    ControlVariable(double* pAddr,
+                    const std::string& pName,
+                    unsigned int pRow = 1,
+                    unsigned int pCol = 1,
+                    const std::string& pDesc = "");
+
+    virtual ~ControlVariable();
 
     void setMainHeapAddr( double* pHeapAddr );
 

@@ -194,9 +194,7 @@ void ControlBase::syncMainHeap()
         mDataRepository->controlVariables()[i]->copyFromHeap();
     }
 
-    mDuration = mDataRepository->duration();
-
-    mDataRepository->setElapsedTimeSecond( mLifeCycleTask->elapsedTime() );
+    mDataRepository->setElapsedTimeSecond( mLifeCycleTask->elapsedTimeSec() );
     mDataRepository->setOverruns( mLoopTask->overruns() );
 }
 
@@ -216,6 +214,7 @@ void ControlBase::stopControlBase()
     {
         mState = STOPPED;
         mLoopTask->join();
+        //...
         delete mLoopTask;
 
         mDataRepository->unbindLogVariableHeap();

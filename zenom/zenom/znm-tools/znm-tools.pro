@@ -25,8 +25,6 @@ SOURCES += \
     MsgQueue.cpp
 
 HEADERS +=\
-        znm-tools_global.h \
-    znmException.h \
     TaskXn.h \
     SharedMem.h \
     MsgQueue.h

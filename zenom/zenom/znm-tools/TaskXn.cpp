@@ -35,7 +35,7 @@ void TaskXn::runTask(int priority)
 {
     mOverruns = 0;
     mWishToRun = true;
-    mTask = thread(taskFunction);
+    mTask = std::thread(taskFunction);
     // Give RT priority to task
     sched_param sch;
     sch.__sched_priority = priority;
@@ -70,7 +70,7 @@ void TaskXn::detach()
     mTask.detach();
 }
 
-duration TaskXn::elapsedTime()
+std::chrono::duration<double> TaskXn::elapsedTimeSec()
 {
     return now() - mStartTime;
 }

@@ -1,0 +1,13 @@
+Building Q8Driver
+==========================
+Type make to build q8driver.
+    make
+
+insmod installs a loadable module in the running kernel. 
+you can use it as-is by typing;
+    insmod q8driver.ko
+
+lsmod shows what kernel modules are currently loaded. 
+    lsmod
+
+Good luck !

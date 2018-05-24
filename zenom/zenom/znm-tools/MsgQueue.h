@@ -10,8 +10,12 @@
 #ifndef MESSAGEQUEUEXN_H_
 #define MESSAGEQUEUEXN_H_
 #include <string>
+#include <sys/mman.h>
+#include <sys/stat.h>        /* For mode constants */
+#include <fcntl.h>           /* For O_* constants */
+#include <unistd.h>
+#include <mqueue.h>
 #include "znm-tools_global.h"
-#include "znmException.h"
 
 //==============================================================================
 // class MsgQueue
@@ -34,7 +38,7 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
     MsgQueue();
 
     /**
-     * @brief operator = do not use it
+     * @brief operator = do not use assignment operator
      */
     MsgQueue & operator =(const MsgQueue&) = delete;
 
@@ -43,17 +47,26 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
      */
     MsgQueue(const MsgQueue&) = delete;
 
-    virtual ~MsgQueue();
+    /**
+     * @brief MsgQueue creating constructor
+     * @param name
+     * @param maxNumOfMsgsInMQ
+     * @param maxMsgSize
+     * @param flags
+     */
+    MsgQueue(const std::string& nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
+             long maxMsgSize,znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
-    void create( const std::string& name, long maxNumOfMsgsInMQ,
-                 long maxMsgSize,int flags = znm_tools::Flags::READ_AND_WRITE);
+    /**
+     * @brief MsgQueue binding constructor
+     * @param name
+     * @param flags
+     */
+    MsgQueue(const std::string& nameOfMsgQueueToBind,
+             znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
-    void bind( const std::string& name,
-               int flags = znm_tools::Flags::READ_AND_WRITE);
+    ~MsgQueue();
 
-    void unbind();
-
-    void unlink();
 
     /**
      * @brief send
@@ -66,7 +79,7 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
      * @return
      */
     int send(void *buf, size_t size , unsigned int priority= 0,
-             struct timespec *timeout);
+             struct timespec *timeout = nullptr);
 
     /**
      * @brief receive
@@ -76,7 +89,7 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
      * it will try to receive until timeout occurs
      * @return
      */
-    ssize_t receive(void *buf, size_t size,  struct timespec *timeout);
+    ssize_t receive(void *buf, size_t size,  struct timespec *timeout = nullptr);
 
 
     bool isBinded();
@@ -84,12 +97,11 @@ class ZNMTOOLSSHARED_EXPORT MsgQueue
     bool isCreated();
 
 private:
-    int mMqfd; // Message queue file descriptor
+    mqd_t mMqfd; // Message queue file descriptor
     std::string mName;	// Name
     long mMaxMsgSize;
     long mNumMaxMsgs;
     bool mIsCreated;
-    bool mIsBinded;
 };
 
 

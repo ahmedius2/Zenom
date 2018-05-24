@@ -8,7 +8,7 @@
 
 typedef std::vector<ControlVariable*> ControlVariableList;
 typedef std::vector<LogVariable*> LogVariableList;
-
+//singleton
 class DataRepository
 {
 public:
@@ -25,16 +25,24 @@ public:
     void unbindMainControlHeap();
 
     inline double frequency(){ return mMainControlHeapAddr[0]; }
-    void setFrequency(double pFrequency) { mMainControlHeapAddr[0] = pFrequency; }
+    void setFrequency(double pFrequency) {
+        mMainControlHeapAddr[0] = pFrequency;
+    }
 
     inline double duration(){ return mMainControlHeapAddr[1]; }
-    void setDuration(double pDuration) { mMainControlHeapAddr[1] = pDuration; }
+    void setDuration(double pDuration) {
+        mMainControlHeapAddr[1] = pDuration;
+    }
 
     inline double elapsedTimeSecond(){ return mMainControlHeapAddr[2]; }
-    void setElapsedTimeSecond(double pElapsedTime) { mMainControlHeapAddr[2] = pElapsedTime; }
+    void setElapsedTimeSecond(double pElapsedTime) {
+        mMainControlHeapAddr[2] = pElapsedTime;
+    }
 
     inline double overruns(){ return mMainControlHeapAddr[3]; }
-    void setOverruns(double pOverruns) { mMainControlHeapAddr[3] = pOverruns; }
+    void setOverruns(double pOverruns) {
+        mMainControlHeapAddr[3] = pOverruns;
+    }
 
     void createLogVariablesHeap();
     void deleteLogVariablesHeap();

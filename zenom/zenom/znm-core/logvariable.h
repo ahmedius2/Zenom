@@ -10,15 +10,20 @@
 
 #include "variable.h"
 #include <SharedMem.h>
+#include <chrono>
 
 class ZNMCORESHARED_EXPORT LogVariable: public Variable
 {
 public:
-    LogVariable(double* pAddr, const std::string& pName, unsigned int pRow = 1, unsigned int pCol = 1, const std::string& pDesc = "");
+    LogVariable(double* pAddr,
+                const std::string& pName,
+                unsigned int pRow = 1,
+                unsigned int pCol = 1,
+                const std::string& pDesc = "");
 
 	virtual ~LogVariable();
 
-    void setMainHeapAddr( double* pHeapAddr );
+    void setMainHeapAddr( void* pHeapAddr );
 
     /**
      * Log degiskeni frekansini getirir.
@@ -87,12 +92,12 @@ public:
 protected:
 
     SharedMem mHeap;
-    double* mHeapBeginAddr;
-    double* mHeapAddr;
+    void* mHeapBeginAddr;
+    void* mHeapAddr;
 
-    double* mMainHeapAddr;
+    void* mMainHeapAddr;
 
-    double mLogCounter;
+    void mLogCounter;
 };
 
 #endif /* LOGVARIABLE_H_ */

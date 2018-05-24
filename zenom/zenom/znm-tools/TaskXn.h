@@ -13,7 +13,6 @@
 #include <thread>
 #include <chrono>
 #include "znm-tools_global.h"
-#include "znmException.h"
 
 //==============================================================================
 // class TaskXn
@@ -51,6 +50,16 @@ class TaskXn
            int priority = 16);
 
     /**
+     * @brief operator = do not use it
+     */
+    TaskXn & operator =(const TaskXn&) = delete;
+
+    /**
+     * @brief TaskXn do not use copy constructor
+     */
+    TaskXn(const TaskXn&) = delete;
+
+    /**
      * @brief ~TaskXn to stop thread, it must be destructed
      */
     virtual ~TaskXn();
@@ -63,7 +72,7 @@ class TaskXn
 
     void detach();
 
-    std::chrono::steady_clock::duration elapsedTime();
+    std::chrono::duration<double> elapsedTimeSec();
 
     static int maxPriority();
 

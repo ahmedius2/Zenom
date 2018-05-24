@@ -61,7 +61,7 @@ public:
 protected:
 
 	/** Degisken adresi */
-	double* mVariableAddr;
+    double* mVariableAddr;
 
 	/** Degisken ismi */
 	std::string mName;

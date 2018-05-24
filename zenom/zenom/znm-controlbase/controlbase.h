@@ -58,17 +58,18 @@ public:
 
 	virtual int terminate(){return 0;}
 
-    std::chrono::steady_clock::duration period() { return mPeriod; }
+    //std::chrono::steady_clock::duration period() { return mPeriod; }
 
-    std::chrono::steady_clock::duration elapsedTime() {
-        return mLifeCycleTask->elapsedTime();
-    }
+    //std::chrono::steady_clock::duration elapsedTime() {
+    //    return mLifeCycleTask->elapsedTimeSec();
+    //}
 
-    int overruns() { return mLoopTask->overruns(); }
+    //int overruns() { return mLoopTask->overruns(); }
 
 private:
-	// Loop Task Elapsed Time
-    std::chrono::steady_clock::duration mDuration, mPeriod, mElapsedTime;
+    // Duration of simulation, it will end at this time.
+    std::chrono::seconds<double> mDuration;
+
 
     //========================================================================//
     //		INITIALIZE OPERATIONS											  //
