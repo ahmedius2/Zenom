@@ -26,7 +26,7 @@
 // \include SharedMem.t.cpp
 //==============================================================================
 
-class ZNMTOOLSSHARED_EXPORT SharedMem
+class SharedMem
 {
 
 public:

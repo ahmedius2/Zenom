@@ -1,5 +1,5 @@
 //==============================================================================
-// MessageQueueXn.hpp - Native MessageQueue services
+// MessageQueueXn.hpp - MessageQueue services
 //
 // Author        :
 // Version       : 2.0.01 (Temmuz 2009)
@@ -17,14 +17,17 @@ MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
     mqAttr.mq_maxmsg = maxNumOfMsgsInMQ;
     mqAttr.mq_msgsize= maxMsgSize;
     mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-    mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags | O_CREAT | O_EXCL, mode, &mqAttr);
+    mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags|O_CREAT|O_EXCL,
+                    mode, &mqAttr);
     if (mMqfd == -1){
         if(errno == EEXIST){
             mq_unlink(nameOfNewMsgQueue.c_str());
-            mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags|O_CREAT, mode, &mqAttr);
+            mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags|O_CREAT,
+                            mode, &mqAttr);
         }
         if (mMqfd == -1)
-            throw ZnmException(name, "MsgQueue::create, mq_open" );
+            throw std::system_error(errno, std::system_category(),
+                                nameOfNewMsgQueue +" MsgQueue, mq_open");
     }
 
     mName = nameOfNewMsgQueue;
@@ -33,17 +36,19 @@ MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
     mIsCreated = true;
 }
 
-MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind, znm_tools::Flags flags)
+MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind,znm_tools::Flags flags)
 {
     // 0666 is default linux file permission
     mMqfd = mq_open(nameOfMsgQueueToBind.c_str(), flags);
     if (mMqfd == -1)
-        throw ZnmException(name, "MsgQueue::bind, mq_open" );
+        throw std::system_error(errno, std::system_category(),
+                        nameOfMsgQueueToBind +" MsgQueue, mq_open");
 
     struct mq_attr mqAttr;
     if(mq_getattr(mMqfd, &mqAttr) == -1){
         mq_close(mMqfd);
-        throw ZnmException(name, "MsgQueue::bind, mq_getattr" );
+        throw std::system_error(errno, std::system_category(),
+                        nameOfMsgQueueToBind +" MsgQueue, mq_getattr");
     }
 
     mName = nameOfMsgQueueToBind;
@@ -56,11 +61,13 @@ MsgQueue::~MsgQueue()
 {
     if(mIsCreated){
         if(mq_unlink(mName.c_str()) == -1 && errno != ENOENT)
-            throw ZnmException(mName, "MsgQueue::unlink, mq_unlink" );
+            throw std::system_error(errno, std::system_category(),
+                        mName +" ~MsgQueue, mq_unlink");
     }
     else{ // unbind
         if(mq_close(mMqfd) == -1)
-            throw ZnmException(mName, "MsgQueue::unbind, mq_close" );
+            throw std::system_error(errno, std::system_category(),
+                        mName +" ~MsgQueue, mq_close");
     }
 }
 
@@ -74,7 +81,8 @@ int MsgQueue::send(void *buf, size_t size , unsigned int priority,
     else
         bytesSend = mq_timedsend(mMqfd, (const char*)buf, size, priority,timeout);
     if (bytesSend == -1 && errno != ETIMEDOUT)
-        throw ZnmException(mName, "MsgQueue::send" );
+        throw std::system_error(errno, std::system_category(),
+                    mName +" MsgQueue::send");
     return bytesSend;
 }
 
@@ -86,7 +94,8 @@ ssize_t MsgQueue::receive(void *buf, size_t size,  struct timespec *timeout)
     else
         bytesReceived = mq_timedreceive(mMqfd,(char*)buf, size, nullptr,timeout);
     if (bytesReceived == -1 && errno != ETIMEDOUT)
-        throw ZnmException(mName, "MsgQueue::receive" );
+        throw std::system_error(errno, std::system_category(),
+                    mName +" MsgQueue::receive");
     return bytesReceived;
 }
 

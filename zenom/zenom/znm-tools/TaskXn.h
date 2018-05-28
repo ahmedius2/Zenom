@@ -12,6 +12,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <atomic>
 #include "znm-tools_global.h"
 
 //==============================================================================
@@ -89,8 +90,8 @@ class TaskXn
     std::thread mTask;
     std::chrono::steady_clock::duration mPeriod;
     std::chrono::steady_clock::time_point mStartTime;
-    std::atomic<unsigned> mOverruns, mOverrunLimit;
-    std::atomic<bool> mWishToRun, mIsPeriodic;
+    std::atomic<unsigned> mOverruns; // , mOverrunLimit;
+    std::atomic<bool> mIsPeriodic,mWishToRun;
 };
 
 

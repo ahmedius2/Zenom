@@ -13,8 +13,9 @@ include( ../../zenom.pri )
 VERSION = 1.0.0
 
 QT       -= core gui
-
-TARGET = znm-tools
+QMAKE_CXXFLAGS += -std=c++11
+#CONFIG += c++11
+TARGET   = znm-tools
 TEMPLATE = lib
 
 DEFINES += ZNMTOOLS_LIBRARY

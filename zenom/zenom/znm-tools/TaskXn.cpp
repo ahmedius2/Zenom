@@ -6,44 +6,43 @@
 // Compatibility : POSIX, GCC
 //==============================================================================
 
+#include <iostream>
+#include <pthread.h>
 #include "TaskXn.h"
 
-#include <iostream>
-#include <chrono>
-#include <pthread.h>
 
-using namespace std::chrono::steady_clock;
-
-TaskXn::TaskXn(string name,int priority)
+TaskXn::TaskXn(std::string name,int priority)
     : mName(name)
+    , mOverruns(0)
     , mIsPeriodic(false)
+    , mWishToRun(true)
 {
     runTask(priority);
 }
 
-TaskXn::TaskXn(string name,
-       int priority,
-       duration period)
+TaskXn::TaskXn(std::string name,
+       std::chrono::steady_clock::duration period,
+       int priority)
     : mName(name)
-    , mIsPeriodic(true)
     , mPeriod(period)
+    , mOverruns(0)
+    , mIsPeriodic(true)
+    , mWishToRun(true)
 {
     runTask(priority);
 }
 
 void TaskXn::runTask(int priority)
 {
-    mOverruns = 0;
-    mWishToRun = true;
-    mTask = std::thread(taskFunction);
+    mTask = std::thread(&TaskXn::taskFunction, this);
     // Give RT priority to task
     sched_param sch;
     sch.__sched_priority = priority;
     if(pthread_setschedparam(mTask.native_handle(), SCHED_FIFO, &sch) == -1){
         mWishToRun = false;
         mTask.join();
-        throw ZnmException(mName, "TaskXn::TaskXn,"
-                                  " pthread_setschedparam", errno );
+        //throw ZnmException(mName, "TaskXn::TaskXn,"
+        //                          " pthread_setschedparam", errno );
     }
 }
 
@@ -72,7 +71,7 @@ void TaskXn::detach()
 
 std::chrono::duration<double> TaskXn::elapsedTimeSec()
 {
-    return now() - mStartTime;
+    return std::chrono::steady_clock::now() - mStartTime;
 }
 
 int TaskXn::maxPriority()
@@ -92,13 +91,13 @@ void TaskXn::requestPeriodicTaskTermination()
 
 void TaskXn::taskFunction()
 {
-    mStartTime = now();
+    mStartTime = std::chrono::steady_clock::now();
     if(mIsPeriodic){
-        time_point nextStartTime = mStartTime + mPeriod;
+        auto nextStartTime = mStartTime + mPeriod;
         while(mWishToRun){
             run();
             // detect overrun
-            if(nextStartTime - now() < 0){
+            if((nextStartTime - std::chrono::steady_clock::now()).count() < 0){
                 ++mOverruns;
             }
             std::this_thread::sleep_until(nextStartTime);

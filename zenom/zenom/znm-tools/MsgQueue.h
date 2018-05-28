@@ -15,6 +15,8 @@
 #include <fcntl.h>           /* For O_* constants */
 #include <unistd.h>
 #include <mqueue.h>
+#include <cerrno>
+#include <system_error>
 #include "znm-tools_global.h"
 
 //==============================================================================
@@ -32,7 +34,7 @@
 // \include MessageQueueXn.t.cpp
 //==============================================================================
 
-class ZNMTOOLSSHARED_EXPORT MsgQueue
+class MsgQueue
 {
  public:
     MsgQueue();

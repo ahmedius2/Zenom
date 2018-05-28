@@ -2,13 +2,6 @@
 #define ZNMTOOLS_GLOBAL_H
 
 #include <fcntl.h>           /* For O_* constants */
-#include <QtCore/qglobal.h>
-
-#if defined(ZNMTOOLS_LIBRARY)
-#  define ZNMTOOLSSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define ZNMTOOLSSHARED_EXPORT Q_DECL_IMPORT
-#endif
 
 namespace znm_tools
 {
