@@ -84,11 +84,11 @@ private:
     LogVariableList mLogVariables;
     ControlVariableList mControlVariables;
 
-    SharedMem mMainControlHeap;
+    SharedMem* mMainControlHeap;
     double* mMainControlHeapAddr;
 
-    MsgQueue mSender;
-    MsgQueue mReceiver;
+    MsgQueue* mSender;
+    MsgQueue* mReceiver;
 };
 
 #endif // DATAREPOSITORY_H

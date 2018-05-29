@@ -11,8 +11,9 @@
 #include "variable.h"
 #include <SharedMem.h>
 #include <chrono>
+#include <cstring>
 
-class ZNMCORESHARED_EXPORT LogVariable: public Variable
+class LogVariable: public Variable
 {
 public:
     LogVariable(double* pAddr,
@@ -23,7 +24,7 @@ public:
 
 	virtual ~LogVariable();
 
-    void setMainHeapAddr( void* pHeapAddr );
+    void setMainHeapAddr( double* pHeapAddr );
 
     /**
      * Log degiskeni frekansini getirir.
@@ -91,13 +92,13 @@ public:
 
 protected:
 
-    SharedMem mHeap;
-    void* mHeapBeginAddr;
-    void* mHeapAddr;
+    SharedMem* mHeap;
+    double* mHeapBeginAddr;
+    double* mHeapAddr;
 
-    void* mMainHeapAddr;
+    double* mMainHeapAddr;
 
-    void mLogCounter;
+    double mLogCounter;
 };
 
 #endif /* LOGVARIABLE_H_ */

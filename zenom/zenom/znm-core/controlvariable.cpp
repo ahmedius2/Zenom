@@ -7,7 +7,9 @@
 
 #include "controlvariable.h"
 
-ControlVariable::ControlVariable(double* pAddr, const std::string& pName, unsigned int pRow, unsigned int pCol, const std::string& pDesc)
+ControlVariable::ControlVariable(double* pAddr, const std::string& pName,
+                                 unsigned int pRow, unsigned int pCol,
+                                 const std::string& pDesc)
 : Variable(pAddr, pName, pDesc, pRow, pCol)
 {
     mMainHeapAddr = NULL;

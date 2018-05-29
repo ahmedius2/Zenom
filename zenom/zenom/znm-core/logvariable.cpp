@@ -8,7 +8,7 @@
 #include "logvariable.h"
 
 
-LogVariable::LogVariable(void* pAddr,
+LogVariable::LogVariable(double* pAddr,
                          const std::string& pName,
                          unsigned int pRow,
                          unsigned int pCol,
@@ -67,8 +67,8 @@ void LogVariable::createHeap()
     // (size + Time Stamp) * frequency * duration + index
     int heapSize = ((size() + 1) * frequency() * duration() + 1)*sizeof(double);
 
-	mHeap.create( mName, heapSize );
-    mHeapBeginAddr = (double*)mHeap.ptrToShMem();
+    mHeap = new SharedMem( mName, heapSize );
+    mHeapBeginAddr = (double*)mHeap->ptrToShMem();
 
 	// Heap was created successfully.
     mHeapBeginAddr[0] = 0;      // size
@@ -79,7 +79,8 @@ void LogVariable::createHeap()
 
 void LogVariable::deleteHeap()
 {
-    mHeap.unlink();
+    delete mHeap;
+    mHeap = nullptr;
 }
 
 void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
@@ -94,7 +95,7 @@ void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
             mLogCounter -= pMainFreq;   // reset counter;
 
             unsigned int num = size();
-            memcpy( mHeapAddr, mVariableAddr, sizeof(double) * num );
+            std::memcpy( mHeapAddr, mVariableAddr, sizeof(double) * num );
             // copy variable
             mHeapAddr[num] = pTimeInSec;			// copy time stamp
 
@@ -107,8 +108,8 @@ void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
 void LogVariable::bindHeap()
 {
     // first address is size address.
-	mHeap.bind( mName );
-    mHeapBeginAddr = mHeap.ptrToShMem();
+    mHeap = new SharedMem( mName );
+    mHeapBeginAddr = (double*)mHeap->ptrToShMem();
     mHeapAddr = mHeapBeginAddr + 1;
 
     mLogCounter = 0;
@@ -116,12 +117,13 @@ void LogVariable::bindHeap()
 
 void LogVariable::unbindHeap()
 {
-	mHeap.unbind();
+    delete mHeap;
+    mHeap = nullptr;
 }
 
 bool LogVariable::isHeapValid()
 {
-    return (mHeap.isBinded() || mHeap.isCreated()) && heapSize();
+    return (mHeap->isBinded() || mHeap->isCreated()) && heapSize();
 }
 
 int LogVariable::heapSize()

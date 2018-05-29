@@ -1,5 +1,7 @@
 #include "datarepository.h"
 #include <fstream>
+#include <iostream>
+#include <system_error>
 
 DataRepository* DataRepository::mInstance = NULL;
 
@@ -27,7 +29,7 @@ void DataRepository::setProjectName(const std::string &pName)
 {
     mProjectName = pName;
 }
-
+// Zenom process creates
 void DataRepository::createMainControlHeap()
 {
     // frequency, duration, current time, overrun
@@ -40,11 +42,14 @@ void DataRepository::createMainControlHeap()
     }
 
     // Log Variables
+    // first double is frequency of log variable
+    // second double is start time of log variable
+    // third double is duration of log variable
     size += mLogVariables.size() * 3;
 
-    mMainControlHeap.create( mProjectName + "MainControlHeap",
+    mMainControlHeap = new SharedMem( mProjectName + "MainControlHeap",
                              size * sizeof(double) );
-    mMainControlHeapAddr = (double*)mMainControlHeap.ptrToShMem();
+    mMainControlHeapAddr = (double*)mMainControlHeap->ptrToShMem();
     setFrequency( 1 );
     setDuration( 100 );
     setElapsedTimeSecond( 0 );
@@ -54,15 +59,16 @@ void DataRepository::createMainControlHeap()
 
 void DataRepository::deleteMainControlHeap()
 {
-    if (mMainControlHeap.unlink() == -1)
-        std::cerr << "Couldn't unlink shared memory (DataRepository)" << endl;
+    delete mMainControlHeap;
+    mMainControlHeap = nullptr;
 }
 
+// Control base process binds
 void DataRepository::bindMainControlHeap()
 {
     // first address is size
-    mMainControlHeap.bind( mProjectName + "MainControlHeap");
-    mMainControlHeapAddr = (double*)mMainControlHeap.ptrToShMem();
+    mMainControlHeap = new SharedMem( mProjectName + "MainControlHeap");
+    mMainControlHeapAddr = (double*)mMainControlHeap->ptrToShMem();
 
     assignHeapAddressToVariables();
 }
@@ -87,7 +93,8 @@ void DataRepository::assignHeapAddressToVariables()
 
 void DataRepository::unbindMainControlHeap()
 {
-    mMainControlHeap.unbind();
+    delete mMainControlHeap;
+    mMainControlHeap = nullptr;
 }
 
 void DataRepository::createLogVariablesHeap()
@@ -99,7 +106,7 @@ void DataRepository::createLogVariablesHeap()
             mLogVariables[i]->createHeap();
         }
     }
-    catch( ZnmException e )
+    catch( std::system_error e )
     {
         std::cout << std::string(e.what()) << std::endl;
 
@@ -115,7 +122,7 @@ void DataRepository::deleteLogVariablesHeap()
             mLogVariables[i]->deleteHeap();
         }
     }
-    catch( ZnmException e )
+    catch( std::system_error e )
     {
         std::cout << std::string(e.what()) << std::endl;
 
@@ -131,7 +138,7 @@ void DataRepository::bindLogVariablesHeap()
             mLogVariables[i]->bindHeap();
         }
     }
-    catch( ZnmException e )
+    catch( std::system_error e )
     {
         std::cout << std::string(e.what()) << std::endl;
 
@@ -147,7 +154,7 @@ void DataRepository::unbindLogVariableHeap()
             mLogVariables[i]->unbindHeap();
         }
     }
-    catch( ZnmException e )
+    catch( std::system_error e )
     {
         std::cout << std::string(e.what()) << std::endl;
 
@@ -156,32 +163,35 @@ void DataRepository::unbindLogVariableHeap()
 
 void DataRepository::createMessageQueues()
 {
-    mSender.create( mProjectName + "GuiToControl", 25,sizeof( StateRequest ));
-    mReceiver.create( mProjectName + "ControlToGui", 25, sizeof( StateRequest));
-
+    mSender =
+         new MsgQueue(mProjectName + "GuiToControl", 25,sizeof( StateRequest ));
+    mReceiver =
+         new MsgQueue(mProjectName + "ControlToGui", 25, sizeof( StateRequest));
 }
 
 void DataRepository::deleteMessageQueues()
 {
-    mSender.unlink();
-    mReceiver.unlink();
+    delete mSender,
+    delete mReceiver;
+    mSender = mReceiver = nullptr;
 }
 
 void DataRepository::bindMessageQueues()
 {
-    mSender.bind( mProjectName + "ControlToGui" );
-    mReceiver.bind( mProjectName + "GuiToControl" );
+    mSender   = new MsgQueue(mProjectName + "GuiToControl");
+    mReceiver = new MsgQueue(mProjectName + "ControlToGui");
 }
 
 void DataRepository::unbindMessageQueues()
 {
-    mSender.unbind();
-    mReceiver.unbind();
+    delete mSender,
+    delete mReceiver;
+    mSender = mReceiver = nullptr;
 }
 
 void DataRepository::sendStateRequest(StateRequest pRequest)
 {
-    mSender.send(&pRequest, sizeof(StateRequest) );
+    mSender->send(&pRequest, sizeof(StateRequest) );
 }
 
 ssize_t DataRepository::readState(StateRequest* pState)
@@ -190,7 +200,7 @@ ssize_t DataRepository::readState(StateRequest* pState)
     static struct timespec to;
     to.tv_nsec = 0;
     to.tv_sec = 1;
-    return mReceiver.receive( pState, sizeof(StateRequest), &to );
+    return mReceiver->receive( pState, sizeof(StateRequest), &to );
 }
 
 void DataRepository::sampleLogVariable(double pSimTimeInSec)

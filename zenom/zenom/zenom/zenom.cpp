@@ -33,14 +33,18 @@ Zenom::Zenom(int argc, char *argv[]) :
     mGaugeManager = new GaugeManager(this);
     mPlotManager = new PlotManager(this);
     mSceneManager = new SceneManager(this);
-    connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output, SLOT(appendWarningMessage(const QString&)) );
+    connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output,
+             SLOT(appendWarningMessage(const QString&)) );
 
 
     mMessageListenerTask = new MessageListenerTask(this);
 
-    connect( &mControlBaseProcess, SIGNAL( error(QProcess::ProcessError) ), SLOT( controlBaseProcessError(QProcess::ProcessError) ));
-    connect( &mControlBaseProcess, SIGNAL( readyReadStandardOutput() ), SLOT( controlBaseReadyReadStandardOutput() ));
-    connect( &mControlBaseProcess, SIGNAL( readyReadStandardError() ), SLOT( controlBaseReadyReadStandardError() ));
+    connect( &mControlBaseProcess, SIGNAL( error(QProcess::ProcessError) ),
+             SLOT( controlBaseProcessError(QProcess::ProcessError) ));
+    connect( &mControlBaseProcess, SIGNAL( readyReadStandardOutput() ),
+             SLOT( controlBaseReadyReadStandardOutput() ));
+    connect( &mControlBaseProcess, SIGNAL( readyReadStandardError() ),
+             SLOT( controlBaseReadyReadStandardError() ));
 
     setSimulationState( TERMINATED );
 
@@ -218,7 +222,10 @@ void Zenom::openProject(const QString& pProjectPath)
         QFileInfo fileInfo( projectAbsolutePath );
         if ( !fileInfo.exists() )
         {
-            ui->output->appendErrorMessage( QString("Error: Failed opening project: '%1' does not exist.").arg(pProjectPath) );
+            ui->output->appendErrorMessage(
+                        QString(
+                           "Error: Failed opening project: '%1' does not exist."
+                        ).arg(pProjectPath) );
             return;
         }
 
@@ -233,7 +240,7 @@ void Zenom::openProject(const QString& pProjectPath)
 
         mMessageListenerTask->create( mDataRepository->projectName() + "MessageListenerTask" );
         mMessageListenerTask->start();
-
+        //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )
         {

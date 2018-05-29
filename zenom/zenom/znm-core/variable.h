@@ -11,7 +11,7 @@
 #include <string>
 #include "znm-core_global.h"
 
-class ZNMCORESHARED_EXPORT Variable
+class Variable
 {
 public:
     Variable(double* pAddr,
