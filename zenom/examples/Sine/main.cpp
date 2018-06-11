@@ -1,4 +1,5 @@
 /**
+
  * Zenom - Hard Real-Time Simulation Enviroment
  * @author zenom
  *
@@ -6,7 +7,7 @@
  * A simple example of a control program.
  * Does not require any hardware, just generates a sine signal.
  */
-
+#include <iostream>
 #include <controlbase.h>
 #include <math.h>
 

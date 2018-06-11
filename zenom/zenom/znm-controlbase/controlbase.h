@@ -7,12 +7,11 @@
 #include "looptask.h"
 #include "lifecycletask.h"
 
-#include "znm-controlbase_global.h"
 
 #define SECOND_TO_NANO (1000000000)
 #define MILLISECOND_TO_NANO (1000000)
 
-class ZNMCONTROLBASESHARED_EXPORT ControlBase
+class ControlBase
 {
     friend class LifeCycleTask;
 	friend class LoopTask;
@@ -58,18 +57,19 @@ public:
 
 	virtual int terminate(){return 0;}
 
-    //std::chrono::steady_clock::duration period() { return mPeriod; }
+    double period() {
+        return mLoopTask->period();
+    }
 
-    //std::chrono::steady_clock::duration elapsedTime() {
-    //    return mLifeCycleTask->elapsedTimeSec();
-    //}
+    double elapsedTime() {
+        return mLifeCycleTask->elapsedTimeSec();
+    }
 
-    //int overruns() { return mLoopTask->overruns(); }
+    int overruns() { return mLoopTask->overruns(); }
 
 private:
     // Duration of simulation, it will end at this time.
-    std::chrono::seconds<double> mDuration;
-
+    double mDuration;
 
     //========================================================================//
     //		INITIALIZE OPERATIONS											  //
@@ -84,13 +84,13 @@ private:
 	void resumeControlBase();
 
     //========================================================================//
-    //		LOOP OPERATIONS												  //
-	//============================================================================//
+    //		LOOP OPERATIONS									   			      //
+    //========================================================================//
 	void syncMainHeap();
     // Loop Task Elapsed Time
-    void logVariables( std::chrono::duration pSimTime );
+    void logVariables( double pSimTime );
 
-	//============================================================================//
+    //========================================================================//
 	//		STOP OPERATIONS														  //
 	//============================================================================//
 	void stopControlBase();

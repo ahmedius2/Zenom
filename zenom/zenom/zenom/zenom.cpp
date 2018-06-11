@@ -238,8 +238,8 @@ void Zenom::openProject(const QString& pProjectPath)
         mDataRepository->createMessageQueues();
 
 
-        mMessageListenerTask->create( mDataRepository->projectName() + "MessageListenerTask" );
-        mMessageListenerTask->start();
+        mMessageListenerTask = new MessageListenerTask( this );
+        //mMessageListenerTask->start();
         //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )
@@ -285,7 +285,7 @@ void Zenom::openProject(const QString& pProjectPath)
             ui->output->appendMessage( QString("%1 succesfully loaded.").arg(projectName) );
         }
     }
-    catch( ZnmException e )
+    catch( std::system_error e )
     {
         // TODO file exist ise ne olacak
         std::cout << "openProject" << std::string( e.what() ) << std::endl;
@@ -394,7 +394,7 @@ void Zenom::terminateProject()
         on_stopButton_clicked();
     }
 
-    mMessageListenerTask->deleteTask();
+    delete mMessageListenerTask;
 
     if ( mControlBaseProcess.state() != QProcess::NotRunning )
     {

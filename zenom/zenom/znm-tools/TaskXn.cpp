@@ -21,14 +21,15 @@ TaskXn::TaskXn(std::string name,int priority)
 }
 
 TaskXn::TaskXn(std::string name,
-       std::chrono::steady_clock::duration period,
+       std::chrono::duration<double> period,
        int priority)
     : mName(name)
-    , mPeriod(period)
     , mOverruns(0)
     , mIsPeriodic(true)
     , mWishToRun(true)
 {
+    mPeriod =
+        std::chrono::duration_cast<std::chrono::steady_clock::duration>(period);
     runTask(priority);
 }
 
@@ -41,8 +42,8 @@ void TaskXn::runTask(int priority)
     if(pthread_setschedparam(mTask.native_handle(), SCHED_FIFO, &sch) == -1){
         mWishToRun = false;
         mTask.join();
-        //throw ZnmException(mName, "TaskXn::TaskXn,"
-        //                          " pthread_setschedparam", errno );
+        throw std::system_error(errno, std::system_category(),
+                        mName +" TaskXn, mq_open");
     }
 }
 
@@ -68,10 +69,17 @@ void TaskXn::detach()
 {
     mTask.detach();
 }
-
-std::chrono::duration<double> TaskXn::elapsedTimeSec()
+double TaskXn::elapsedTimeSec()
 {
-    return std::chrono::steady_clock::now() - mStartTime;
+    return std::chrono::duration_cast<std::chrono::duration<double>>
+                      (std::chrono::steady_clock::now() - mStartTime).count();
+}
+
+double TaskXn::period()
+{
+    return std::chrono::duration_cast<std::chrono::duration<double>>(
+                                                           mPeriod
+                                                           ).count();
 }
 
 int TaskXn::maxPriority()

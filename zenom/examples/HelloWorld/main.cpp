@@ -7,6 +7,7 @@
  *
  */
 
+#include <iostream>
 #include <controlbase.h>
 
 class HelloWorld : public ControlBase

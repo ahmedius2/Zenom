@@ -9,7 +9,7 @@
 #define LOOP_TASK_H_
 
 #include <TaskXn.h>
-#include "controlbase.h"
+
 
 class ControlBase;
 

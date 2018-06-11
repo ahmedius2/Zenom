@@ -5,12 +5,14 @@
  *      Author: root
  */
 
+#include <iostream>
 #include "looptask.h"
 #include <datarepository.h>
+#include "controlbase.h"
 
 LoopTask::LoopTask( ControlBase* pControlBase, std::string name)
     : mControlBase(pControlBase)
-    , TaskXn(name, mControlBase->)
+    , TaskXn(name, mControlBase->period())
 {
 }
 
@@ -48,8 +50,8 @@ void LoopTask::run()
         }
 	}
 
-    if( mControlBase->mLifeCycleTask->elapsedTimeSec() > mControlBase->mDuration
-            || error )
+    if( mControlBase->mLifeCycleTask->elapsedTimeSec()
+            > mControlBase->mDuration || error )
     {
         DataRepository::instance()->sendStateRequest( R_STOP );
         this->requestPeriodicTaskTermination();

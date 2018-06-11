@@ -2,7 +2,7 @@
 // TaskXn.hpp - Task class.
 //
 // Author        :
-// Version       : 2.0.01 (Temmuz 2009)
+// Version       : 2.0.01 (June 2018)
 // Compatibility : POSIX, GCC
 //==============================================================================
 
@@ -47,7 +47,7 @@ class TaskXn
      * @param priority nanosconds on x86 linux
      */
     TaskXn(std::string name,
-           std::chrono::steady_clock::duration period,
+           std::chrono::duration<double> period,
            int priority = 16);
 
     /**
@@ -73,7 +73,9 @@ class TaskXn
 
     void detach();
 
-    std::chrono::duration<double> elapsedTimeSec();
+    double elapsedTimeSec();
+
+    double period();
 
     static int maxPriority();
 

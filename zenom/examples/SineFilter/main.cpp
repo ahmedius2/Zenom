@@ -7,6 +7,8 @@
  *
  */
 
+#include <iostream>
+
 #include <controlbase.h>
 #include <math.h>
 #include <ButterworthFilter.hpp>

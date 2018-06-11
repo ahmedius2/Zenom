@@ -14,7 +14,7 @@ VERSION = 1.0.0
 
 QT       -= core gui
 QMAKE_CXXFLAGS += -std=c++11
-#CONFIG += c++11
+CONFIG += c++11
 TARGET   = znm-tools
 TEMPLATE = lib
 
@@ -28,7 +28,8 @@ SOURCES += \
 HEADERS +=\
     TaskXn.h \
     SharedMem.h \
-    MsgQueue.h
+    MsgQueue.h \
+    znm-tools_global.h
 
 
 # build directory
@@ -41,3 +42,5 @@ INSTALLS += target
 headers.files  = $${HEADERS}
 headers.path   = $${ZENOM_INSTALL_HEADERS}
 INSTALLS += headers
+
+LIBS += -lrt

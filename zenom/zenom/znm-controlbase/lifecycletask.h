@@ -9,12 +9,10 @@
 #define LIFE_CYCLE_TASK_H_
 
 #include <TaskXn.h>
-#include "controlbase.h"
-
 
 class ControlBase;
 
-class LifeCycleTask: public TaskXn
+class LifeCycleTask : public TaskXn
 {
 public:
     LifeCycleTask( ControlBase* pControlBase , std::string name);

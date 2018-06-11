@@ -5,11 +5,12 @@
  *      Author: root
  */
 
-#include "lifecycletask.h"
-#include <datarepository.h>
 #include <iostream>
+#include <datarepository.h>
+#include "lifecycletask.h"
+#include "controlbase.h"
 
-LifeCycleTask::LifeCycleTask( ControlBase* pControlBase , std::sting name)
+LifeCycleTask::LifeCycleTask( ControlBase* pControlBase , std::string name)
     : mControlBase(pControlBase)
     ,TaskXn(name)
 {
@@ -56,9 +57,9 @@ void LifeCycleTask::run()
             }
         }
 	}
-    catch (ZnmException e)
+    catch (std::system_error e)
 	{
-        std::cerr << "Error occurred controlBase:"<< e.errorNo() <<
+        std::cerr << "Error occurred controlBase:"<< e.code() <<
                      std::string(e.what()) << std::endl;
 	}
     catch (std::exception e)

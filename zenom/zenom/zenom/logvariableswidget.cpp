@@ -133,7 +133,7 @@ void LogVariablesWidget::setFrequency( int pIndex, double pFrequency )
 	QTableWidgetItem* frequency = ui->logVariableTable->item(pIndex, 1);
 	if ( pFrequency > 0 )
 	{
-		logVariable->setFrequency( pFrequency );
+        logVariable->setFrequency( pFrequency );
 		frequency->setText( QString::number(pFrequency) );
 	}
 	else

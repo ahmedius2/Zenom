@@ -1,6 +1,7 @@
 #include "controlbase.h"
 
 #include <sys/mman.h>
+#include <iostream>
 
 using namespace std::chrono;
 ControlBase::ControlBase(/*int argc, char* argv[]*/)
@@ -69,7 +70,7 @@ void ControlBase::run(int argc, char *argv[])
         mLifeCycleTask->join(); // wait for execution to finish
 		delete mLifeCycleTask;
 	}
-    catch (ZnmException e)
+    catch ( std::exception& e)
 	{
         std::cout << "Life Task Error occurred: " << std::string(e.what())
                   << std::endl;
@@ -194,12 +195,13 @@ void ControlBase::syncMainHeap()
         mDataRepository->controlVariables()[i]->copyFromHeap();
     }
 
-    mDataRepository->setElapsedTimeSecond( mLifeCycleTask->elapsedTimeSec() );
+    mDataRepository->setElapsedTimeSecond(
+                mLifeCycleTask->elapsedTimeSec() );
     mDataRepository->setOverruns( mLoopTask->overruns() );
 }
 
 
-void ControlBase::logVariables( steady_clock::duration pSimTime )
+void ControlBase::logVariables( double pSimTime )
 {
     mDataRepository->sampleLogVariable( pSimTime );
 }

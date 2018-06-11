@@ -2,6 +2,7 @@
 #include <MsgQueue.h>
 #include <datarepository.h>
 #include <unistd.h>
+#include <iostream>
 
 MessageListenerTask::MessageListenerTask( Zenom* pZenom )
     :  mZenom(pZenom)

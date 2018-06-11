@@ -33,7 +33,7 @@ public:
     double frequency();
 
     /**
-     * Log degiskeni frekansini gunceller.
+     * Log degiskeni periyodunu gunceller.
      * @param Logfrequency  Yeni frekans
      */
     void setFrequency(double pFrequency);

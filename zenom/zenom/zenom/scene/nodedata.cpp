@@ -1,5 +1,5 @@
 #include "nodedata.h"
-
+#include <iostream>
 
 void NodeCallback::operator()( osg::Node* pNode, osg::NodeVisitor* pNodeVisitor )
 {
