@@ -13,39 +13,27 @@
 
 TaskXn::TaskXn(std::string name,int priority)
     : mName(name)
+    , mPriority(priority)
     , mOverruns(0)
     , mIsPeriodic(false)
-    , mWishToRun(true)
+    , mWishToRun(false)
 {
-    runTask(priority);
 }
 
 TaskXn::TaskXn(std::string name,
        std::chrono::duration<double> period,
        int priority)
     : mName(name)
+    , mPriority(priority)
     , mOverruns(0)
     , mIsPeriodic(true)
-    , mWishToRun(true)
+    , mWishToRun(false)
 {
     mPeriod =
         std::chrono::duration_cast<std::chrono::steady_clock::duration>(period);
-    runTask(priority);
 }
 
-void TaskXn::runTask(int priority)
-{
-    mTask = std::thread(&TaskXn::taskFunction, this);
-    // Give RT priority to task
-    sched_param sch;
-    sch.__sched_priority = priority;
-    if(pthread_setschedparam(mTask.native_handle(), SCHED_FIFO, &sch) == -1){
-        mWishToRun = false;
-        mTask.join();
-        throw std::system_error(errno, std::system_category(),
-                        mName +" TaskXn, mq_open");
-    }
-}
+
 
 TaskXn::~TaskXn()
 {
@@ -53,6 +41,25 @@ TaskXn::~TaskXn()
     if(mTask.joinable())
         mTask.join();
 
+}
+
+void TaskXn::runTask()
+{
+    if(mWishToRun){
+        std::cerr << "Task " + mName + " is already running..." << std::endl;
+        return;
+    }
+    mWishToRun = true;
+    mTask = std::thread(&TaskXn::taskFunction, this);
+    // Give RT priority to task
+    sched_param sch;
+    sch.__sched_priority = mPriority;
+    if(pthread_setschedparam(mTask.native_handle(), SCHED_FIFO, &sch) == -1){
+        mWishToRun = false;
+        mTask.join();
+        throw std::system_error(errno, std::system_category(),
+                        mName +" TaskXn, mq_open");
+    }
 }
 
 unsigned TaskXn::overruns()
@@ -114,6 +121,7 @@ void TaskXn::taskFunction()
     }
     else{
         run();
+        mWishToRun = false;
     }
 }
 

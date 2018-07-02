@@ -19,8 +19,9 @@ public:
     LoopTask( ControlBase* pControlBase , std::string name);
 
 private:
+    ControlBase* mControlBase;
     void run();
-	ControlBase* mControlBase;
+
 };
 
 #endif /* LOOP_TASK_H_ */

@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QTime>
 
+
 #include "utility/matlabstream.h"
 
 Zenom::Zenom(int argc, char *argv[]) :
@@ -238,8 +239,7 @@ void Zenom::openProject(const QString& pProjectPath)
         mDataRepository->createMessageQueues();
 
 
-        mMessageListenerTask = new MessageListenerTask( this );
-        //mMessageListenerTask->start();
+        mMessageListenerTask->runTask();
         //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )

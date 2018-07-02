@@ -16,6 +16,9 @@ DataRepository* DataRepository::instance()
 }
 
 DataRepository::DataRepository()
+    : mReceiver(nullptr)
+    , mSender(nullptr)
+    , mMainControlHeap(nullptr)
 {
     mProjectName = "Test";
 }

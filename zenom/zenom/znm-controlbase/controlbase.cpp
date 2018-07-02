@@ -67,6 +67,7 @@ void ControlBase::run(int argc, char *argv[])
         mLifeCycleTask = new LifeCycleTask( this,
                                    mDataRepository->projectName() +
                                    "LifeCycleTask");
+        mLifeCycleTask->runTask();
         mLifeCycleTask->join(); // wait for execution to finish
 		delete mLifeCycleTask;
 	}
@@ -171,6 +172,7 @@ void ControlBase::startControlBase()
             mLoopTask = new LoopTask(
                         this,mDataRepository->projectName() + "LoopTask"
                         );
+            mLoopTask->runTask();
         }
     }
 }

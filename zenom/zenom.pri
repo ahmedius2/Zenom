@@ -17,7 +17,7 @@ ZENOM_VERSION   = $${ZENOM_VER_MAJ}.$${ZENOM_VER_MIN}.$${ZENOM_VER_PAT}
 # Install paths
 #--------------------------------------------------------------
 
-ZENOM_INSTALL_PREFIX = /usr
+ZENOM_INSTALL_PREFIX = /usr/local
 
 ZENOM_INSTALL_HEADERS   = $${ZENOM_INSTALL_PREFIX}/include/zenom
 ZENOM_INSTALL_LIBS      = $${ZENOM_INSTALL_PREFIX}/lib64

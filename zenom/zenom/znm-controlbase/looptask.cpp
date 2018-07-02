@@ -11,8 +11,9 @@
 #include "controlbase.h"
 
 LoopTask::LoopTask( ControlBase* pControlBase, std::string name)
-    : mControlBase(pControlBase)
-    , TaskXn(name, mControlBase->period())
+    : TaskXn(name, mControlBase->period())
+    , mControlBase(pControlBase)
+
 {
 }
 

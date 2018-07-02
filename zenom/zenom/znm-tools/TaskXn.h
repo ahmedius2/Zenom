@@ -65,7 +65,7 @@ class TaskXn
      */
     virtual ~TaskXn();
 
-//    void setOverrunLimit(unsigned ovrLimit);
+    void runTask();
 
     unsigned overruns();
 
@@ -86,9 +86,8 @@ class TaskXn
     void requestPeriodicTaskTermination();
  private:
     void taskFunction();
-    void runTask(int priority);
-
     std::string mName;
+    int mPriority;
     std::thread mTask;
     std::chrono::steady_clock::duration mPeriod;
     std::chrono::steady_clock::time_point mStartTime;

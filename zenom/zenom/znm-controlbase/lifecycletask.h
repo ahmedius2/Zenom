@@ -18,8 +18,8 @@ public:
     LifeCycleTask( ControlBase* pControlBase , std::string name);
 
 private:
+    ControlBase* mControlBase;
     virtual void run();
-	ControlBase* mControlBase;
 };
 
 #endif /* LIFE_CYCLE_TASK_H_ */

@@ -1,9 +1,9 @@
 #ifndef MESSAGELISTENERTASK_H_
 #define MESSAGELISTENERTASK_H_
 
-#include <TaskXn.h>
 #include <QQueue>
-#include "zenom.h"
+#include <TaskXn.h>
+#include "znm-core_global.h"
 class Zenom;
 
 class MessageListenerTask: public TaskXn
@@ -11,16 +11,12 @@ class MessageListenerTask: public TaskXn
 public:
     MessageListenerTask(Zenom* pZenom);
 
-    virtual void run();
-
-    /*
-     *
-     */
     bool waitForInitMessage();
 
 private:
-    Zenom* mZenom;
+    virtual void run();
     QQueue<StateRequest> mMessageQueue;
+    Zenom* mZenom;
 };
 
 #endif /* MESSAGELISTENERTASK_H_ */

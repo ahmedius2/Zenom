@@ -1,21 +1,23 @@
-#include "messagelistenertask.h"
+#include <QMetaObject>
 #include <MsgQueue.h>
 #include <datarepository.h>
 #include <unistd.h>
 #include <iostream>
 
-MessageListenerTask::MessageListenerTask( Zenom* pZenom )
-    :  mZenom(pZenom)
-    ,TaskXn("MessageListenerTask")
-{
+#include "messagelistenertask.h"
+#include "zenom.h"
 
+MessageListenerTask::MessageListenerTask( Zenom* pZenom )
+    :  TaskXn("MessageListenerTask")
+    , mZenom(pZenom)
+{
 }
 
 void MessageListenerTask::run()
 {
+    StateRequest stateRequest;
     while( true )
     {
-        StateRequest stateRequest;
         if( DataRepository::instance()->readState( &stateRequest ) >= 0 )
         {
             switch (stateRequest)

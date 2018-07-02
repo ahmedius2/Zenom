@@ -14,9 +14,6 @@
 #include <datarepository.h>
 #include <MsgQueue.h>
 
-#include "messagelistenertask.h"
-class MessageListenerTask;
-
 #include "widget/statusbar.h"
 #include "controlvariableswidget.h"
 #include "logvariableswidget.h"
@@ -25,15 +22,18 @@ class MessageListenerTask;
 #include "scene/scenemanager.h"
 #include "aboutdialog.h"
 
+#include "messagelistenertask.h"
+
 
 namespace Ui {
 class Zenom;
 }
 
+
 class Zenom : public QMainWindow
 {
     Q_OBJECT
-    friend class MessageListenerTask;
+    //friend class MessageListenerTask;
     
 public:
     explicit Zenom( int argc, char *argv[] );
