@@ -15,6 +15,7 @@ LogVariable::LogVariable(double* pAddr,
                          const std::string& pDesc)
  : Variable(pAddr, pName, pDesc, pRow, pCol)
 {
+    mHeap = nullptr;
     mHeapBeginAddr = nullptr;
     mMainHeapAddr = nullptr;
 }
@@ -79,8 +80,13 @@ void LogVariable::createHeap()
 
 void LogVariable::deleteHeap()
 {
-    delete mHeap;
-    mHeap = nullptr;
+
+    if(mHeap != nullptr){
+        delete mHeap;
+        mHeap = nullptr;
+        mHeapBeginAddr = nullptr;
+        mHeapAddr = nullptr;
+    }
 }
 
 void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
@@ -117,13 +123,15 @@ void LogVariable::bindHeap()
 
 void LogVariable::unbindHeap()
 {
-    delete mHeap;
-    mHeap = nullptr;
+    if(mHeap != nullptr){
+        delete mHeap;
+        mHeap = nullptr;
+    }
 }
 
 bool LogVariable::isHeapValid()
 {
-    return (mHeap->isBinded() || mHeap->isCreated()) && heapSize();
+    return (mHeap != nullptr) && heapSize();
 }
 
 int LogVariable::heapSize()

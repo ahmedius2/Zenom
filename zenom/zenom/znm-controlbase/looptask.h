@@ -16,11 +16,13 @@ class ControlBase;
 class LoopTask: public TaskXn
 {
 public:
-    LoopTask( ControlBase* pControlBase , std::string name);
+    LoopTask( ControlBase* pControlBase
+              ,std::chrono::duration<double> period
+              ,std::string name);
 
 private:
     ControlBase* mControlBase;
-    void run();
+    void run() override;
 
 };
 

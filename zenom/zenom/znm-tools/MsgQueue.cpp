@@ -9,52 +9,64 @@
 
 
 #include "MsgQueue.h"
+#include<iostream>
 
 MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
                    long maxMsgSize, znm_tools::Flags flags)
 {
+    std::string name = '/' + nameOfNewMsgQueue;
+
+    std::cerr << "Creating MQ:" + name << std::endl;
+
     struct mq_attr mqAttr;
     mqAttr.mq_maxmsg = maxNumOfMsgsInMQ;
     mqAttr.mq_msgsize= maxMsgSize;
     mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-    mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags|O_CREAT|O_EXCL,
+    mMqfd = mq_open(name.c_str(), flags|O_CREAT|O_EXCL,
                     mode, &mqAttr);
     if (mMqfd == -1){
         if(errno == EEXIST){
-            mq_unlink(nameOfNewMsgQueue.c_str());
-            mMqfd = mq_open(nameOfNewMsgQueue.c_str(), flags|O_CREAT,
+            mq_unlink(name.c_str());
+            mMqfd = mq_open(name.c_str(), flags|O_CREAT,
                             mode, &mqAttr);
         }
         if (mMqfd == -1)
             throw std::system_error(errno, std::system_category(),
-                                nameOfNewMsgQueue +" MsgQueue, mq_open");
+                                name +" MsgQueue, mq_open");
     }
 
-    mName = nameOfNewMsgQueue;
+    mName = name;
     mMaxMsgSize = maxMsgSize;
     mNumMaxMsgs = maxNumOfMsgsInMQ;
     mIsCreated = true;
+
+    std::cerr << "Created MQ:" + name << std::endl;
 }
 
 MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind,znm_tools::Flags flags)
 {
-    // 0666 is default linux file permission
-    mMqfd = mq_open(nameOfMsgQueueToBind.c_str(), flags);
+    std::string name = '/' + nameOfMsgQueueToBind;
+
+    std::cerr << "Binding MQ:" + name << std::endl;
+
+    mMqfd = mq_open(name.c_str(), flags);
     if (mMqfd == -1)
         throw std::system_error(errno, std::system_category(),
-                        nameOfMsgQueueToBind +" MsgQueue, mq_open");
+                        name +" MsgQueue, mq_open");
 
     struct mq_attr mqAttr;
     if(mq_getattr(mMqfd, &mqAttr) == -1){
         mq_close(mMqfd);
         throw std::system_error(errno, std::system_category(),
-                        nameOfMsgQueueToBind +" MsgQueue, mq_getattr");
+                        name +" MsgQueue, mq_getattr");
     }
 
-    mName = nameOfMsgQueueToBind;
+    mName = name;
     mMaxMsgSize = mqAttr.mq_maxmsg;
     mNumMaxMsgs = mqAttr.mq_msgsize;
     mIsCreated = false;
+
+    std::cerr << "Binded MQ:" + name << std::endl;
 }
 
 MsgQueue::~MsgQueue()

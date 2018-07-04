@@ -62,8 +62,10 @@ void DataRepository::createMainControlHeap()
 
 void DataRepository::deleteMainControlHeap()
 {
-    delete mMainControlHeap;
-    mMainControlHeap = nullptr;
+    if(mMainControlHeap != nullptr){
+        delete mMainControlHeap;
+        mMainControlHeap = nullptr;
+    }
 }
 
 // Control base process binds
@@ -96,8 +98,10 @@ void DataRepository::assignHeapAddressToVariables()
 
 void DataRepository::unbindMainControlHeap()
 {
-    delete mMainControlHeap;
-    mMainControlHeap = nullptr;
+    if(mMainControlHeap != nullptr){
+        delete mMainControlHeap;
+        mMainControlHeap = nullptr;
+    }
 }
 
 void DataRepository::createLogVariablesHeap()
@@ -174,22 +178,33 @@ void DataRepository::createMessageQueues()
 
 void DataRepository::deleteMessageQueues()
 {
-    delete mSender,
-    delete mReceiver;
-    mSender = mReceiver = nullptr;
+    if(mSender != nullptr){
+        delete mSender;
+        mSender = nullptr;
+    }
+    if(mReceiver != nullptr){
+        delete mReceiver;
+        mReceiver = nullptr;
+    }
 }
 
 void DataRepository::bindMessageQueues()
 {
-    mSender   = new MsgQueue(mProjectName + "GuiToControl");
-    mReceiver = new MsgQueue(mProjectName + "ControlToGui");
+    // reverse of create
+    mReceiver = new MsgQueue(mProjectName + "GuiToControl");
+    mSender = new MsgQueue(mProjectName + "ControlToGui");
 }
 
 void DataRepository::unbindMessageQueues()
 {
-    delete mSender,
-    delete mReceiver;
-    mSender = mReceiver = nullptr;
+    if(mSender != nullptr){
+        delete mSender;
+        mSender = nullptr;
+    }
+    if(mReceiver != nullptr){
+        delete mReceiver;
+        mReceiver = nullptr;
+    }
 }
 
 void DataRepository::sendStateRequest(StateRequest pRequest)

@@ -14,7 +14,7 @@ public:
     bool waitForInitMessage();
 
 private:
-    virtual void run();
+    void run() override;
     QQueue<StateRequest> mMessageQueue;
     Zenom* mZenom;
 };

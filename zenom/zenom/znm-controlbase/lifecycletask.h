@@ -19,7 +19,7 @@ public:
 
 private:
     ControlBase* mControlBase;
-    virtual void run();
+    void run() override;
 };
 
 #endif /* LIFE_CYCLE_TASK_H_ */

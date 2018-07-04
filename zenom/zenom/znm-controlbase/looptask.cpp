@@ -10,11 +10,15 @@
 #include <datarepository.h>
 #include "controlbase.h"
 
-LoopTask::LoopTask( ControlBase* pControlBase, std::string name)
-    : TaskXn(name, mControlBase->period())
+LoopTask::LoopTask( ControlBase* pControlBase
+                    ,std::chrono::duration<double> period
+                    ,std::string name)
+    : TaskXn(name, period)
     , mControlBase(pControlBase)
 
 {
+    std::cerr << "LoopTask constructor, period " << period.count() <<
+              " seconds" << std::endl;
 }
 
 void LoopTask::run()
@@ -46,14 +50,15 @@ void LoopTask::run()
                              " function." << std::endl;
             }
 
-            mControlBase->logVariables( mControlBase->mDuration );
+
+            mControlBase->logVariables( elapsedTimeSec() );
             mControlBase->syncMainHeap();
         }
 	}
 
-    if( mControlBase->mLifeCycleTask->elapsedTimeSec()
-            > mControlBase->mDuration || error )
+    if( elapsedTimeSec() > mControlBase->duration() || error )
     {
+        std::cerr << "LoopTask lifetime has ended" << std::endl;
         DataRepository::instance()->sendStateRequest( R_STOP );
         this->requestPeriodicTaskTermination();
     }

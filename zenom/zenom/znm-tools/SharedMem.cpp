@@ -12,10 +12,12 @@
 #include <unistd.h>
 #include <system_error>
 #include <cerrno>
+#include <iostream>
 #include "SharedMem.h"
 
 SharedMem::SharedMem(const std::string &name,size_t size,znm_tools::Flags flags)
 {
+    std::cerr << "SharedMem create," + name + " started" << std::endl;
     mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
     mShmfd = shm_open(name.c_str(), flags | O_CREAT | O_EXCL, mode);
     if (mShmfd == -1){
@@ -25,7 +27,7 @@ SharedMem::SharedMem(const std::string &name,size_t size,znm_tools::Flags flags)
         }
         if (mShmfd == -1)
             throw std::system_error(errno, std::system_category(),
-                                    name +" SharedMem, shm_open");
+                                    name +" SharedMem(create), shm_open");
     }
 
     if (ftruncate(mShmfd, size) == -1){
@@ -54,21 +56,26 @@ SharedMem::SharedMem(const std::string &name,size_t size,znm_tools::Flags flags)
         close(mShmfd);
         shm_unlink(name.c_str());
         throw std::system_error(errno, std::system_category(),
-                                name + " SharedMem, mmap");
+                                name + " SharedMem(create), mmap");
     }
 
     mName = name;
     mSize = size;
     mIsCreated = true;
+
+    std::cerr << "SharedMem create," + name + " ended" << std::endl;
+
 }
 
 SharedMem::SharedMem(const std::string &name, znm_tools::Flags flags)
 {
+    std::cerr << "SharedMem bind," + name + " started" << std::endl;
+
     mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
     mShmfd = shm_open(name.c_str(), flags, mode);
     if (mShmfd == -1)
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem, open");
+                            name + " SharedMem(bind), shm_open");
 
     // Get size of existing shared mem
     struct stat shmMemInfo;
@@ -95,12 +102,15 @@ SharedMem::SharedMem(const std::string &name, znm_tools::Flags flags)
     if(mPtrToShMem == MAP_FAILED){
         close(mShmfd);
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem, mmap");
+                            name + " SharedMem(bind), mmap");
     }
 
     mName = name;
     mSize = shmMemInfo.st_size;
     mIsCreated = false;
+
+    std::cerr << "SharedMem bind," + name + " ended" << std::endl;
+
 }
 
 SharedMem::~SharedMem()

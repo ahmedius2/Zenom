@@ -38,4 +38,4 @@ OSG_LIBS      = /usr/local/lib64/
 #--------------------------------------------------------------
 # QtCreator Wizards Plugin Path
 #--------------------------------------------------------------
-QTCREATOR_WIZARDS_PATH = /opt/Qt/Tools/QtCreator/templates/wizards
+QTCREATOR_WIZARDS_PATH = /usr/share/qtcreator/templates/wizards

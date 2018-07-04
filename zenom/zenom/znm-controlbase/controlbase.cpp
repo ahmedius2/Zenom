@@ -1,16 +1,19 @@
 #include "controlbase.h"
 
 #include <sys/mman.h>
-#include <iostream>
+
+
 
 using namespace std::chrono;
 ControlBase::ControlBase(/*int argc, char* argv[]*/)
 {
     mDataRepository = DataRepository::instance();
+    myfile.open ("controlbase.log", std::ios::out);
 }
 
 ControlBase::~ControlBase()
 {
+    myfile.close();
 
 }
 
@@ -84,6 +87,9 @@ void ControlBase::run(int argc, char *argv[])
 //============================================================================//
 void ControlBase::initializeControlBase()
 {
+
+
+
     try
     {
         int error = initialize();	// User Function
@@ -107,9 +113,27 @@ void ControlBase::initializeControlBase()
 
     mDataRepository->writeVariablesToFile();
     mDataRepository->bindMessageQueues();
+    myfile << "Controlbase binded to Message queues" << std::endl;
     mDataRepository->sendStateRequest( R_INIT );
+    myfile << "Controlbase sent first state request" << std::endl;
     // Send message to GUI to read variables
-    mDataRepository->bindMainControlHeap();
+    bool bind_success = false;
+    do{
+        try{
+            mDataRepository->bindMainControlHeap();
+            bind_success = true;
+        }
+        catch (std::system_error e){
+            myfile << "Bind problem: " << e.what() << std::endl;
+            if(e.code() == std::errc::no_such_file_or_directory){
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            }
+            else
+                throw e;
+        }
+    }while(!bind_success);
+
+    myfile << "Controlbase binded to main heap" << std::endl;
 
     // Control Variable degerleri heap'e kopyalanir.
     for (size_t i = 0; i < mDataRepository->controlVariables().size(); ++i)
@@ -117,7 +141,11 @@ void ControlBase::initializeControlBase()
         mDataRepository->controlVariables()[i]->copyToHeap();
     }
 
+    myfile << "Controlbase copied variables to heap" << std::endl;
+
     mDataRepository->sendStateRequest( R_INIT );
+
+    myfile << "Controlbase sent second state request" << std::endl;
     // Send message to GUI to read values
     mState = STOPPED;
 }
@@ -127,16 +155,25 @@ void ControlBase::initializeControlBase()
 //============================================================================//
 void ControlBase::startControlBase()
 {
+    myfile << "startControlBase is called" << std::endl;
 	if( mState != RUNNING )
     {
+        myfile << "Controlbase starting" << std::endl;
+
         mDataRepository->bindLogVariablesHeap();
+
+        myfile << "Controlbase binded to log var. heap" << std::endl;
         syncMainHeap();
+
+        myfile << "Controlbase synced to main heap" << std::endl;
 
         int error = 0;
 
         try
         {
+            myfile << "Controlbase starting user defined start" << std::endl;
             error = start();	// User Function
+            myfile << "Controlbase ended user defined start" << std::endl;
 
             // start() hata ile donerse program baslatilmaz.
             if ( error )
@@ -161,18 +198,28 @@ void ControlBase::startControlBase()
         // start() hata ile donerse program baslatilmaz.
         if ( error )
         {
+            myfile << "Controlbase an error occured" << std::endl;
             mState = STOPPED;
             DataRepository::instance()->sendStateRequest( R_STOP );
+            myfile << "Controlbase sent request to stop" << std::endl;
             mDataRepository->unbindLogVariableHeap();
+            myfile << "Controlbase unbinded log variables heap" << std::endl;
         }
         else
         {
             mState = RUNNING;
-
+            myfile << "Controlbase creating loop task" << std::endl;
             mLoopTask = new LoopTask(
-                        this,mDataRepository->projectName() + "LoopTask"
+                            this,
+                            std::chrono::duration<double>(
+                                1.0 / mDataRepository->frequency()
+                            ),
+                            mDataRepository->projectName() + "LoopTask"
                         );
+            myfile << "Controlbase starting loop task" << std::endl;
             mLoopTask->runTask();
+            // error is probably somewhere here
+            myfile << "Controlbase loop task should be running" << std::endl;
         }
     }
 }
@@ -197,8 +244,7 @@ void ControlBase::syncMainHeap()
         mDataRepository->controlVariables()[i]->copyFromHeap();
     }
 
-    mDataRepository->setElapsedTimeSecond(
-                mLifeCycleTask->elapsedTimeSec() );
+    mDataRepository->setElapsedTimeSecond(mLifeCycleTask->elapsedTimeSec() );
     mDataRepository->setOverruns( mLoopTask->overruns() );
 }
 

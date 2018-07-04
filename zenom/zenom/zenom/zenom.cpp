@@ -15,7 +15,8 @@
 
 Zenom::Zenom(int argc, char *argv[]) :
     QMainWindow( NULL ),
-    ui(new Ui::Zenom)
+    ui(new Ui::Zenom),
+    mMessageListenerTask(nullptr)
 {
     ui->setupUi(this);
     createRecentFileActions();
@@ -36,9 +37,6 @@ Zenom::Zenom(int argc, char *argv[]) :
     mSceneManager = new SceneManager(this);
     connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output,
              SLOT(appendWarningMessage(const QString&)) );
-
-
-    mMessageListenerTask = new MessageListenerTask(this);
 
     connect( &mControlBaseProcess, SIGNAL( error(QProcess::ProcessError) ),
              SLOT( controlBaseProcessError(QProcess::ProcessError) ));
@@ -71,7 +69,6 @@ Zenom::Zenom(int argc, char *argv[]) :
 Zenom::~Zenom()
 {
     terminateProject();
-    delete mMessageListenerTask;
     delete ui;
 }
 
@@ -215,6 +212,8 @@ void Zenom::openProject(const QString& pProjectPath)
 {
     terminateProject();     // close project if already a project was opened.
 
+    std::cerr << "Terminated project before open(just to be sure)" << std::endl;
+
     // TODO catch blogu ve return kontrol et hersey silindigine emin ol
     try
     {
@@ -232,14 +231,18 @@ void Zenom::openProject(const QString& pProjectPath)
 
         QDir::setCurrent( fileInfo.path() );
         const QString projectName = fileInfo.baseName();
-        const QString controlBaseProgram = fileInfo.dir().filePath( fileInfo.baseName() );
+        const QString controlBaseProgram =
+                fileInfo.dir().filePath( fileInfo.baseName() );
 
         mDataRepository->setProjectName( projectName.toStdString() );
 
         mDataRepository->createMessageQueues();
 
+        std::cerr << "openProject: message queues are created" << std::endl;
 
+        mMessageListenerTask = new MessageListenerTask(this);
         mMessageListenerTask->runTask();
+
         //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )
@@ -247,31 +250,47 @@ void Zenom::openProject(const QString& pProjectPath)
             // Controlbase'den mesaj gelene kadar beklenir.
             if ( !mMessageListenerTask->waitForInitMessage() )
             {
-                ui->output->appendErrorMessage( QString("Error: Failed connecting program: The program does not implemented specified format.") );
+                ui->output->appendErrorMessage(
+                 QString("Error1: Failed connecting program: The program "
+                         "does not implemented specified format.") );
                 return;
             }
+            std::cerr << "Message from controlbase has come" << std::endl;
 
             if( !mDataRepository->readVariablesFromFile() )
             {
-                ui->output->appendErrorMessage( QString("Error: Failed connecting program: The program does not implemented specified format.") );
+                ui->output->appendErrorMessage(
+                  QString("Error2: Failed connecting program: The program"
+                          " does not implemented specified format.") );
                 return;
             }
 
+            std::cerr << "read Variables from file" << std::endl;
+
             mDataRepository->createMainControlHeap();
+
+            std::cerr << "openProject: created Main control heap" << std::endl;
 
             // Controlbase main control heap'e baglanmasi ve
             // control variable degerlerini main control heap'e yazmasi beklenir.
             if ( !mMessageListenerTask->waitForInitMessage() )
             {
-                ui->output->appendErrorMessage( QString("Error: Failed connecting program: The program does not implemented specified format.") );
+                ui->output->appendErrorMessage(
+                   QString("Error3: Failed connecting program: The program "
+                           "does not implemented specified format.") );
                 return;
             }
+            std::cerr << "Message from controlbase has come again" << std::endl;
 
             mControlVariablesWidget->setControlVariableList( mDataRepository->controlVariables() );
             mLogVariablesWidget->setLogVariableList( mDataRepository->logVariables() );
             mGaugeManager->setLogVariableList( mDataRepository->logVariables() );
 
+            std::cerr << "Variables are set" << std::endl;
+
             loadSettings( projectAbsolutePath );
+
+            std::cerr << "Settings are loaded" << std::endl;
 
             setSimulationState( STOPPED );
             mTimer.start(50);
@@ -283,6 +302,8 @@ void Zenom::openProject(const QString& pProjectPath)
             insertRecentFileList( projectAbsolutePath );
 
             ui->output->appendMessage( QString("%1 succesfully loaded.").arg(projectName) );
+
+            std::cerr << "Open finished" << std::endl;
         }
     }
     catch( std::system_error e )
@@ -394,7 +415,8 @@ void Zenom::terminateProject()
         on_stopButton_clicked();
     }
 
-    delete mMessageListenerTask;
+    if(mMessageListenerTask != nullptr)
+        delete mMessageListenerTask;
 
     if ( mControlBaseProcess.state() != QProcess::NotRunning )
     {
@@ -402,7 +424,8 @@ void Zenom::terminateProject()
         if ( !mControlBaseProcess.waitForFinished() )    // Finish the process
         {
             //appendTextToOutput("Terminating unsuccesful");
-            mControlBaseProcess.kill(); // TODO process bir sure sonlanmaz ise kill etsek mi? kill edince crashed oluyor.
+            mControlBaseProcess.kill(); // TODO process bir sure sonlanmaz
+            // ise kill etsek mi? kill edince crashed oluyor.
         }
     }
 

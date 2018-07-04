@@ -1,0 +1,14 @@
+Controlbase binded to Message queues
+Controlbase sent first state request
+Controlbase binded to main heap
+Controlbase copied variables to heap
+Controlbase sent second state request
+startControlBase is called
+Controlbase starting
+Controlbase binded to log var. heap
+Controlbase synced to main heap
+Controlbase starting user defined start
+Controlbase ended user defined start
+Controlbase creating loop task
+Controlbase starting loop task
+Controlbase loop task should be running

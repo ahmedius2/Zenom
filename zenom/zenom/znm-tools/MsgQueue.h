@@ -37,17 +37,6 @@
 class MsgQueue
 {
  public:
-    MsgQueue();
-
-    /**
-     * @brief operator = do not use assignment operator
-     */
-    MsgQueue & operator =(const MsgQueue&) = delete;
-
-    /**
-     * @brief MsgQueue do not use copy constructor
-     */
-    MsgQueue(const MsgQueue&) = delete;
 
     /**
      * @brief MsgQueue creating constructor
@@ -56,8 +45,10 @@ class MsgQueue
      * @param maxMsgSize
      * @param flags
      */
-    MsgQueue(const std::string& nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
-             long maxMsgSize,znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
+    MsgQueue(const std::string& nameOfNewMsgQueue,
+             long maxNumOfMsgsInMQ,
+             long maxMsgSize,
+             znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     /**
      * @brief MsgQueue binding constructor
@@ -68,6 +59,16 @@ class MsgQueue
              znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     ~MsgQueue();
+
+    /**
+     * @brief operator = do not use assignment operator
+     */
+    MsgQueue & operator =(const MsgQueue&) = delete;
+
+    /**
+     * @brief MsgQueue do not use copy constructor
+     */
+    MsgQueue(const MsgQueue&) = delete;
 
 
     /**
@@ -80,7 +81,7 @@ class MsgQueue
      * it will try to send until timeout occurs
      * @return
      */
-    int send(void *buf, size_t size , unsigned int priority= 0,
+    int send(void *buf, size_t size , unsigned int priority= 31,
              struct timespec *timeout = nullptr);
 
     /**

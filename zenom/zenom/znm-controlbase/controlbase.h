@@ -4,6 +4,8 @@
 #include <vector>
 #include <datarepository.h>
 #include <MsgQueue.h>
+#include <iostream>
+#include <fstream>
 #include "looptask.h"
 #include "lifecycletask.h"
 
@@ -14,7 +16,7 @@
 class ControlBase
 {
     friend class LifeCycleTask;
-	friend class LoopTask;
+    friend class LoopTask;
 
 public:
 
@@ -58,18 +60,20 @@ public:
 	virtual int terminate(){return 0;}
 
     double period() {
-        return mLoopTask->period();
+        return 1.0 / mDataRepository->frequency();
     }
 
     double elapsedTime() {
-        return mLifeCycleTask->elapsedTimeSec();
+        return mLoopTask->elapsedTimeSec();
+    }
+
+    double duration() {
+        return mDataRepository->duration();
     }
 
     int overruns() { return mLoopTask->overruns(); }
 
 private:
-    // Duration of simulation, it will end at this time.
-    double mDuration;
 
     //========================================================================//
     //		INITIALIZE OPERATIONS											  //
@@ -104,6 +108,9 @@ private:
 	LoopTask* mLoopTask;
 	State mState;
     DataRepository* mDataRepository;
+
+    // log file
+    std::ofstream myfile;
 };
 
 #endif /* CONTROLBASE_H_ */
