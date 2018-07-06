@@ -30,15 +30,14 @@ class SharedMem
 {
 
 public:
-    /**
-     * @brief operator = do not use assignment operator
-     */
-    SharedMem & operator =(const SharedMem&) = delete;
 
     /**
-     * @brief SharedMem do not use copy constructor
+     * @brief SharedMem constructor to bind existing shared memory
+     * @param name
+     * @param flags
      */
-    SharedMem(const SharedMem&) = delete;
+    SharedMem(const std::string& name,
+              znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     /**
      * @brief SharedMem constructor to create a new shared memory
@@ -51,12 +50,15 @@ public:
               znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
 
     /**
-     * @brief SharedMem constructor to bind existing shared memory
-     * @param name
-     * @param flags
+     * @brief operator = do not use assignment operator
      */
-    SharedMem(const std::string& name,
-              znm_tools::Flags flags = znm_tools::Flags::READ_AND_WRITE);
+    SharedMem & operator =(const SharedMem&) = delete;
+
+    /**
+     * @brief SharedMem do not use copy constructor
+     */
+    SharedMem(const SharedMem&) = delete;
+
 
     /**
      * @brief ~SharedMem destructs shared memory object and unlinks the

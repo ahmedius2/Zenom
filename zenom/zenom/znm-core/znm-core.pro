@@ -33,7 +33,6 @@ HEADERS +=\
     controlvariable.h \
     datarepository.h
 
-QMAKE_CXXFLAGS += -std=c++11
 # Zenom Tools Library
 INCLUDEPATH += ../znm-tools
 DEPENDPATH += ../znm-tools

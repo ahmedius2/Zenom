@@ -11,7 +11,7 @@
 #include "controlbase.h"
 
 LifeCycleTask::LifeCycleTask( ControlBase* pControlBase , std::string name)
-    : TaskXn(name)
+    : TaskXn(name, 32)
     ,  mControlBase(pControlBase)
 
 {

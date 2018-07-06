@@ -13,12 +13,10 @@
 LoopTask::LoopTask( ControlBase* pControlBase
                     ,std::chrono::duration<double> period
                     ,std::string name)
-    : TaskXn(name, period)
+    : TaskXn(name, period,32)
     , mControlBase(pControlBase)
 
 {
-    std::cerr << "LoopTask constructor, period " << period.count() <<
-              " seconds" << std::endl;
 }
 
 void LoopTask::run()
@@ -54,12 +52,12 @@ void LoopTask::run()
             mControlBase->logVariables( elapsedTimeSec() );
             mControlBase->syncMainHeap();
         }
+
+        if( elapsedTimeSec() > mControlBase->duration() || error )
+        {
+            DataRepository::instance()->sendStateRequest( R_STOP );
+            this->requestPeriodicTaskTermination();
+        }
 	}
 
-    if( elapsedTimeSec() > mControlBase->duration() || error )
-    {
-        std::cerr << "LoopTask lifetime has ended" << std::endl;
-        DataRepository::instance()->sendStateRequest( R_STOP );
-        this->requestPeriodicTaskTermination();
-    }
 }

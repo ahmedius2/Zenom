@@ -17,7 +17,7 @@ HAPTIC_WAND_VERSION   = $${HAPTIC_WAND_VER_MAJ}.$${HAPTIC_WAND_VER_MIN}.$${HAPTI
 # Install paths
 #--------------------------------------------------------------
 
-HAPTIC_WAND_INSTALL_PREFIX = /usr
+HAPTIC_WAND_INSTALL_PREFIX = /usr/local
 
 HAPTIC_WAND_INSTALL_HEADERS   = $${HAPTIC_WAND_INSTALL_PREFIX}/include/hapticWand
 HAPTIC_WAND_INSTALL_LIBS      = $${HAPTIC_WAND_INSTALL_PREFIX}/lib64
@@ -26,7 +26,7 @@ HAPTIC_WAND_INSTALL_BINS      = $${HAPTIC_WAND_INSTALL_PREFIX}/bin
 #--------------------------------------------------------------
 # Zenom path
 #--------------------------------------------------------------
-ZENOM_HEADERS   = /usr/include/zenom
-ZENOM_LIBS      = /usr/lib64
+ZENOM_HEADERS   = /usr/local/include/zenom
+ZENOM_LIBS      = /usr/local/lib64
 
 

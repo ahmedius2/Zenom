@@ -115,7 +115,7 @@ int Tracker::doloop()
     hapticWand.forwardKinematics( jointAngles, w.getElementsPointer() );    // current world position.
 
     // Desired position.
-    wd = setPoint.wd( simTimeInSec() , period() ) + firstSample;
+    wd = setPoint.wd( elapsedTime() , period() ) + firstSample;
 
     // calculate forces.
     ColumnVector<5> F;

@@ -131,8 +131,7 @@ void LogVariablesWidget::setFrequency( int pIndex, double pFrequency )
 {
 	LogVariable* logVariable = DataRepository::instance()->logVariables()[pIndex];
 	QTableWidgetItem* frequency = ui->logVariableTable->item(pIndex, 1);
-	if ( pFrequency > 0 )
-	{
+    if ( pFrequency > 0 ){
         logVariable->setFrequency( pFrequency );
 		frequency->setText( QString::number(pFrequency) );
 	}

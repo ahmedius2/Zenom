@@ -19,7 +19,7 @@
  */
 namespace Hardware
 {
-    class HAPTICWANDSHARED_EXPORT HapticWand : public HIL
+    class HapticWand : public HIL
     {
     public:
         HapticWand();

@@ -8,9 +8,11 @@
 #include "zenom.h"
 
 MessageListenerTask::MessageListenerTask( Zenom* pZenom )
-    :  TaskXn("MessageListenerTask")
-    , mZenom(pZenom)
+    :  mZenom(pZenom),
+       initMsgs(0),
+       TaskXn("MessageListenerTask")
 {
+
 }
 
 void MessageListenerTask::run()
@@ -18,17 +20,18 @@ void MessageListenerTask::run()
     StateRequest stateRequest;
     while( true )
     {
-        //std::cerr << "MessageListenerTask waiting for state message" << std::endl;
-        if( DataRepository::instance()->readState( &stateRequest ) >= 0 )
+        if( DataRepository::instance()->readState( &stateRequest ) > 0 )
         {
             std::cerr << "MessageListenerTask state read" << std::endl;
             switch (stateRequest)
             {
 
                 case R_INIT:
-                    // All functions in QQueue are reentrant.
-                    mMessageQueue.enqueue( R_INIT );
                     std::cerr << "read state R_INIT" << std::endl;
+                    mtx.lock();
+                    ++initMsgs;
+                    mtx.unlock();
+                    condvar.notify_one();
                     break;
 
                 case R_STOP:
@@ -47,23 +50,16 @@ void MessageListenerTask::run()
 
 bool MessageListenerTask::waitForInitMessage()
 {
-    // All functions in QQueue Class are reentrant.
-    int attempt = 0;
-    while ( mMessageQueue.isEmpty() && attempt < 40 )
-    {
-        std::cerr << "waiting for init message" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        ++attempt;
-    }
+    using namespace std::chrono;
 
-    if( attempt < 40 )
-    {
-        mMessageQueue.dequeue();
-        return true;
-    }
+    std::unique_lock<std::mutex> ulock(mtx);
+
+    bool ret = condvar.wait_for(ulock,seconds(2),[this]{return initMsgs != 0;});
+
+    if(ret)
+        --initMsgs;
     else
-    {
-        return false;
-    }
+        std::cerr << "Init message timeout..." << std::endl;
 
+    return ret;
 }

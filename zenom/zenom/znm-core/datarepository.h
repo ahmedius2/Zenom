@@ -5,6 +5,7 @@
 #include <logvariable.h>
 #include <controlvariable.h>
 #include <MsgQueue.h>
+#include <iostream>
 
 typedef std::vector<ControlVariable*> ControlVariableList;
 typedef std::vector<LogVariable*> LogVariableList;
@@ -24,12 +25,14 @@ public:
     void bindMainControlHeap();
     void unbindMainControlHeap();
 
-    inline double frequency(){ return mMainControlHeapAddr[0]; }
+    inline double frequency(){
+        return mMainControlHeapAddr[0]; }
     void setFrequency(double pFrequency) {
         mMainControlHeapAddr[0] = pFrequency;
     }
 
-    inline double duration(){ return mMainControlHeapAddr[1]; }
+    inline double duration(){
+        return mMainControlHeapAddr[1]; }
     void setDuration(double pDuration) {
         mMainControlHeapAddr[1] = pDuration;
     }

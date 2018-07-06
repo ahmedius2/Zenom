@@ -9,14 +9,11 @@
 
 
 #include "MsgQueue.h"
-#include<iostream>
 
 MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
                    long maxMsgSize, znm_tools::Flags flags)
 {
     std::string name = '/' + nameOfNewMsgQueue;
-
-    std::cerr << "Creating MQ:" + name << std::endl;
 
     struct mq_attr mqAttr;
     mqAttr.mq_maxmsg = maxNumOfMsgsInMQ;
@@ -39,15 +36,11 @@ MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
     mMaxMsgSize = maxMsgSize;
     mNumMaxMsgs = maxNumOfMsgsInMQ;
     mIsCreated = true;
-
-    std::cerr << "Created MQ:" + name << std::endl;
 }
 
 MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind,znm_tools::Flags flags)
 {
     std::string name = '/' + nameOfMsgQueueToBind;
-
-    std::cerr << "Binding MQ:" + name << std::endl;
 
     mMqfd = mq_open(name.c_str(), flags);
     if (mMqfd == -1)
@@ -66,7 +59,6 @@ MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind,znm_tools::Flags flag
     mNumMaxMsgs = mqAttr.mq_msgsize;
     mIsCreated = false;
 
-    std::cerr << "Binded MQ:" + name << std::endl;
 }
 
 MsgQueue::~MsgQueue()
@@ -91,7 +83,7 @@ int MsgQueue::send(void *buf, size_t size , unsigned int priority,
     if (timeout == nullptr)
         bytesSend = mq_send(mMqfd, (const char*)buf, size, priority);
     else
-        bytesSend = mq_timedsend(mMqfd, (const char*)buf, size, priority,timeout);
+        bytesSend = mq_timedsend(mMqfd, (const char*)buf, size, priority, timeout);
     if (bytesSend == -1 && errno != ETIMEDOUT)
         throw std::system_error(errno, std::system_category(),
                     mName +" MsgQueue::send");

@@ -6,8 +6,9 @@
 
 include( ../HapticWand.pri )
 
-#QT       -= core gui
-
+#QT -= core gui
+QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++11
 TARGET = HapticWand
 TEMPLATE = lib
 
@@ -25,6 +26,7 @@ HEADERS += hapticwand.h\
     q8Config.h \
     hapticwand_utils.h
 
+INCLUDEPATH += /usr/include/qt4/QtCore
 
 # build directory
 DESTDIR = ../lib

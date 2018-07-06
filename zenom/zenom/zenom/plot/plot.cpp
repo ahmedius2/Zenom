@@ -107,7 +107,8 @@ void Plot::tick()
     // Increment interval
     if ( maxTime > d_interval.maxValue() )
     {
-        setAutoscaleAndInterval( autoscale(), d_interval.maxValue(), d_interval.maxValue() + timeInterval() );
+        setAutoscaleAndInterval( autoscale(), d_interval.maxValue(),
+                                 d_interval.maxValue() + timeInterval() );
     }
 
     // rescale when simulation start
@@ -171,7 +172,8 @@ double Plot::timeInterval()
 
 void Plot::setTimeInterval(double pInterval)
 {
-    setAutoscaleAndInterval( autoscale(), d_interval.minValue(), d_interval.minValue() + pInterval );
+    setAutoscaleAndInterval( autoscale(), d_interval.minValue(),
+                             d_interval.minValue() + pInterval );
 }
 
 bool Plot::autoscale()

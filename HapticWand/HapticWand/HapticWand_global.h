@@ -1,7 +1,8 @@
 #ifndef HAPTICWAND_GLOBAL_H
 #define HAPTICWAND_GLOBAL_H
 
-#include <QtCore/qglobal.h>
+//#include <QtCore/qglobal.h>
+#include <inttypes.h>
 
 #if defined(HAPTICWAND_LIBRARY)
 #  define HAPTICWANDSHARED_EXPORT Q_DECL_EXPORT

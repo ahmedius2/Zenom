@@ -96,7 +96,6 @@ int Sine::doloop()
 {
     // ----- Generates sine wave -----
     sine = amplitude * sin( elapsedTime() );
-
     return 0;
 }
 

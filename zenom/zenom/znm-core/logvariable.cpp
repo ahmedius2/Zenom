@@ -6,7 +6,7 @@
  */
 
 #include "logvariable.h"
-
+#include <iostream>
 
 LogVariable::LogVariable(double* pAddr,
                          const std::string& pName,
@@ -30,7 +30,7 @@ void LogVariable::setMainHeapAddr(double *pHeapAddr)
     mMainHeapAddr = pHeapAddr;
     mMainHeapAddr[0] = 1;      // frequency
     mMainHeapAddr[1] = 0;      // start time
-    mMainHeapAddr[2] = 100;     // duration
+    mMainHeapAddr[2] = 100;    // duration
 }
 
 double LogVariable::frequency()
@@ -91,6 +91,7 @@ void LogVariable::deleteHeap()
 
 void LogVariable::insertToHeap(double pTimeInSec, double pMainFreq)
 {
+
     // TODO duration ondalik sayı olmasin.
     if( startTime() <= pTimeInSec && pTimeInSec < (startTime() + duration()) )
 	{

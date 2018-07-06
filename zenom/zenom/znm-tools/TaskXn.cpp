@@ -44,14 +44,12 @@ TaskXn::~TaskXn()
 
 void TaskXn::runTask()
 {
-    std::cerr << "Task " + mName + " will run" << std::endl;
     if(mWishToRun){
         std::cerr << "Task " + mName + " is already running..." << std::endl;
         return;
     }
     mWishToRun = true;
     mTask = std::thread(&TaskXn::taskFunction, this);
-    std::cerr << "Task " + mName + " thread created" << std::endl;
     // Give RT priority to task
     sched_param sch;
     sch.__sched_priority = mPriority;
@@ -61,7 +59,6 @@ void TaskXn::runTask()
         throw std::system_error(errno, std::system_category(),
                         mName +" TaskXn, mq_open");
     }
-    std::cerr << "Task " + mName + " has been given priority" << std::endl;
 }
 
 unsigned TaskXn::overruns()
@@ -109,15 +106,17 @@ void TaskXn::requestPeriodicTaskTermination()
 
 void TaskXn::taskFunction()
 {
-    std::cerr << "Task " + mName + " started" << std::endl;
     mStartTime = std::chrono::steady_clock::now();
     if(mIsPeriodic){
+
         auto nextStartTime = mStartTime + mPeriod;
         while(mWishToRun){
             run();
             // count overrun
             if((nextStartTime - std::chrono::steady_clock::now()).count() < 0){
                 ++mOverruns;
+                std::cerr << "Task " << mName << " overrun: " << mOverruns <<
+                             " !" << std::endl;
             }
             std::this_thread::sleep_until(nextStartTime);
             nextStartTime += mPeriod;
@@ -127,6 +126,5 @@ void TaskXn::taskFunction()
         run();
         mWishToRun = false;
     }
-    std::cerr << "Task " + mName + " ending..." << std::endl;
 }
 

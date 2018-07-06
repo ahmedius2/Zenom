@@ -13,7 +13,7 @@ namespace Hardware
      * The base class for all exceptions thrown by the Quanser.Hardware.HIL class.
      *
      */
-    class HAPTICWANDSHARED_EXPORT HILException: public std::exception
+    class HILException: public std::exception
     {
     public:
         /**

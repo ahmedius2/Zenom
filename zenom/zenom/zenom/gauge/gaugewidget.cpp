@@ -9,6 +9,8 @@
 #include "numericgauge.h"
 #include "editgaugedialog.h"
 
+#include<iostream>
+
 GaugeWidget::GaugeWidget(QWidget *parent) :
     QWidget(parent, Qt::Window | Qt::WindowCloseButtonHint ),
     ui(new Ui::GaugeWidget)

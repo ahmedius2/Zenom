@@ -15,102 +15,104 @@
 
 class ControlBase
 {
-    friend class LifeCycleTask;
-    friend class LoopTask;
+	friend class LifeCycleTask;
+	friend class LoopTask;
 
-public:
+	public:
 
 	ControlBase(/*int argc, char* argv[]*/);
 
 	virtual ~ControlBase();
 
-    /**
-     * Register Functions
-     */
-    void registerLogVariable(double *pVariable,
-                             const std::string& pName,
-                             unsigned int pRow = 1,
-                             unsigned int pCol = 1,
-                             const std::string& pDesc= "");
+	/**
+	 * Register Functions
+	 */
+	void registerLogVariable(double *pVariable,
+			const std::string& pName,
+			unsigned int pRow = 1,
+			unsigned int pCol = 1,
+			const std::string& pDesc= "");
 
-    void registerLogVariable(double& pVariable,
-                             const std::string& pName,
-                             const std::string& pDesc= "");
+	void registerLogVariable(double& pVariable,
+			const std::string& pName,
+			const std::string& pDesc= "");
 
-    void registerControlVariable(double *pVariable,
-                                 const std::string& pName,
-                                 unsigned int pRow = 1,
-                                 unsigned int pCol = 1,
-                                 const std::string& pDesc= "");
+	void registerControlVariable(double *pVariable,
+			const std::string& pName,
+			unsigned int pRow = 1,
+			unsigned int pCol = 1,
+			const std::string& pDesc= "");
 
-    void registerControlVariable(double& pVariable,
-                                 const std::string& pName,
-                                 const std::string& pDesc= "");
+	void registerControlVariable(double& pVariable,
+			const std::string& pName,
+			const std::string& pDesc= "");
 
-    void run(int argc, char *argv[]);
+	void run(int argc, char *argv[]);
 
 	virtual int initialize(){return 0;}
 
 	virtual int start(){return 0;}
 
-    virtual int doloop(){return 0;}
+	virtual int doloop(){return 0;}
 
 	virtual int stop(){return 0;}
 
 	virtual int terminate(){return 0;}
 
-    double period() {
-        return 1.0 / mDataRepository->frequency();
+    double frequency() {
+       return  mDataRepository->frequency();
     }
 
-    double elapsedTime() {
-        return mLoopTask->elapsedTimeSec();
-    }
+	double period() {
+		return 1.0 / mDataRepository->frequency();
+	}
 
-    double duration() {
-        return mDataRepository->duration();
-    }
+	double elapsedTime() {
+		return mLoopTask->elapsedTimeSec();
+	}
 
-    int overruns() { return mLoopTask->overruns(); }
+	double duration() {
+		return mDataRepository->duration();
+	}
 
-private:
+	int overruns() { return mLoopTask->overruns(); }
 
-    //========================================================================//
-    //		INITIALIZE OPERATIONS											  //
-    //========================================================================//
+	private:
+
+	//========================================================================//
+	//		INITIALIZE OPERATIONS											  //
+	//========================================================================//
 	void initializeControlBase();
 
-    //========================================================================//
-    //		START OPERATIONS                                                  //
-    //========================================================================//
+	//========================================================================//
+	//		START OPERATIONS                                                  //
+	//========================================================================//
 	void startControlBase();
 	void pauseControlBase();
 	void resumeControlBase();
 
-    //========================================================================//
-    //		LOOP OPERATIONS									   			      //
-    //========================================================================//
+	//========================================================================//
+	//		LOOP OPERATIONS									   			      //
+	//========================================================================//
 	void syncMainHeap();
-    // Loop Task Elapsed Time
-    void logVariables( double pSimTime );
+	// Loop Task Elapsed Time
+	void logVariables( double pSimTime );
 
-    //========================================================================//
+	//========================================================================//
 	//		STOP OPERATIONS														  //
-	//============================================================================//
+    //========================================================================//
 	void stopControlBase();
 
-	//============================================================================//
+    //========================================================================//
 	//		TERMINATE OPERATIONS												  //
-	//============================================================================//
+    //========================================================================//
 	void terminateControlBase();
 
-    LifeCycleTask* mLifeCycleTask;
+	LifeCycleTask* mLifeCycleTask;
 	LoopTask* mLoopTask;
 	State mState;
-    DataRepository* mDataRepository;
+	DataRepository* mDataRepository;
 
-    // log file
-    std::ofstream myfile;
 };
 
 #endif /* CONTROLBASE_H_ */

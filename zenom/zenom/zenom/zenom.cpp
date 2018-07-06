@@ -158,6 +158,7 @@ void Zenom::doloop()
     mGaugeManager->tick();
     mPlotManager->tick();
     mSceneManager->tick();
+
 }
 
 State Zenom::simulationState()
@@ -212,8 +213,6 @@ void Zenom::openProject(const QString& pProjectPath)
 {
     terminateProject();     // close project if already a project was opened.
 
-    std::cerr << "Terminated project before open(just to be sure)" << std::endl;
-
     // TODO catch blogu ve return kontrol et hersey silindigine emin ol
     try
     {
@@ -238,8 +237,6 @@ void Zenom::openProject(const QString& pProjectPath)
 
         mDataRepository->createMessageQueues();
 
-        std::cerr << "openProject: message queues are created" << std::endl;
-
         mMessageListenerTask = new MessageListenerTask(this);
         mMessageListenerTask->runTask();
 
@@ -255,7 +252,6 @@ void Zenom::openProject(const QString& pProjectPath)
                          "does not implemented specified format.") );
                 return;
             }
-            std::cerr << "Message from controlbase has come" << std::endl;
 
             if( !mDataRepository->readVariablesFromFile() )
             {
@@ -265,11 +261,16 @@ void Zenom::openProject(const QString& pProjectPath)
                 return;
             }
 
-            std::cerr << "read Variables from file" << std::endl;
+            std::cerr << "Creating shared memories" << std::endl;
+
+            //SharedMem tempsm("example", sizeof(double)*8);
+            //double *dp = (double*)tempsm.ptrToShMem();
+            //for(int i=0; i<8; ++i)
+            //    dp[i] = i*4;
 
             mDataRepository->createMainControlHeap();
 
-            std::cerr << "openProject: created Main control heap" << std::endl;
+            std::cerr << "Created shared memories" << std::endl;
 
             // Controlbase main control heap'e baglanmasi ve
             // control variable degerlerini main control heap'e yazmasi beklenir.
@@ -280,17 +281,12 @@ void Zenom::openProject(const QString& pProjectPath)
                            "does not implemented specified format.") );
                 return;
             }
-            std::cerr << "Message from controlbase has come again" << std::endl;
 
             mControlVariablesWidget->setControlVariableList( mDataRepository->controlVariables() );
             mLogVariablesWidget->setLogVariableList( mDataRepository->logVariables() );
             mGaugeManager->setLogVariableList( mDataRepository->logVariables() );
 
-            std::cerr << "Variables are set" << std::endl;
-
             loadSettings( projectAbsolutePath );
-
-            std::cerr << "Settings are loaded" << std::endl;
 
             setSimulationState( STOPPED );
             mTimer.start(50);
@@ -375,6 +371,7 @@ void Zenom::setFrequency(double pFrequency)
 {
     if ( pFrequency > 0 )
     {
+        std::cout << "Zenom::setFrequeny , freq:" << pFrequency << std::endl;
         mDataRepository->setFrequency( pFrequency );
         ui->frequency->setText( QString::number(pFrequency) );
         mLogVariablesWidget->mainFrequencyChanged( pFrequency );
@@ -428,6 +425,8 @@ void Zenom::terminateProject()
             // ise kill etsek mi? kill edince crashed oluyor.
         }
     }
+
+
 
     setSimulationState( TERMINATED );
 

@@ -19,7 +19,7 @@
 
 namespace Hardware
 {
-    class HAPTICWANDSHARED_EXPORT HIL {
+    class HIL {
     public:
         HIL();
 

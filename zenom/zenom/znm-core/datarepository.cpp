@@ -16,9 +16,9 @@ DataRepository* DataRepository::instance()
 }
 
 DataRepository::DataRepository()
-    : mReceiver(nullptr)
+    : mMainControlHeap(nullptr)
     , mSender(nullptr)
-    , mMainControlHeap(nullptr)
+    , mReceiver(nullptr)
 {
     mProjectName = "Test";
 }
@@ -53,11 +53,14 @@ void DataRepository::createMainControlHeap()
     mMainControlHeap = new SharedMem( mProjectName + "MainControlHeap",
                              size * sizeof(double) );
     mMainControlHeapAddr = (double*)mMainControlHeap->ptrToShMem();
-    setFrequency( 1 );
-    setDuration( 100 );
+    setFrequency( 10 );
+    setDuration( 10 );
     setElapsedTimeSecond( 0 );
     setOverruns( 0 );
+
+
     assignHeapAddressToVariables();
+
 }
 
 void DataRepository::deleteMainControlHeap()
@@ -215,7 +218,7 @@ void DataRepository::sendStateRequest(StateRequest pRequest)
 ssize_t DataRepository::readState(StateRequest* pState)
 {
     // timeout 1 seconds
-    static struct timespec to;
+    struct timespec to;
     to.tv_nsec = 0;
     to.tv_sec = 1;
     return mReceiver->receive( pState, sizeof(StateRequest), &to );
@@ -223,6 +226,7 @@ ssize_t DataRepository::readState(StateRequest* pState)
 
 void DataRepository::sampleLogVariable(double pSimTimeInSec)
 {
+
     for (unsigned int i = 0; i < mLogVariables.size(); ++i)
     {
         mLogVariables[i]->insertToHeap( pSimTimeInSec, frequency() );

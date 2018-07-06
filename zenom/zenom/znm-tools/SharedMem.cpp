@@ -17,24 +17,20 @@
 
 SharedMem::SharedMem(const std::string &name,size_t size,znm_tools::Flags flags)
 {
-    std::cerr << "SharedMem create," + name + " started" << std::endl;
-    mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-    mShmfd = shm_open(name.c_str(), flags | O_CREAT | O_EXCL, mode);
-    if (mShmfd == -1){
-        if(errno == EEXIST){
-            shm_unlink(name.c_str());
-            mShmfd = shm_open(name.c_str(), flags | O_CREAT | O_EXCL, mode);
-        }
-        if (mShmfd == -1)
-            throw std::system_error(errno, std::system_category(),
-                                    name +" SharedMem(create), shm_open");
-    }
+    std::string shmName = "/" + name;
+
+    mode_t mode  = 0777;
+    mShmfd = shm_open(shmName.c_str(), flags | O_CREAT | O_TRUNC, mode);
+    if (mShmfd == -1)
+        throw std::system_error(errno, std::system_category(),
+                                    shmName +" SharedMem(create), shm_open");
+
 
     if (ftruncate(mShmfd, size) == -1){
         close(mShmfd);
-        shm_unlink(name.c_str());
+        shm_unlink(shmName.c_str());
         throw std::system_error(errno, std::system_category(),
-                                name + " SharedMem, ftruncate");
+                                shmName + " SharedMem, ftruncate");
     }
 
     unsigned flags_ = 0;
@@ -44,45 +40,43 @@ SharedMem::SharedMem(const std::string &name,size_t size,znm_tools::Flags flags)
         flags_ = PROT_READ | PROT_WRITE;
     else{
         close(mShmfd);
-        shm_unlink(name.c_str());
+        shm_unlink(shmName.c_str());
         throw std::system_error(errno, std::system_category(),
-                                name + " SharedMem, wrong mode");
+                                shmName + " SharedMem, wrong mode");
     }
 
     mPtrToShMem = mmap(nullptr, size, flags_,
-                       MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
+                       MAP_SHARED,
                        mShmfd,0);
+
     if(mPtrToShMem == MAP_FAILED){
         close(mShmfd);
-        shm_unlink(name.c_str());
+        shm_unlink(shmName.c_str());
         throw std::system_error(errno, std::system_category(),
-                                name + " SharedMem(create), mmap");
+                                shmName + " SharedMem(create), mmap");
     }
 
-    mName = name;
+    mName = shmName;
     mSize = size;
     mIsCreated = true;
-
-    std::cerr << "SharedMem create," + name + " ended" << std::endl;
 
 }
 
 SharedMem::SharedMem(const std::string &name, znm_tools::Flags flags)
 {
-    std::cerr << "SharedMem bind," + name + " started" << std::endl;
+    std::string shmName = "/" + name;
 
-    mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-    mShmfd = shm_open(name.c_str(), flags, mode);
+    mShmfd = shm_open(shmName.c_str(), flags, 0);
     if (mShmfd == -1)
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem(bind), shm_open");
+                            shmName + " SharedMem(bind), shm_open");
 
     // Get size of existing shared mem
     struct stat shmMemInfo;
     if(fstat(mShmfd,&shmMemInfo) == -1){
         close(mShmfd);
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem, fstat");
+                            shmName + " SharedMem, fstat");
     }
 
     unsigned flags_ = 0;
@@ -93,23 +87,22 @@ SharedMem::SharedMem(const std::string &name, znm_tools::Flags flags)
     else{
         close(mShmfd);
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem, wrong mode");
+                            shmName + " SharedMem, wrong mode");
     }
 
     mPtrToShMem = mmap(nullptr, shmMemInfo.st_size, flags_,
-                       MAP_SHARED | MAP_LOCKED | MAP_POPULATE,
+                       MAP_SHARED,
                        mShmfd,0);
     if(mPtrToShMem == MAP_FAILED){
         close(mShmfd);
         throw std::system_error(errno, std::system_category(),
-                            name + " SharedMem(bind), mmap");
+                            shmName + " SharedMem(bind), mmap");
     }
 
-    mName = name;
+    mName = shmName;
     mSize = shmMemInfo.st_size;
     mIsCreated = false;
 
-    std::cerr << "SharedMem bind," + name + " ended" << std::endl;
 
 }
 

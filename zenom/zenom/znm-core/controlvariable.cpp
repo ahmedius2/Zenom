@@ -6,6 +6,7 @@
  */
 
 #include "controlvariable.h"
+#include<iostream>
 
 ControlVariable::ControlVariable(double* pAddr, const std::string& pName,
                                  unsigned int pRow, unsigned int pCol,
@@ -48,6 +49,7 @@ void ControlVariable::setHeapElement(int pRow, int pCol, double pVal)
 void ControlVariable::copyToHeap()
 {
     memcpy( mMainHeapAddr, mVariableAddr, sizeof(double) * size() );
+
 }
 
 void ControlVariable::copyFromHeap()

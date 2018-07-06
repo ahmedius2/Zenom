@@ -81,9 +81,11 @@ class TaskXn
 
     static int minPriority();
 
+    void requestPeriodicTaskTermination();
+
  protected:
     virtual void run() = 0;
-    void requestPeriodicTaskTermination();
+
  private:
     void taskFunction();
     std::string mName;
