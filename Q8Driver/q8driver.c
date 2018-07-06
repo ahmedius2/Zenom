@@ -13,7 +13,7 @@
 
 #include "q8driver.h"
 #include <asm/io.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <linux/capability.h>
 #include <linux/cdev.h>
 #include <linux/fs.h>
@@ -999,7 +999,6 @@ int Q8_DAC_Config(int cardNum,  void* buf) {
 ///
 ///=============================================================================================================
 int Q8_TIMER_SET(int cardNum,  void* buf) {
-  printk("q8timer set called!");
   struct_Q8_Config q8Str;
   if (copy_from_user(&q8Str, buf,sizeof(struct_Q8_Config))) {
     return -EFAULT;

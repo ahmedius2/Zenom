@@ -112,6 +112,9 @@ void ControlBase::initializeControlBase()
     mDataRepository->writeVariablesToFile();
     mDataRepository->bindMessageQueues();
     mDataRepository->sendStateRequest( R_INIT );
+    // sleep for some time to wait for shared memory to be created
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
     // Send message to GUI to read variables
     bool bind_success = false;
     do{
@@ -124,8 +127,10 @@ void ControlBase::initializeControlBase()
             if(e.code() == std::errc::no_such_file_or_directory){
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-            else
-                throw e;
+            else{
+                std::cerr << "SharedMem Bind problem: " <<e.what() << std::endl;
+            }
+
         }
     }while(!bind_success);
 
@@ -244,6 +249,7 @@ void ControlBase::stopControlBase()
         delete mLoopTask;
 
         mDataRepository->unbindLogVariableHeap();
+        std::cout << "unbinded from log variable heap" << std::endl;
 
         try
         {
@@ -274,6 +280,7 @@ void ControlBase::terminateControlBase()
 {
     mDataRepository->unbindMessageQueues();
     mDataRepository->unbindMainControlHeap();
+    std::cout << "unbinded from message queues and main heap" << std::endl;
 
     mState = TERMINATED;
 	terminate();	// User Function

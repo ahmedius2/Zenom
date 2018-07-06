@@ -9,6 +9,8 @@
 
 
 #include "MsgQueue.h"
+#include<cstring>
+#include <iostream>
 
 MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
                    long maxMsgSize, znm_tools::Flags flags)
@@ -18,7 +20,7 @@ MsgQueue::MsgQueue(const std::string &nameOfNewMsgQueue, long maxNumOfMsgsInMQ,
     struct mq_attr mqAttr;
     mqAttr.mq_maxmsg = maxNumOfMsgsInMQ;
     mqAttr.mq_msgsize= maxMsgSize;
-    mode_t mode  = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
+    mode_t mode  = 0777;
     mMqfd = mq_open(name.c_str(), flags|O_CREAT|O_EXCL,
                     mode, &mqAttr);
     if (mMqfd == -1){
@@ -63,16 +65,11 @@ MsgQueue::MsgQueue(const std::string &nameOfMsgQueueToBind,znm_tools::Flags flag
 
 MsgQueue::~MsgQueue()
 {
-    if(mIsCreated){
-        if(mq_unlink(mName.c_str()) == -1 && errno != ENOENT)
-            throw std::system_error(errno, std::system_category(),
-                        mName +" ~MsgQueue, mq_unlink");
-    }
-    else{ // unbind
-        if(mq_close(mMqfd) == -1)
-            throw std::system_error(errno, std::system_category(),
-                        mName +" ~MsgQueue, mq_close");
-    }
+    if(mq_close(mMqfd) == -1)
+        std::cerr << "~MsgQueue, mq_close error:"<< strerror(errno)<< std::endl;
+    if(mIsCreated && mq_unlink(mName.c_str()) == -1 && errno != ENOENT)
+        std::cerr << "~MsgQueue, mq_unlink error:"<<strerror(errno)<< std::endl;
+
 }
 
 
@@ -83,7 +80,7 @@ int MsgQueue::send(void *buf, size_t size , unsigned int priority,
     if (timeout == nullptr)
         bytesSend = mq_send(mMqfd, (const char*)buf, size, priority);
     else
-        bytesSend = mq_timedsend(mMqfd, (const char*)buf, size, priority, timeout);
+        bytesSend = mq_timedsend(mMqfd, (const char*)buf, size, priority,timeout);
     if (bytesSend == -1 && errno != ETIMEDOUT)
         throw std::system_error(errno, std::system_category(),
                     mName +" MsgQueue::send");

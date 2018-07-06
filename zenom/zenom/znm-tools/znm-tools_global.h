@@ -8,7 +8,8 @@ namespace znm_tools
     enum Flags
     {
         READ_ONLY = O_RDONLY,
-        READ_AND_WRITE = O_RDWR
+        READ_AND_WRITE = O_RDWR,
+        WRITE_ONLY = O_WRONLY
     };
 
 }

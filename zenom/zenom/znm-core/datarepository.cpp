@@ -174,9 +174,15 @@ void DataRepository::unbindLogVariableHeap()
 void DataRepository::createMessageQueues()
 {
     mSender =
-         new MsgQueue(mProjectName + "GuiToControl", 25,sizeof( StateRequest ));
+         new MsgQueue(mProjectName + "GuiToControl",
+                      25,
+                      sizeof( StateRequest ),
+                      znm_tools::WRITE_ONLY);
     mReceiver =
-         new MsgQueue(mProjectName + "ControlToGui", 25, sizeof( StateRequest));
+         new MsgQueue(mProjectName + "ControlToGui",
+                      25,
+                      sizeof( StateRequest),
+                      znm_tools::READ_ONLY);
 }
 
 void DataRepository::deleteMessageQueues()
@@ -194,8 +200,8 @@ void DataRepository::deleteMessageQueues()
 void DataRepository::bindMessageQueues()
 {
     // reverse of create
-    mReceiver = new MsgQueue(mProjectName + "GuiToControl");
-    mSender = new MsgQueue(mProjectName + "ControlToGui");
+    mReceiver = new MsgQueue(mProjectName +"GuiToControl",znm_tools::READ_ONLY);
+    mSender = new MsgQueue(mProjectName + "ControlToGui",znm_tools::WRITE_ONLY);
 }
 
 void DataRepository::unbindMessageQueues()

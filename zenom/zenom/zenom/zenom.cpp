@@ -359,6 +359,9 @@ void Zenom::on_actionReload_triggered()
 
 void Zenom::on_actionExit_triggered()
 {
+    // just to be sure
+    terminateProject();
+    std::cerr << "Terminated projected if it is still running" << std::endl;
     close();
 }
 
@@ -371,7 +374,6 @@ void Zenom::setFrequency(double pFrequency)
 {
     if ( pFrequency > 0 )
     {
-        std::cout << "Zenom::setFrequeny , freq:" << pFrequency << std::endl;
         mDataRepository->setFrequency( pFrequency );
         ui->frequency->setText( QString::number(pFrequency) );
         mLogVariablesWidget->mainFrequencyChanged( pFrequency );
@@ -426,8 +428,6 @@ void Zenom::terminateProject()
         }
     }
 
-
-
     setSimulationState( TERMINATED );
 
     mTimer.stop();
@@ -435,6 +435,7 @@ void Zenom::terminateProject()
     mDataRepository->deleteMessageQueues();
     mDataRepository->deleteMainControlHeap();
     mDataRepository->deleteLogVariablesHeap();
+    std::cout << "deleted message queues and heaps" << std::endl;
 
     mControlVariablesWidget->clear();
     mLogVariablesWidget->clear();

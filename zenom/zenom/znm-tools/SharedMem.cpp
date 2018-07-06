@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <system_error>
 #include <cerrno>
+#include <cstring>
 #include <iostream>
 #include "SharedMem.h"
 
@@ -109,14 +110,11 @@ SharedMem::SharedMem(const std::string &name, znm_tools::Flags flags)
 SharedMem::~SharedMem()
 {
     if( munmap(mPtrToShMem,mSize) == -1)
-        throw std::system_error(errno, std::system_category(),
-                        mName + "~SharedMem, munmap");
+        std::cerr << "~SharedMem, munmap error:" << strerror(errno)<< std::endl;
     if( close(mShmfd) == -1)
-        throw std::system_error(errno, std::system_category(),
-                        mName + " ~SharedMem, close");
+        std::cerr << "~SharedMem, close error:" << strerror(errno)<< std::endl;
     if( mIsCreated && shm_unlink(mName.c_str()) == -1 && errno != ENOENT)
-        throw std::system_error(errno, std::system_category(),
-                        mName + " ~SharedMem:, shm_unlink");
+        std::cerr<<"~SharedMem, shm_unlink error:"<<strerror(errno)<< std::endl;
 }
 
 void *SharedMem::ptrToShMem()
