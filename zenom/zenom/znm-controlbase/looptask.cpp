@@ -13,7 +13,7 @@
 LoopTask::LoopTask( ControlBase* pControlBase
                     ,std::chrono::duration<double> period
                     ,std::string name)
-    : TaskXn(name, period,32)
+    : TaskXn(name, period,TaskXn::maxPriority())
     , mControlBase(pControlBase)
 
 {

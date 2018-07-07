@@ -115,8 +115,8 @@ void TaskXn::taskFunction()
             // count overrun
             if((nextStartTime - std::chrono::steady_clock::now()).count() < 0){
                 ++mOverruns;
-                std::cerr << "Task " << mName << " overrun: " << mOverruns <<
-                             " !" << std::endl;
+                //std::cerr << "Task " << mName << " overrun: " << mOverruns <<
+                //             " !" << std::endl;
             }
             std::this_thread::sleep_until(nextStartTime);
             nextStartTime += mPeriod;

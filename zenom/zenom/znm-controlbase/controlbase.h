@@ -10,8 +10,8 @@
 #include "lifecycletask.h"
 
 
-#define SECOND_TO_NANO (1000000000)
-#define MILLISECOND_TO_NANO (1000000)
+//#define SECOND_TO_NANO (1000000000)
+//#define MILLISECOND_TO_NANO (1000000)
 
 class ControlBase
 {
