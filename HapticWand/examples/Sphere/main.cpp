@@ -31,8 +31,8 @@ public:
     
 private:
     /**
-     * Detects collision. When the sphere is touched, calculates a force feedback.
-     *
+     * Detects collision.
+     * When the sphere is touched, calculates a force feedback.
      * @param center        Center of object (m)
      * @param radius        Radius of object (m)
      * @param k_stiff       Stiffness gain (N/m)
@@ -43,14 +43,21 @@ private:
      * @return F Output force (N)
      *
      */
-    ColumnVector<5, double> virtual_object( ColumnVector<3, double>& center,
-        double radius, ColumnVector<5, double>& k_stiff, ColumnVector<5, double>& k_damp,
-        ColumnVector<3, double>& w_xyz, ColumnVector<5, double>& w_dot );
+    ColumnVector<5, double> virtual_object(
+            ColumnVector<3, double>& center,
+            double radius,
+            ColumnVector<5, double>& k_stiff,
+            ColumnVector<5, double>& k_damp,
+            ColumnVector<3, double>& w_xyz,
+            ColumnVector<5, double>& w_dot );
 
     // ----- Log Variables -----
-    double position[3];             // position of the wand (openscenegraph coordinate system)
-    double rotation[4];             // rotation of the wand (openscenegraph coordinate system)
-    ColumnVector<5, double> F;      // world forces in N and world torques in N-m
+    // position of the wand (openscenegraph coordinate system)
+    double position[3];
+    // rotation of the wand (openscenegraph coordinate system)
+    double rotation[4];
+    // world forces in N and world torques in N-m
+    ColumnVector<5, double> F;
 
 
     // ----- Control Variables -----
@@ -74,7 +81,7 @@ int Sphere::initialize()
     registerLogVariable( rotation, "rotation", 1, 4 );
     registerLogVariable( F.getElementsPointer(), "F", 1, 5 );
 
-    hapticWand.openDevice();                  // Open the q8 card
+    hapticWand.openDevice();            // Open the q8 card
     hapticWand.calibrateWand();         // Calibrate the haptic wand
 
     return 0;
@@ -134,7 +141,7 @@ int Sphere::doloop()
     ColumnVector<5> worldCoordinates;
     double jointAngles[6];        // joint angles in radians
     hapticWand.jointAngles( jointAngles );
-    hapticWand.forwardKinematics( jointAngles, worldCoordinates.getElementsPointer() );
+    hapticWand.forwardKinematics(jointAngles,worldCoordinates.getElementsPointer());
 
     // transform to openscenegraph coordinate system.
     transformToOSG( worldCoordinates.getElementsPointer(), position, rotation );
@@ -198,9 +205,13 @@ int Sphere::terminate()
 }
 
 
-ColumnVector<5, double> Sphere::virtual_object( ColumnVector<3, double>& center,
-    double radius, ColumnVector<5, double>& k_stiff, ColumnVector<5, double>& k_damp,
-    ColumnVector<3, double>& w_xyz, ColumnVector<5, double>& w_dot )
+ColumnVector<5, double> Sphere::virtual_object(
+        ColumnVector<3, double>& center,
+        double radius,
+        ColumnVector<5, double>& k_stiff,
+        ColumnVector<5, double>& k_damp,
+        ColumnVector<3, double>& w_xyz,
+        ColumnVector<5, double>& w_dot )
 {
     // Output Force (N)
     ColumnVector<5> F;

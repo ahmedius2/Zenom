@@ -33,7 +33,7 @@ QWT_LIBS      = /usr/local/qwt-6.0.1/lib
 # OpenSceneGraph path
 #--------------------------------------------------------------
 OSG_HEADERS   = /usr/local/include
-OSG_LIBS      = /usr/local/lib64/
+OSG_LIBS      = /usr/local/lib64
 
 #--------------------------------------------------------------
 # QtCreator Wizards Plugin Path

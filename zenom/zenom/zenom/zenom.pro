@@ -141,11 +141,6 @@ INCLUDEPATH +=  $${QWT_HEADERS}
 DEPENDPATH += $${QWT_HEADERS}
 LIBS += -L$${QWT_LIBS} -lqwt
 
-# OpenSceneGraph
-INCLUDEPATH +=  $${OSG_HEADERS}
-DEPENDPATH += $${OSG_HEADERS}
-LIBS += -L$${OSG_LIBS} -losgViewer -losgGA -losg -losgQt -losgDB -losgSim -lOpenThreads 
-
 # Zenom Core Library
 INCLUDEPATH += ../znm-core
 DEPENDPATH += ../znm-core
@@ -155,6 +150,11 @@ LIBS += -L../../lib -lznm-core
 INCLUDEPATH += ../znm-tools
 DEPENDPATH += ../znm-tools
 LIBS += -L../../lib -lznm-tools
+
+# OpenSceneGraph
+INCLUDEPATH +=  $${OSG_HEADERS}
+DEPENDPATH += $${OSG_HEADERS}
+LIBS += -L$${OSG_LIBS} -losg -losgViewer -losgDB -losgGA -losgQt -losgSim -lOpenThreads 
 
 # build directory
 DESTDIR = ../../bin
