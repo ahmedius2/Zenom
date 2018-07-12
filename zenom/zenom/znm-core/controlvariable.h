@@ -11,7 +11,7 @@
 #include "variable.h"
 #include <string.h>
 
-class ZNMCORESHARED_EXPORT ControlVariable: public Variable
+class ControlVariable: public Variable
 {
 public:
     ControlVariable(double* pAddr,

@@ -1,7 +1,6 @@
 #ifndef HAPTICWAND_GLOBAL_H
 #define HAPTICWAND_GLOBAL_H
 
-//#include <QtCore/qglobal.h>
 #include <inttypes.h>
 
 #if defined(HAPTICWAND_LIBRARY)

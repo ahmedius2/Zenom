@@ -35,6 +35,9 @@ Zenom::Zenom(int argc, char *argv[]) :
     mGaugeManager = new GaugeManager(this);
     mPlotManager = new PlotManager(this);
     mSceneManager = new SceneManager(this);
+
+    mCameraManager = new CameraScene(this);
+
     connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output,
              SLOT(appendWarningMessage(const QString&)) );
 
@@ -84,7 +87,7 @@ void Zenom::on_startButton_clicked()
 
         ui->output->appendMessage( QString("Simulation started.") );
     }
-    else if( simulationState() == RUNNING )	// Pause
+    else if( simulationState() == RUNNING )	// Pausecam = new CameraScene(this);
     {
         setSimulationState( PAUSED );
         mDataRepository->sendStateRequest( R_PAUSE );
@@ -158,7 +161,7 @@ void Zenom::doloop()
     mGaugeManager->tick();
     mPlotManager->tick();
     mSceneManager->tick();
-
+    mCameraManager->tick();
 }
 
 State Zenom::simulationState()
@@ -445,6 +448,7 @@ void Zenom::terminateProject()
     mGaugeManager->clear();
     mPlotManager->clear();
     mSceneManager->clear();
+    delete mCameraManager;
 
     ui->output->clear();
 
@@ -543,4 +547,10 @@ void Zenom::on_actionExport_as_Matlab_triggered()
             out.writeLogVariable( DataRepository::instance()->logVariables().at(i) );
         }
     }
+}
+
+void Zenom::on_actionCamera_triggered()
+{
+
+    mCameraManager->show();
 }

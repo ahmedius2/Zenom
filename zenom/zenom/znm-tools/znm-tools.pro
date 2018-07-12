@@ -44,3 +44,7 @@ headers.path   = $${ZENOM_INSTALL_HEADERS}
 INSTALLS += headers
 
 LIBS += -lrt
+
+FORMS +=
+
+DISTFILES +=

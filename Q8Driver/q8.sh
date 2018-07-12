@@ -17,7 +17,7 @@ case $1 in
 	    # cleanup
 		rm -f /dev/$DEVICE_NAME
 		# load the module
-		insmod -f ./$MODULE || exit 1
+		insmod ./$MODULE || exit 1
 		# get the major number(s) of the device driver
 		MAJOR_NUMBERS=`cat /proc/devices | awk -v dev=$DEVICE_NAME '$2==dev { print $1 }'`
 		# count the devices 

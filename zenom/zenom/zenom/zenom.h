@@ -24,6 +24,8 @@
 
 #include "messagelistenertask.h"
 
+#include "camerascene.h"
+
 
 namespace Ui {
 class Zenom;
@@ -154,9 +156,14 @@ private slots:
 
     void on_actionClear_Recent_Projects_Menu_triggered();
 
+    void on_actionCamera_triggered();
+
 private:
     Ui::Zenom *ui;
 
+
+    //camera
+    CameraScene *mCameraManager;
     /**
      * Arayuzde yer alan status bar aracıdır.
      */

@@ -11,6 +11,8 @@
 include( ../../zenom.pri )
 
 QT       += core gui
+QT      += network
+
 CONFIG += qwt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -66,7 +68,8 @@ SOURCES += main.cpp\
     widget/output.cpp \
     aboutdialog.cpp \
     utility/matlabstream.cpp \
-    widget/linesizecombobox.cpp
+    widget/linesizecombobox.cpp \
+    camerascene.cpp
 
 HEADERS  += zenom.h \
     messagelistenertask.h \
@@ -113,7 +116,8 @@ HEADERS  += zenom.h \
     widget/output.h \
     aboutdialog.h \
     utility/matlabstream.h \
-    widget/linesizecombobox.h
+    widget/linesizecombobox.h \
+    camerascene.h
 
 FORMS    += zenom.ui \
     controlvariableswidget.ui \
@@ -131,7 +135,8 @@ FORMS    += zenom.ui \
     plot/plotwindow.ui \
     plot/attachlogvariabledialog.ui \
     plot/legenditem.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    camerascene.ui
 
 RESOURCES += \
     zenom.qrc

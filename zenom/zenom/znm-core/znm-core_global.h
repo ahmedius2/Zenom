@@ -1,8 +1,6 @@
 #ifndef ZNMCORE_GLOBAL_H
 #define ZNMCORE_GLOBAL_H
 
-#include <QtCore/qglobal.h>
-
 #if defined(ZNMCORE_LIBRARY)
 #  define ZNMCORESHARED_EXPORT Q_DECL_EXPORT
 #else
