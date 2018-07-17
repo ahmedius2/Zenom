@@ -113,6 +113,9 @@ class ControlBase
 	State mState;
 	DataRepository* mDataRepository;
 
+    //file
+    std::ofstream logFile;
+
 };
 
 #endif /* CONTROLBASE_H_ */

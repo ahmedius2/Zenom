@@ -5,6 +5,10 @@
 #include <QTcpSocket>
 #include <atomic>
 #include <thread>
+#include <mutex>
+#include <fstream>
+#include<QIODevice>
+
 
 namespace Ui {
 class CameraScene;
@@ -32,14 +36,16 @@ private slots:
 
     void on_local_clicked();
 
+
 private:
     Ui::CameraScene *ui;
-    QTcpSocket *socket;
     std::thread cameraThread;
+    std::mutex imgMutex;
     QString ipAdd;
     quint16 senderPort;
-    QImage imageOrg;
+    QImage lastImage;
     std::atomic<bool> finish;
+    std::ofstream cameraLog;
 
 };
 

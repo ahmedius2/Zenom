@@ -1,0 +1,7 @@
+LogFile is started
+initializeControlBase()
+void ControlBase::initializeControlBase() dumpState : 0
+End Of void ControlBase::initializeControlBase()
+LifeCycleTask::run() case :5
+unbinded from message queues
+unbinded from heap

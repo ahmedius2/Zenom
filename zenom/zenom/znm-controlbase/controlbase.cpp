@@ -8,11 +8,17 @@ using namespace std::chrono;
 ControlBase::ControlBase(/*int argc, char* argv[]*/)
 {
     mDataRepository = DataRepository::instance();
+    //File
+    logFile.open ("cblog.txt");
+    logFile<<"LogFile is started"<<std::endl;
+    logFile.flush();
 }
 
 ControlBase::~ControlBase()
 {
-
+    logFile << "Controlbase object is dying" << std::endl;
+    logFile.flush();
+    logFile.close();
 }
 
 void ControlBase::registerLogVariable(double *pVariable,
@@ -56,7 +62,8 @@ void ControlBase::run(int argc, char *argv[])
 {
     if ( argc != 2 )
     {
-        std::cout << "Invalid argument" << std::endl;
+        logFile << "Invalid argument" << std::endl;
+        logFile.flush();
         return;
     }
 
@@ -71,11 +78,14 @@ void ControlBase::run(int argc, char *argv[])
         mLifeCycleTask->runTask();
         mLifeCycleTask->join(); // wait for execution to finish
 		delete mLifeCycleTask;
+        logFile << "LifeCycleTask is deleted" << std::endl;
+        logFile.flush();
 	}
     catch ( std::exception& e)
 	{
-        std::cout << "Life Task Error occurred: " << std::string(e.what())
+        logFile << "Life Task Error occurred: " << std::string(e.what())
                   << std::endl;
+        logFile.flush();
 	}
 }
 
@@ -86,53 +96,63 @@ void ControlBase::run(int argc, char *argv[])
 void ControlBase::initializeControlBase()
 {
 
-
+    logFile<<"initializeControlBase()"<<std::endl;
+    logFile.flush();
 
     try
     {
         int error = initialize();	// User Function
         if( error )
         {
-            std::cerr << "The initialize() function returned non zero: "
+            logFile << "The initialize() function returned non zero: "
                       <<
                          error << std::endl;
+            logFile.flush();
         }
     }
     catch( std::exception& e )
     {
-        std::cerr << "An exception occured in the initialize() function: "
+        logFile << "An exception occured in the initialize() function: "
                   << e.what() << std::endl;
+        logFile.flush();
     }
     catch (...)
     {
-        std::cerr << "An unknown exception occured in the initialize()"
+        logFile << "An unknown exception occured in the initialize()"
                      " function." << std::endl;
+        logFile.flush();
     }
 
     mDataRepository->writeVariablesToFile();
     mDataRepository->bindMessageQueues();
     mDataRepository->sendStateRequest( R_INIT );
-    // sleep for some time to wait for shared memory to be created
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
+    StateRequest dumpState;
+    while ( mDataRepository->readState( &dumpState ) < 0 )
+        // false (if an error occurred or the operation timed out).
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+    logFile<<"void ControlBase::initializeControlBase() dumpState : "<<dumpState<<std::endl;
+
 
     // Send message to GUI to read variables
-    bool bind_success = false;
-    do{
-        try{
-            mDataRepository->bindMainControlHeap();
-            bind_success = true;
-        }
-        catch (std::system_error e){
-            std::cerr << "Bind problem: " << e.what() << std::endl;
-            if(e.code() == std::errc::no_such_file_or_directory){
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));
-            }
-            else{
-                std::cerr << "SharedMem Bind problem: " <<e.what() << std::endl;
-            }
+//    bool bind_success = false;
+//    do{
+//        try{
+     mDataRepository->bindMainControlHeap();
+//            bind_success = true;
+//        }
+//        catch (std::system_error e){
+//            logFile << "Bind problem: " << e.what() << std::endl;
+//            if(e.code() == std::errc::no_such_file_or_directory){
+//                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+//            }
+//            else{
+//                logFile << "SharedMem Bind problem: " <<e.what() << std::endl;
+//            }
 
-        }
-    }while(!bind_success);
+//        }
+//    }while(!bind_success);
 
     // Control Variable degerleri heap'e kopyalanir.
     for (size_t i = 0; i < mDataRepository->controlVariables().size(); ++i)
@@ -142,8 +162,11 @@ void ControlBase::initializeControlBase()
 
     mDataRepository->sendStateRequest( R_INIT );
 
-    // Send message to GUI to read values
+    // Send message to GUIe.flush();
     mState = STOPPED;
+
+    logFile<<"End Of void ControlBase::initializeControlBase()"<<std::endl;
+    logFile.flush();
 }
 
 //============================================================================//
@@ -151,7 +174,11 @@ void ControlBase::initializeControlBase()
 //============================================================================//
 void ControlBase::startControlBase()
 {
-	if( mState != RUNNING )
+
+    logFile<<"void ControlBase::startControlBase()"<<std::endl;
+    logFile.flush();
+
+    if( mState != RUNNING )
     {
 
         mDataRepository->bindLogVariablesHeap();
@@ -165,21 +192,24 @@ void ControlBase::startControlBase()
             // start() hata ile donerse program baslatilmaz.
             if ( error )
             {
-                std::cerr << "The start() function returned non zero: " <<
+                logFile << "The start() function returned non zero: " <<
                              error << std::endl;
+                logFile.flush();
             }
         }
         catch( std::exception& e )
         {
             error = -1;
-            std::cerr << "An exception occured in the start() function: " <<
+            logFile << "An exception occured in the start() function: " <<
                          e.what() << std::endl;
+            logFile.flush();
         }
         catch (...)
         {
             error = -1;
-            std::cerr << "An unknown exception occured in the start() "
+            logFile << "An unknown exception occured in the start() "
                          "function." << std::endl;
+            logFile.flush();
         }
 
         // start() hata ile donerse program baslatilmaz.
@@ -244,31 +274,36 @@ void ControlBase::stopControlBase()
     if( mState != STOPPED )
     {
         mState = STOPPED;
+        mLoopTask->requestPeriodicTaskTermination();
         mLoopTask->join();
         //...
         delete mLoopTask;
 
         mDataRepository->unbindLogVariableHeap();
-        std::cout << "unbinded from log variable heap" << std::endl;
+        logFile << "unbinded from log variable heap" << std::endl;
+        logFile.flush();
 
         try
         {
             int error = stop();			// User Function
             if( error )
             {
-                std::cerr << "The stop() function returned non zero: "
+                logFile << "The stop() function returned non zero: "
                           << error << std::endl;
+                logFile.flush();
             }
         }
         catch( std::exception& e )
         {
-            std::cerr << "An exception occured in the stop() function: "
+            logFile << "An exception occured in the stop() function: "
                       << e.what() << std::endl;
+            logFile.flush();
         }
         catch (...)
         {
-            std::cerr << "An unknown exception occured in the stop() function."
+            logFile << "An unknown exception occured in the stop() function."
                       << std::endl;
+            logFile.flush();
         }
     }
 }
@@ -279,8 +314,12 @@ void ControlBase::stopControlBase()
 void ControlBase::terminateControlBase()
 {
     mDataRepository->unbindMessageQueues();
+    logFile << "unbinded from message queues" << std::endl;
+    logFile.flush();
     mDataRepository->unbindMainControlHeap();
-    std::cout << "unbinded from message queues and main heap" << std::endl;
+    logFile << "unbinded from heap" << std::endl;
+    logFile.flush();
+
 
     mState = TERMINATED;
 	terminate();	// User Function

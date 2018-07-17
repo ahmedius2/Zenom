@@ -20,6 +20,7 @@ LogVariablesWidget::LogVariablesWidget(QWidget *parent) :
 
 LogVariablesWidget::~LogVariablesWidget()
 {
+    close();
     delete ui;
 }
 

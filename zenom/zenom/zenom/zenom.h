@@ -26,6 +26,8 @@
 
 #include "camerascene.h"
 
+#include <fstream>
+
 
 namespace Ui {
 class Zenom;
@@ -39,6 +41,12 @@ class Zenom : public QMainWindow
     
 public:
     explicit Zenom( int argc, char *argv[] );
+
+    /**
+     * Benzetim durumunu getirir.
+     * @return benzetim durumunu getirir.
+     */
+    State simulationState();
 
     ~Zenom();
 
@@ -162,6 +170,8 @@ private:
     Ui::Zenom *ui;
 
 
+
+
     //camera
     CameraScene *mCameraManager;
     /**
@@ -235,12 +245,6 @@ private:
      * Control programindan gelen mesajlari dinleyen siniftir.
      */
     MessageListenerTask* mMessageListenerTask;
-
-    /**
-     * Benzetim durumunu getirir.
-     * @return benzetim durumunu getirir.
-     */
-    State simulationState();
 
     /**
      * Benzetim durumunu gunceller. Duruma gore arayuzdeki alanlar

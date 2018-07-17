@@ -35,7 +35,6 @@ Zenom::Zenom(int argc, char *argv[]) :
     mGaugeManager = new GaugeManager(this);
     mPlotManager = new PlotManager(this);
     mSceneManager = new SceneManager(this);
-
     mCameraManager = new CameraScene(this);
 
     connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output,
@@ -67,12 +66,23 @@ Zenom::Zenom(int argc, char *argv[]) :
             }
         }
     }
+
+
 }
 
 Zenom::~Zenom()
 {
     terminateProject();
+    delete mAboutDialog;
+    delete mCameraManager;
+    delete mSceneManager;
+    delete mPlotManager;
+    delete mGaugeManager;
+    delete mLogVariablesWidget;
+    delete mControlVariablesWidget;
+    delete mStatusBar;
     delete ui;
+
 }
 
 void Zenom::on_startButton_clicked()
@@ -240,6 +250,7 @@ void Zenom::openProject(const QString& pProjectPath)
 
         mDataRepository->createMessageQueues();
 
+        setSimulationState( STOPPED );
         mMessageListenerTask = new MessageListenerTask(this);
         mMessageListenerTask->runTask();
 
@@ -266,14 +277,11 @@ void Zenom::openProject(const QString& pProjectPath)
 
             std::cerr << "Creating shared memories" << std::endl;
 
-            //SharedMem tempsm("example", sizeof(double)*8);
-            //double *dp = (double*)tempsm.ptrToShMem();
-            //for(int i=0; i<8; ++i)
-            //    dp[i] = i*4;
-
             mDataRepository->createMainControlHeap();
 
             std::cerr << "Created shared memories" << std::endl;
+
+            mDataRepository->sendStateRequest( R_INIT );
 
             // Controlbase main control heap'e baglanmasi ve
             // control variable degerlerini main control heap'e yazmasi beklenir.
@@ -291,7 +299,7 @@ void Zenom::openProject(const QString& pProjectPath)
 
             loadSettings( projectAbsolutePath );
 
-            setSimulationState( STOPPED );
+
             mTimer.start(50);
 
             setWindowTitle( fileInfo.baseName() );
@@ -409,6 +417,11 @@ void Zenom::setDuration(double pDuration)
 
 void Zenom::terminateProject()
 {
+    std::cout<<"void Zenom::terminateProject()"<<std::endl;
+
+    if (simulationState() == TERMINATED)
+        return;
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     // if the controlbase is running, stop it and then terminate.
@@ -417,14 +430,20 @@ void Zenom::terminateProject()
         on_stopButton_clicked();
     }
 
-    if(mMessageListenerTask != nullptr)
-        delete mMessageListenerTask;
+
 
     if ( mControlBaseProcess.state() != QProcess::NotRunning )
     {
+        std::cout<<"void Zenom::terminateProject() if ( mControlBaseProcess.state() != QProcess::NotRunning ) "<<std::endl;
+
+
+
+
         mDataRepository->sendStateRequest( R_TERMINATE );
-        if ( !mControlBaseProcess.waitForFinished() )    // Finish the process
+
+        if ( !mControlBaseProcess.waitForFinished(5000) )    // Finish the process
         {
+            std::cerr << "Controlbase process did not finish!" << std::endl;
             //appendTextToOutput("Terminating unsuccesful");
             mControlBaseProcess.kill(); // TODO process bir sure sonlanmaz
             // ise kill etsek mi? kill edince crashed oluyor.
@@ -433,12 +452,17 @@ void Zenom::terminateProject()
 
     setSimulationState( TERMINATED );
 
+    if(mMessageListenerTask != nullptr)
+        delete mMessageListenerTask;
+
     mTimer.stop();
 
     mDataRepository->deleteMessageQueues();
+    std::cerr << "deleted message queues" << std::endl;
     mDataRepository->deleteMainControlHeap();
+    std::cerr << "deleted main control heap" << std::endl;
     mDataRepository->deleteLogVariablesHeap();
-    std::cout << "deleted message queues and heaps" << std::endl;
+    std::cerr << "deleted log variables heap" << std::endl;
 
     mControlVariablesWidget->clear();
     mLogVariablesWidget->clear();
@@ -448,7 +472,6 @@ void Zenom::terminateProject()
     mGaugeManager->clear();
     mPlotManager->clear();
     mSceneManager->clear();
-    delete mCameraManager;
 
     ui->output->clear();
 

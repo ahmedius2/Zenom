@@ -31,6 +31,7 @@ public:
     QRadioButton *local;
     QRadioButton *server;
     QPushButton *start;
+
     QLineEdit *ipAddress;
 
     void setupUi(QDialog *CameraScene)

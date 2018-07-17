@@ -18,7 +18,8 @@ MessageListenerTask::MessageListenerTask( Zenom* pZenom )
 void MessageListenerTask::run()
 {
     StateRequest stateRequest;
-    while( true )
+    while( mZenom->simulationState() != TERMINATED &&
+           mZenom->simulationState() != CRASHED)
     {
         if( DataRepository::instance()->readState( &stateRequest ) > 0 )
         {
@@ -54,7 +55,7 @@ bool MessageListenerTask::waitForInitMessage()
 
     std::unique_lock<std::mutex> ulock(mtx);
 
-    bool ret = condvar.wait_for(ulock,seconds(2),[this]{return initMsgs != 0;});
+    bool ret = condvar.wait_for(ulock,seconds(5),[this]{return initMsgs != 0;});
 
     if(ret)
         --initMsgs;
