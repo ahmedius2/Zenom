@@ -191,7 +191,8 @@ bool HIL::readDigital(const unsigned int channelNumber)
     return q8_config.udwDataRegister & mask;
 }
 
-void HIL::readDigital(const unsigned int *inputChannels, bool *bits, const int inputChannelsLength)
+void HIL::readDigital(const unsigned int *inputChannels, bool *bits,
+                      const int inputChannelsLength)
 {
     for ( int i = 0; i < inputChannelsLength; ++i )
     {
@@ -199,7 +200,8 @@ void HIL::readDigital(const unsigned int *inputChannels, bool *bits, const int i
     }
 }
 
-void HIL::setDigitalOutputDirection(const unsigned int *outputChannels, const int outputChannelsLength)
+void HIL::setDigitalOutputDirection(const unsigned int *outputChannels,
+                                    const int outputChannelsLength)
 {
     uint32_t digOutConstant = 0x00000001;
     uint32_t digOutChannelCurrent = 0x0;

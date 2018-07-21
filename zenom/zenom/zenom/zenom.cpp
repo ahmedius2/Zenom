@@ -254,6 +254,8 @@ void Zenom::openProject(const QString& pProjectPath)
         mMessageListenerTask = new MessageListenerTask(this);
         mMessageListenerTask->runTask();
 
+        std::cerr << "Controlbase program path:" <<
+                     controlBaseProgram.toStdString() << std::endl;
         //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )
