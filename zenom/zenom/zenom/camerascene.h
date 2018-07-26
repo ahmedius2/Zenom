@@ -8,6 +8,7 @@
 #include <mutex>
 #include <fstream>
 #include<QIODevice>
+#include <QCloseEvent>
 
 
 namespace Ui {
@@ -29,6 +30,10 @@ public slots:
     //QTimer aktif hale geldiğinde işletilecek slotumuz
     void processFrameAndUpdateGUI();
 
+
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private slots:
     void on_start_clicked();
 
@@ -45,8 +50,6 @@ private:
     quint16 senderPort;
     QImage lastImage;
     std::atomic<bool> finish;
-    std::ofstream cameraLog;
-
 };
 
 #endif // CAMERASCENE_H

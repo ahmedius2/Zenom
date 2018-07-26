@@ -69,6 +69,8 @@ unsigned TaskXn::overruns()
 
 void TaskXn::join()
 {
+    // if you don't request periodic task termination before
+    // calling this function, it wil block indefinetlyS
     mTask.join();
 }
 

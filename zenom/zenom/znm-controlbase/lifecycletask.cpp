@@ -29,7 +29,6 @@ void LifeCycleTask::run()
             if ( DataRepository::instance()->readState( &stateRequest ) > 0 )
                 // false (if an error occurred or the operation timed out).
             {
-                mControlBase->logFile<<"LifeCycleTask::run() case :"<<stateRequest<<std::endl;
                 switch (stateRequest)
                 {
 
@@ -61,10 +60,6 @@ void LifeCycleTask::run()
                 }
             }
         }
-        StateRequest stateRequest;
-        DataRepository::instance()->readState( &stateRequest );
-        mControlBase->logFile<<"End LifeCycleTask::run()  :"<<mControlBase->mState <<"state :"<<stateRequest<<std::endl;
-        mControlBase->logFile.flush();
 	}
     catch (std::system_error e)
 	{
@@ -83,7 +78,6 @@ void LifeCycleTask::run()
         std::cerr << "Unknown exception occured." << std::endl;
          mControlBase->logFile << "Unknown exception occured." << std::endl;
     }
-    std::cout << "Life cycle task is finishing" << std::endl;
      mControlBase->logFile << "Life cycle task is finishing" << std::endl;
 
 

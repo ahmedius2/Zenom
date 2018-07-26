@@ -294,6 +294,17 @@ private:
      * About penceresidir.
      */
     AboutDialog* mAboutDialog;
+
+    //Keystroke
+
+
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+
+    //control variables
+     std::vector<ControlVariable*> cntrVariables;
+
+
 };
 
 #endif // ZENOM_H

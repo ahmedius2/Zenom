@@ -30,6 +30,10 @@ private:
 
     // ----- Control Parameters -----
     double amplitude;
+    double key_a;
+    double key_s;
+    double key_d;
+    double key_w;
 
 
     // ----- Variables -----
@@ -51,6 +55,14 @@ int Sine::initialize()
     // ----- Register the control paramateres -----
     registerControlVariable(&amplitude, "amplitude");
     amplitude = 3;
+    registerControlVariable(&key_a, "key_a");
+    key_a = 0;
+    registerControlVariable(&key_s, "key_s");
+    key_s = 0;
+    registerControlVariable(&key_d, "key_d");
+    key_d = 0;
+    registerControlVariable(&key_w, "key_w");
+    key_w = 0;
 
     // ----- Prints message in screen -----
     std::cout
@@ -95,7 +107,7 @@ int Sine::start()
 int Sine::doloop()
 {
     // ----- Generates sine wave -----
-    sine = amplitude * sin( elapsedTime() );
+    sine = amplitude * sin( elapsedTime() ) *key_a;
     return 0;
 }
 

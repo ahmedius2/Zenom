@@ -14,14 +14,14 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="3">
+   <item row="2" column="2">
     <widget class="QRadioButton" name="server">
      <property name="text">
       <string>Server</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="5">
+   <item row="1" column="0" colspan="4">
     <widget class="QLabel" name="label_camera">
      <property name="autoFillBackground">
       <bool>true</bool>
@@ -34,14 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QRadioButton" name="local">
-     <property name="text">
-      <string>Local</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="4">
+   <item row="2" column="3">
     <widget class="QPushButton" name="start">
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
@@ -51,7 +44,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="4">
+   <item row="3" column="3">
     <widget class="QLineEdit" name="ipAddress">
      <property name="styleSheet">
       <string notr="true">color: rgb(85, 255, 0);</string>

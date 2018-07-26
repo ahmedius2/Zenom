@@ -10,6 +10,9 @@
 #include <QFileInfo>
 #include <QTime>
 
+#include <QKeyEvent>
+
+
 
 #include "utility/matlabstream.h"
 
@@ -87,6 +90,7 @@ Zenom::~Zenom()
 
 void Zenom::on_startButton_clicked()
 {
+     cntrVariables =mDataRepository->controlVariables();
     if( simulationState() == STOPPED )	// Start
     {
         setSimulationState( RUNNING );
@@ -95,7 +99,7 @@ void Zenom::on_startButton_clicked()
         mDataRepository->createLogVariablesHeap();
         mDataRepository->sendStateRequest( R_START );
 
-        ui->output->appendMessage( QString("Simulation started.") );
+
     }
     else if( simulationState() == RUNNING )	// Pausecam = new CameraScene(this);
     {
@@ -109,8 +113,10 @@ void Zenom::on_startButton_clicked()
         setSimulationState( RUNNING );
         mDataRepository->sendStateRequest( R_RESUME );
 
+
         ui->output->appendMessage( QString("Simulation resumed.") );
     }
+
 }
 
 void Zenom::on_stopButton_clicked()
@@ -172,6 +178,11 @@ void Zenom::doloop()
     mPlotManager->tick();
     mSceneManager->tick();
     mCameraManager->tick();
+
+
+
+
+
 }
 
 State Zenom::simulationState()
@@ -254,8 +265,6 @@ void Zenom::openProject(const QString& pProjectPath)
         mMessageListenerTask = new MessageListenerTask(this);
         mMessageListenerTask->runTask();
 
-        std::cerr << "Controlbase program path:" <<
-                     controlBaseProgram.toStdString() << std::endl;
         //  This is where control base process is started
         mControlBaseProcess.start( controlBaseProgram, QStringList() << projectName );
         if ( mControlBaseProcess.waitForStarted() )
@@ -579,3 +588,38 @@ void Zenom::on_actionCamera_triggered()
 
     mCameraManager->show();
 }
+
+//Keystroke
+
+void Zenom::keyPressEvent(QKeyEvent *event){
+
+   for(int i=0; i<cntrVariables.size(); i++)
+   {
+       if(!cntrVariables[i]->name().compare(0,4,"key_") && event->text()[0]==cntrVariables[i]->name()[4]){
+           cntrVariables[i]->setHeapElement(0,1);
+       }
+   }
+
+
+
+
+
+
+}
+
+
+void Zenom::keyReleaseEvent(QKeyEvent *event){
+   if( !event->isAutoRepeat()){
+       for(int i=0; i<cntrVariables.size(); i++)
+       {
+           if(event->text()[0]==cntrVariables[i]->name()[4])
+               cntrVariables[i]->setHeapElement(0,0);
+       }
+   }
+}
+
+
+
+
+
+

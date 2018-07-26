@@ -136,23 +136,7 @@ void ControlBase::initializeControlBase()
 
 
     // Send message to GUI to read variables
-//    bool bind_success = false;
-//    do{
-//        try{
      mDataRepository->bindMainControlHeap();
-//            bind_success = true;
-//        }
-//        catch (std::system_error e){
-//            logFile << "Bind problem: " << e.what() << std::endl;
-//            if(e.code() == std::errc::no_such_file_or_directory){
-//                std::this_thread::sleep_for(std::chrono::milliseconds(5));
-//            }
-//            else{
-//                logFile << "SharedMem Bind problem: " <<e.what() << std::endl;
-//            }
-
-//        }
-//    }while(!bind_success);
 
     // Control Variable degerleri heap'e kopyalanir.
     for (size_t i = 0; i < mDataRepository->controlVariables().size(); ++i)
