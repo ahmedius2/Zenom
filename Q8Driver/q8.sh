@@ -39,6 +39,7 @@ case $1 in
 		mknod /dev/$DEVICE_NAME c $MAJOR 0
 		# set to read only
 		chmod a-x-w+r /dev/$DEVICE_NAME          
+		~/Zenom/HapticWand/examples/ReadWriteDigital/ReadWriteDigital
 		;;
 	stop)
 	    # remove (unload) the module

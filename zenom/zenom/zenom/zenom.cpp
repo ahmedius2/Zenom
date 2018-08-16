@@ -593,7 +593,7 @@ void Zenom::on_actionCamera_triggered()
 
 void Zenom::keyPressEvent(QKeyEvent *event){
 
-   for(int i=0; i<cntrVariables.size(); i++)
+   for(unsigned int i=0; i<cntrVariables.size(); i++)
    {
        if(!cntrVariables[i]->name().compare(0,4,"key_") && event->text()[0]==cntrVariables[i]->name()[4]){
            cntrVariables[i]->setHeapElement(0,1);
@@ -610,7 +610,7 @@ void Zenom::keyPressEvent(QKeyEvent *event){
 
 void Zenom::keyReleaseEvent(QKeyEvent *event){
    if( !event->isAutoRepeat()){
-       for(int i=0; i<cntrVariables.size(); i++)
+       for(unsigned int i=0; i<cntrVariables.size(); i++)
        {
            if(event->text()[0]==cntrVariables[i]->name()[4])
                cntrVariables[i]->setHeapElement(0,0);

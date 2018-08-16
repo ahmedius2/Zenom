@@ -77,6 +77,9 @@ class ControlBase
 
 	int overruns() { return mLoopTask->overruns(); }
 
+    //file
+    std::ofstream logFile;
+
 	private:
 
 	//========================================================================//
@@ -113,8 +116,7 @@ class ControlBase
 	State mState;
 	DataRepository* mDataRepository;
 
-    //file
-    std::ofstream logFile;
+
 
 };
 

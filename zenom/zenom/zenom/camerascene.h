@@ -42,6 +42,18 @@ private slots:
     void on_local_clicked();
 
 
+    void on_tenHund_clicked();
+
+    void on_threeHund_clicked();
+
+    void on_sixHund_clicked();
+
+    void on_tenThnd_clicked();
+
+    void on_up_clicked();
+
+    void on_bottom_clicked();
+
 private:
     Ui::CameraScene *ui;
     std::thread cameraThread;
@@ -50,6 +62,11 @@ private:
     quint16 senderPort;
     QImage lastImage;
     std::atomic<bool> finish;
+    int mWidth;
+    int mHeight;
+    int mResolution;
+    int mBottomOrUp;
+
 };
 
 #endif // CAMERASCENE_H

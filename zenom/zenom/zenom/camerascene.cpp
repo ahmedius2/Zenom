@@ -9,20 +9,31 @@
 #include <cstring>
 #include <iostream>
 #include <boost/asio.hpp>
+#include<boost/asio/error.hpp>
 #include <boost/array.hpp>
+#include <zenom.h>
 
 CameraScene::CameraScene(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CameraScene),
-    finish(false)
+    finish(false),
+    mWidth(240),
+    mHeight(240),
+    mResolution(0),
+    mBottomOrUp(1)
 {
     ui->setupUi(this);
 
     ui->ipAddress->hide();
+//    ui->sixHund->hide();
+//    ui->threeHund->hide();
+//    ui->tenThnd->hide();
 
-    lastImage = QImage(640,480,  QImage::Format_RGB888);// dump image
+
+    lastImage = QImage(300,300,  QImage::Format_RGB888);// dump image
     lastImage.fill(Qt::GlobalColor::blue);
     tick();
+
 }
 
 CameraScene::~CameraScene()
@@ -37,24 +48,47 @@ CameraScene::~CameraScene()
 void CameraScene::tick()
 {
     std::lock_guard<std::mutex> lock(imgMutex);
-    ui->label_camera->setPixmap(QPixmap::fromImage(lastImage));
+    
+    ui->label_camera->setPixmap(QPixmap::fromImage(
+                                lastImage.scaled(mWidth,mHeight,Qt::IgnoreAspectRatio)));
+
+
+    ui->label_camera->setFixedWidth(mWidth);
+    ui->label_camera->setFixedHeight(mHeight);
 }
 
 
 void CameraScene::processFrameAndUpdateGUI()
 {
 
+
     boost::array<unsigned char,1920*1080*3>buffer;
 
     boost::asio::io_service ios;
+    boost::asio::ip::tcp::socket *socket = nullptr;
 
-    boost::asio::ip::tcp::endpoint endpoint(
-                boost::asio::ip::address::from_string(
-                    ipAdd.toStdString()),13333);
+    try{
+        boost::asio::ip::tcp::endpoint endpoint(
+                    boost::asio::ip::address::from_string(
+                        ipAdd.toStdString()),13333);
 
-    boost::asio::ip::tcp::socket socket(ios);
+        socket = new boost::asio::ip::tcp::socket(ios);
+        socket->connect(endpoint);
+    }
+   catch(boost::system::system_error e){
 
-    socket.connect(endpoint);
+        ui->ipAddress->clear();
+        ui->ipAddress->setPlaceholderText("Wrong ip address , Please try again");
+        ui->ipAddress->show();
+//        std::cout<<"there is an error"<<std::endl;
+//        std::cout<<e.what()<<std::endl;
+        finish=true;
+        ui->start->setText("Start");
+
+   }
+
+    boost::array<int,2>buff;
+
 
      while(!finish){
 
@@ -62,10 +96,12 @@ void CameraScene::processFrameAndUpdateGUI()
         auto start = std::chrono::steady_clock::now();
 
         buffer[0] = 'h';
+        buff[0]=mResolution;
+        buff[1]=mBottomOrUp;
 
-        boost::asio::write(socket, boost::asio::buffer(buffer,1));
+        boost::asio::write(*socket, boost::asio::buffer(buff,sizeof(int)*2));
 
-         boost::asio::read(socket,boost::asio::buffer(buffer, 12));
+        boost::asio::read(*socket,boost::asio::buffer(buffer, 12));
 
         //qDebug()<<"buffer "<<buffer;
 
@@ -86,10 +122,13 @@ void CameraScene::processFrameAndUpdateGUI()
         layer |= ((uint)((uchar)buffer[10]))<<8;
         layer |= (uint)((uchar)buffer[11]);
 
+        //ui->label_camera->setFixedHeight(height);
+        //ui->label_camera->setFixedWidth(width);
+
         qDebug()<<"width , height, layer : "<<width<<" "<<height<<" "<<layer;
 
         int numberOfBytes=width*height*layer;
-         boost::asio::read(socket,boost::asio::buffer(buffer,numberOfBytes));
+         boost::asio::read(*socket,boost::asio::buffer(buffer,numberOfBytes));
         auto end = std::chrono::steady_clock::now();
         auto taken = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << taken << " milliseconds"<<std::endl;
@@ -104,14 +143,8 @@ void CameraScene::processFrameAndUpdateGUI()
 
     }
 
-
-
-
-    //EndOfBoost
-
-
-
-
+     if(socket != nullptr)
+         delete socket;
 }
 
 void CameraScene::on_start_clicked()
@@ -121,19 +154,26 @@ void CameraScene::on_start_clicked()
     {
         if(ui->start->text()=="Start")
         {
+            if(cameraThread.joinable()){
+                //ui->start->setEnabled(false);
+                cameraThread.join();
+                //ui->start->setEnabled(true);
+            }
             finish=false;
             ui->start->setText("Stop");
             ipAdd=ui->ipAddress->text();
             cameraThread = std::thread(&CameraScene::processFrameAndUpdateGUI,this);
+
         }
 
        else if(ui->start->text()=="Stop")
         {
             ui->start->setText("Start");
             finish=true;
+            ui->start->setEnabled(false);
             if(cameraThread.joinable())
                 cameraThread.join();
-
+            ui->start->setEnabled(true);
         }
 
     }
@@ -144,9 +184,15 @@ void CameraScene::on_start_clicked()
 
 void CameraScene::on_server_clicked()
 {
-    ui->ipAddress->placeholderText();
-    ui->ipAddress->setPlaceholderText("Enter IP Address ...");
-    ui->ipAddress->show();
+    if(ui->server->isChecked()){
+        ui->ipAddress->placeholderText();
+        ui->ipAddress->setPlaceholderText("Enter IP Address ...");
+        ui->ipAddress->show();
+    }
+
+    else{
+        ui->ipAddress->hide();
+    }
 
 
 
@@ -167,3 +213,41 @@ void CameraScene::closeEvent(QCloseEvent *event){
         cameraThread.join();
 }
 
+
+void CameraScene::on_tenHund_clicked()
+{
+    mWidth=160;
+    mHeight=120;
+    mResolution=0;
+}
+
+void CameraScene::on_threeHund_clicked()
+{
+    mWidth=320;
+    mHeight=240;
+    mResolution=1;
+}
+
+void CameraScene::on_sixHund_clicked()
+{
+    mWidth=640;
+    mHeight=480;
+    mResolution=2;
+}
+
+void CameraScene::on_tenThnd_clicked()
+{
+    mWidth=1280;
+    mHeight=960;
+    mResolution=3;
+}
+
+void CameraScene::on_up_clicked()
+{
+    mBottomOrUp=0;
+}
+
+void CameraScene::on_bottom_clicked()
+{
+    mBottomOrUp=1;
+}
