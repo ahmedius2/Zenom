@@ -175,12 +175,12 @@ void DataRepository::createMessageQueues()
 {
     mSender =
          new MsgQueue(mProjectName + "GuiToControl",
-                      25,
+                      10,
                       sizeof( StateRequest ),
                       znm_tools::WRITE_ONLY);
     mReceiver =
          new MsgQueue(mProjectName + "ControlToGui",
-                      25,
+                      10,
                       sizeof( StateRequest),
                       znm_tools::READ_ONLY);
 }
