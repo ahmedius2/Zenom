@@ -102,8 +102,10 @@ void ControlVariablesWidget::itemChanged(QTableWidgetItem* pItem)
 		int row = pItem->row();
 		int column = pItem->column();
 		
-		ControlVariable* controlVariable = DataRepository::instance()->controlVariables()[index];
-		QTableWidget* tableWidget = (QTableWidget*)ui->controlVariableTable->cellWidget(index, 1);
+        ControlVariable* controlVariable =
+                DataRepository::instance()->controlVariables()[index];
+        QTableWidget* tableWidget =
+                (QTableWidget*)ui->controlVariableTable->cellWidget(index, 1);
 		tableWidget->item( row, column )->setText( QString::number(controlVariable->heapElement(row, column)) );
     }
 }

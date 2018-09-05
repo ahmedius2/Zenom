@@ -178,11 +178,6 @@ void Zenom::doloop()
     mPlotManager->tick();
     mSceneManager->tick();
     mCameraManager->tick();
-
-
-
-
-
 }
 
 State Zenom::simulationState()
@@ -445,11 +440,6 @@ void Zenom::terminateProject()
 
     if ( mControlBaseProcess.state() != QProcess::NotRunning )
     {
-        std::cout<<"void Zenom::terminateProject() if ( mControlBaseProcess.state() != QProcess::NotRunning ) "<<std::endl;
-
-
-
-
         mDataRepository->sendStateRequest( R_TERMINATE );
 
         if ( !mControlBaseProcess.waitForFinished(5000) )    // Finish the process
@@ -585,23 +575,28 @@ void Zenom::on_actionExport_as_Matlab_triggered()
 
 void Zenom::on_actionCamera_triggered()
 {
-
     mCameraManager->show();
 }
 
 //Keystroke
 
 void Zenom::keyPressEvent(QKeyEvent *event){
+    if(!event->isAutoRepeat()){
+        std::cout << "Pressed key:" << event->text()[0].toAscii() << std::endl;
 
-   for(unsigned int i=0; i<cntrVariables.size(); i++)
-   {
-       if(!cntrVariables[i]->name().compare(0,4,"key_") && event->text()[0]==cntrVariables[i]->name()[4]){
-           cntrVariables[i]->setHeapElement(0,1);
-       }
-   }
-
-
-
+        for(unsigned int i=0; i<cntrVariables.size(); i++)
+        {
+           if(!cntrVariables[i]->name().compare(0,4,"key_") &&
+              event->text()[0] == cntrVariables[i]->name()[4])
+           {
+               cntrVariables[i]->setHeapElement(0,1);
+           }
+        }
+        QWidget::keyPressEvent(event);
+    }
+    else{
+        event->ignore();
+    }
 
 
 
@@ -609,13 +604,20 @@ void Zenom::keyPressEvent(QKeyEvent *event){
 
 
 void Zenom::keyReleaseEvent(QKeyEvent *event){
-   if( !event->isAutoRepeat()){
-       for(unsigned int i=0; i<cntrVariables.size(); i++)
-       {
+    if(!event->isAutoRepeat()){
+
+        std::cout << "Released key:" << event->text()[0].toAscii() << std::endl;
+
+        for(unsigned int i=0; i<cntrVariables.size(); i++)
+        {
            if(event->text()[0]==cntrVariables[i]->name()[4])
                cntrVariables[i]->setHeapElement(0,0);
-       }
-   }
+        }
+        QWidget::keyReleaseEvent(event);
+    }
+    else{
+        event->ignore();
+    }
 }
 
 

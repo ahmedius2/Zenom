@@ -169,9 +169,6 @@ private slots:
 private:
     Ui::Zenom *ui;
 
-
-
-
     //camera
     CameraScene *mCameraManager;
     /**

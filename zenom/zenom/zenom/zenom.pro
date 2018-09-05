@@ -10,7 +10,7 @@
 
 include( ../../zenom.pri )
 
-QT       += core gui
+QT       += core gui opengl
 QT      += network
 
 CONFIG += qwt

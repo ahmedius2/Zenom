@@ -132,9 +132,6 @@ void ControlBase::initializeControlBase()
         // false (if an error occurred or the operation timed out).
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-    logFile<<"void ControlBase::initializeControlBase() dumpState : "<<dumpState<<std::endl;
-
-
     // Send message to GUI to read variables
      mDataRepository->bindMainControlHeap();
 

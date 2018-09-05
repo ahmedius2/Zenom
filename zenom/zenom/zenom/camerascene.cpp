@@ -80,8 +80,6 @@ void CameraScene::processFrameAndUpdateGUI()
         ui->ipAddress->clear();
         ui->ipAddress->setPlaceholderText("Wrong ip address , Please try again");
         ui->ipAddress->show();
-//        std::cout<<"there is an error"<<std::endl;
-//        std::cout<<e.what()<<std::endl;
         finish=true;
         ui->start->setText("Start");
 
@@ -91,10 +89,6 @@ void CameraScene::processFrameAndUpdateGUI()
 
 
      while(!finish){
-
-        //boost
-        auto start = std::chrono::steady_clock::now();
-
         buffer[0] = 'h';
         buff[0]=mResolution;
         buff[1]=mBottomOrUp;
@@ -103,7 +97,6 @@ void CameraScene::processFrameAndUpdateGUI()
 
         boost::asio::read(*socket,boost::asio::buffer(buffer, 12));
 
-        //qDebug()<<"buffer "<<buffer;
 
 
         unsigned width=0, height=0,layer=0;
@@ -122,18 +115,9 @@ void CameraScene::processFrameAndUpdateGUI()
         layer |= ((uint)((uchar)buffer[10]))<<8;
         layer |= (uint)((uchar)buffer[11]);
 
-        //ui->label_camera->setFixedHeight(height);
-        //ui->label_camera->setFixedWidth(width);
-
-        qDebug()<<"width , height, layer : "<<width<<" "<<height<<" "<<layer;
 
         int numberOfBytes=width*height*layer;
          boost::asio::read(*socket,boost::asio::buffer(buffer,numberOfBytes));
-        auto end = std::chrono::steady_clock::now();
-        auto taken = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        std::cout << taken << " milliseconds"<<std::endl;
-
-
 
         {
             std::lock_guard<std::mutex> lock(imgMutex);
@@ -155,9 +139,7 @@ void CameraScene::on_start_clicked()
         if(ui->start->text()=="Start")
         {
             if(cameraThread.joinable()){
-                //ui->start->setEnabled(false);
                 cameraThread.join();
-                //ui->start->setEnabled(true);
             }
             finish=false;
             ui->start->setText("Stop");
