@@ -5,4 +5,5 @@ SUBDIRS += \
     BouncingBall \
     HelloWorld \
     Sine \
-    SineFilter
+    SineFilter \
+    ZeroMQ
