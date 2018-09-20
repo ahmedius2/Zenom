@@ -17,3 +17,11 @@ ui_*
 qrc_*
 zenom/bin
 Makefile
+*.ko*
+*.cmd
+*.txt
+.cache.mk
+*.order
+*.symvers
+*.mod.c
+.tmp_versions
