@@ -293,8 +293,6 @@ private:
     AboutDialog* mAboutDialog;
 
     //Keystroke
-
-
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 

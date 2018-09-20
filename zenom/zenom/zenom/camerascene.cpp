@@ -190,6 +190,7 @@ void CameraScene::on_local_clicked()
 
 
 void CameraScene::closeEvent(QCloseEvent *event){
+    event->accept();
     finish=true;
     if(cameraThread.joinable())
         cameraThread.join();

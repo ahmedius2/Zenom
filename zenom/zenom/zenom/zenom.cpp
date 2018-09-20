@@ -50,6 +50,8 @@ Zenom::Zenom(int argc, char *argv[]) :
     connect( &mControlBaseProcess, SIGNAL( readyReadStandardError() ),
              SLOT( controlBaseReadyReadStandardError() ));
 
+    //QWidget::grabKeyboard();
+
     setSimulationState( TERMINATED );
 
     connect(&mTimer, SIGNAL(timeout()), SLOT(doloop()));
@@ -117,6 +119,8 @@ void Zenom::on_startButton_clicked()
         ui->output->appendMessage( QString("Simulation resumed.") );
     }
 
+    QWidget::grabKeyboard();
+
 }
 
 void Zenom::on_stopButton_clicked()
@@ -125,6 +129,8 @@ void Zenom::on_stopButton_clicked()
     mDataRepository->sendStateRequest( R_STOP );
 
     ui->output->appendMessage( QString("Simulation stopped.") );
+
+    QWidget::releaseKeyboard();
 }
 
 void Zenom::on_actionWatch_triggered()
@@ -579,45 +585,45 @@ void Zenom::on_actionCamera_triggered()
 }
 
 //Keystroke
-
 void Zenom::keyPressEvent(QKeyEvent *event){
-    if(!event->isAutoRepeat()){
-        std::cout << "Pressed key:" << event->text()[0].toAscii() << std::endl;
 
+    //std::cout << "Pressed key:" << event->text()[0].toAscii() << std::endl;
+
+    if(!event->isAutoRepeat()){
+        std::cout << "iAR Pressed key:" << event->text()[0].toAscii() << std::endl;
         for(unsigned int i=0; i<cntrVariables.size(); i++)
         {
-           if(!cntrVariables[i]->name().compare(0,4,"key_") &&
-              event->text()[0] == cntrVariables[i]->name()[4])
-           {
-               cntrVariables[i]->setHeapElement(0,1);
-           }
+            if(!cntrVariables[i]->name().compare(0,4,"key_") &&
+                    event->text()[0] == cntrVariables[i]->name()[4])
+            {
+                cntrVariables[i]->setHeapElement(0,1);
+                return;
+            }
         }
-        QWidget::keyPressEvent(event);
-    }
-    else{
-        event->ignore();
     }
 
-
-
+    //QMainWindow::keyPressEvent(event);
 }
 
 
 void Zenom::keyReleaseEvent(QKeyEvent *event){
-    if(!event->isAutoRepeat()){
 
-        std::cout << "Released key:" << event->text()[0].toAscii() << std::endl;
+    //std::cout << "Released key:" << event->text()[0].toAscii() << std::endl;
+
+    if(!event->isAutoRepeat()){
+        std::cout << "iAR Released key:" << event->text()[0].toAscii() << std::endl;
 
         for(unsigned int i=0; i<cntrVariables.size(); i++)
         {
-           if(event->text()[0]==cntrVariables[i]->name()[4])
-               cntrVariables[i]->setHeapElement(0,0);
+            if(event->text()[0]==cntrVariables[i]->name()[4]){
+                cntrVariables[i]->setHeapElement(0,0);
+                event->accept();
+                return;
+            }
         }
-        QWidget::keyReleaseEvent(event);
     }
-    else{
-        event->ignore();
-    }
+
+    //QMainWindow::keyReleaseEvent(event);
 }
 
 
