@@ -1,9 +1,0 @@
-LogFile is started
-initializeControlBase()
-void ControlBase::initializeControlBase() dumpState : 0
-End Of void ControlBase::initializeControlBase()
-unbinded from message queues
-unbinded from heap
-Life cycle task is finishing
-LifeCycleTask is deleted
-Controlbase object is dying
