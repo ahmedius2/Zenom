@@ -25,6 +25,7 @@
 #include "messagelistenertask.h"
 
 #include "camerascene.h"
+#include "robotmodedialog.h"
 
 #include <fstream>
 
@@ -166,11 +167,15 @@ private slots:
 
     void on_actionCamera_triggered();
 
+    void on_naoControlPanel_triggered();
+
 private:
     Ui::Zenom *ui;
 
     //camera
     CameraScene *mCameraManager;
+    // Nao Dialog
+    RobotModeDialog *mRobotModeDialog;
     /**
      * Arayuzde yer alan status bar aracıdır.
      */
@@ -292,13 +297,10 @@ private:
      */
     AboutDialog* mAboutDialog;
 
-    //Keystroke
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-
     //control variables
-     std::vector<ControlVariable*> cntrVariables;
+    std::vector<ControlVariable*> cntrVariables;
 
+protected:
 
 };
 

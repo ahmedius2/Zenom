@@ -77,9 +77,6 @@ class ControlBase
 
 	int overruns() { return mLoopTask->overruns(); }
 
-    //file
-    std::ofstream logFile;
-
 	private:
 
 	//========================================================================//

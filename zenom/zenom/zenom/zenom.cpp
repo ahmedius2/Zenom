@@ -39,6 +39,7 @@ Zenom::Zenom(int argc, char *argv[]) :
     mPlotManager = new PlotManager(this);
     mSceneManager = new SceneManager(this);
     mCameraManager = new CameraScene(this);
+    mRobotModeDialog = new RobotModeDialog(this);
 
     connect( mSceneManager, SIGNAL(warningMessage(const QString&)), ui->output,
              SLOT(appendWarningMessage(const QString&)) );
@@ -51,6 +52,7 @@ Zenom::Zenom(int argc, char *argv[]) :
              SLOT( controlBaseReadyReadStandardError() ));
 
     //QWidget::grabKeyboard();
+    QMainWindow::setFocusPolicy(Qt::StrongFocus);
 
     setSimulationState( TERMINATED );
 
@@ -80,6 +82,7 @@ Zenom::~Zenom()
     terminateProject();
     delete mAboutDialog;
     delete mCameraManager;
+    delete mRobotModeDialog;
     delete mSceneManager;
     delete mPlotManager;
     delete mGaugeManager;
@@ -92,7 +95,7 @@ Zenom::~Zenom()
 
 void Zenom::on_startButton_clicked()
 {
-     cntrVariables =mDataRepository->controlVariables();
+    cntrVariables =mDataRepository->controlVariables();
     if( simulationState() == STOPPED )	// Start
     {
         setSimulationState( RUNNING );
@@ -119,8 +122,6 @@ void Zenom::on_startButton_clicked()
         ui->output->appendMessage( QString("Simulation resumed.") );
     }
 
-    QWidget::grabKeyboard();
-
 }
 
 void Zenom::on_stopButton_clicked()
@@ -129,8 +130,6 @@ void Zenom::on_stopButton_clicked()
     mDataRepository->sendStateRequest( R_STOP );
 
     ui->output->appendMessage( QString("Simulation stopped.") );
-
-    QWidget::releaseKeyboard();
 }
 
 void Zenom::on_actionWatch_triggered()
@@ -248,8 +247,8 @@ void Zenom::openProject(const QString& pProjectPath)
         {
             ui->output->appendErrorMessage(
                         QString(
-                           "Error: Failed opening project: '%1' does not exist."
-                        ).arg(pProjectPath) );
+                            "Error: Failed opening project: '%1' does not exist."
+                            ).arg(pProjectPath) );
             return;
         }
 
@@ -274,16 +273,16 @@ void Zenom::openProject(const QString& pProjectPath)
             if ( !mMessageListenerTask->waitForInitMessage() )
             {
                 ui->output->appendErrorMessage(
-                 QString("Error1: Failed connecting program: The program "
-                         "does not implemented specified format.") );
+                            QString("Error1: Failed connecting program: The program "
+                                    "does not implemented specified format.") );
                 return;
             }
 
             if( !mDataRepository->readVariablesFromFile() )
             {
                 ui->output->appendErrorMessage(
-                  QString("Error2: Failed connecting program: The program"
-                          " does not implemented specified format.") );
+                            QString("Error2: Failed connecting program: The program"
+                                    " does not implemented specified format.") );
                 return;
             }
 
@@ -300,8 +299,8 @@ void Zenom::openProject(const QString& pProjectPath)
             if ( !mMessageListenerTask->waitForInitMessage() )
             {
                 ui->output->appendErrorMessage(
-                   QString("Error3: Failed connecting program: The program "
-                           "does not implemented specified format.") );
+                            QString("Error3: Failed connecting program: The program "
+                                    "does not implemented specified format.") );
                 return;
             }
 
@@ -555,11 +554,11 @@ void Zenom::on_action_About_zenom_triggered()
 void Zenom::on_actionExport_as_Matlab_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName( this,
-                                             tr("Export File Name"),
-                                             QString(),
-                                             "Matlab (*.m)",
-                                             NULL,
-                                             QFileDialog::DontUseNativeDialog);
+                                                     tr("Export File Name"),
+                                                     QString(),
+                                                     "Matlab (*.m)",
+                                                     NULL,
+                                                     QFileDialog::DontUseNativeDialog);
 
     if ( !fileName.isEmpty() )
     {
@@ -584,50 +583,7 @@ void Zenom::on_actionCamera_triggered()
     mCameraManager->show();
 }
 
-//Keystroke
-void Zenom::keyPressEvent(QKeyEvent *event){
-
-    //std::cout << "Pressed key:" << event->text()[0].toAscii() << std::endl;
-
-    if(!event->isAutoRepeat()){
-        std::cout << "iAR Pressed key:" << event->text()[0].toAscii() << std::endl;
-        for(unsigned int i=0; i<cntrVariables.size(); i++)
-        {
-            if(!cntrVariables[i]->name().compare(0,4,"key_") &&
-                    event->text()[0] == cntrVariables[i]->name()[4])
-            {
-                cntrVariables[i]->setHeapElement(0,1);
-                return;
-            }
-        }
-    }
-
-    //QMainWindow::keyPressEvent(event);
+void Zenom::on_naoControlPanel_triggered()
+{
+    mRobotModeDialog->show();
 }
-
-
-void Zenom::keyReleaseEvent(QKeyEvent *event){
-
-    //std::cout << "Released key:" << event->text()[0].toAscii() << std::endl;
-
-    if(!event->isAutoRepeat()){
-        std::cout << "iAR Released key:" << event->text()[0].toAscii() << std::endl;
-
-        for(unsigned int i=0; i<cntrVariables.size(); i++)
-        {
-            if(event->text()[0]==cntrVariables[i]->name()[4]){
-                cntrVariables[i]->setHeapElement(0,0);
-                event->accept();
-                return;
-            }
-        }
-    }
-
-    //QMainWindow::keyReleaseEvent(event);
-}
-
-
-
-
-
-

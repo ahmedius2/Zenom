@@ -69,7 +69,8 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     utility/matlabstream.cpp \
     widget/linesizecombobox.cpp \
-    camerascene.cpp
+    camerascene.cpp \
+    robotmodedialog.cpp
 
 HEADERS  += zenom.h \
     messagelistenertask.h \
@@ -117,7 +118,8 @@ HEADERS  += zenom.h \
     aboutdialog.h \
     utility/matlabstream.h \
     widget/linesizecombobox.h \
-    camerascene.h
+    camerascene.h \
+    robotmodedialog.h
 
 FORMS    += zenom.ui \
     controlvariableswidget.ui \
@@ -136,7 +138,8 @@ FORMS    += zenom.ui \
     plot/attachlogvariabledialog.ui \
     plot/legenditem.ui \
     aboutdialog.ui \
-    camerascene.ui
+    camerascene.ui \
+    robotmodedialog.ui
 
 RESOURCES += \
     zenom.qrc

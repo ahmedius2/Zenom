@@ -75,13 +75,6 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="QLineEdit" name="ipAddress">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(0, 0, 0);</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="1">
     <widget class="QPushButton" name="up">
      <property name="text">
@@ -127,6 +120,9 @@
       <string>Bottom</string>
      </property>
     </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLineEdit" name="ipAddress"/>
    </item>
   </layout>
  </widget>
