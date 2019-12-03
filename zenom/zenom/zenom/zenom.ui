@@ -125,7 +125,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -168,8 +168,15 @@
     <addaction name="separator"/>
     <addaction name="action_About_zenom"/>
    </widget>
+   <widget class="QMenu" name="menuTarget">
+    <property name="title">
+     <string>Target</string>
+    </property>
+    <addaction name="actionData_Aqusition_Board"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
+   <addaction name="menuTarget"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -248,6 +255,11 @@
   <action name="naoControlPanel">
    <property name="text">
     <string>Nao Control Panel</string>
+   </property>
+  </action>
+  <action name="actionData_Aqusition_Board">
+   <property name="text">
+    <string>Data Aqusition Board</string>
    </property>
   </action>
  </widget>

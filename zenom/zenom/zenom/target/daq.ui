@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>daq</class>
+ <widget class="QDialog" name="daq">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>645</width>
+    <height>366</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_6">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Status</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_7">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Communication Error:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="lblCommErr">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>USB Tx Error Counter:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="lblUSBErr">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>General Error:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="lblGenericErr">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="1">
+         <widget class="QComboBox" name="cbPorts"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Available Ports:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="btnConnect">
+          <property name="text">
+           <string>Connect</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Com Port Status:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="lblCommStatus">
+          <property name="text">
+           <string>NC</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Configuration</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Encoder Resoulution:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spEnc">
+        <property name="maximum">
+         <number>16384</number>
+        </property>
+        <property name="value">
+         <number>4096</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>PWM Frequency:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spPWM">
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>System Sampling Rate:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="lblSamplingRate">
+        <property name="text">
+         <string>NC</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Inputs</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QTableWidget" name="tblIn">
+         <column>
+          <property name="text">
+           <string>Input</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Control Variable</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Outputs</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QTableWidget" name="tblOut">
+         <column>
+          <property name="text">
+           <string>Output</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Log Variable</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

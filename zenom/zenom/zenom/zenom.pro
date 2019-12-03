@@ -21,6 +21,7 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
 CONFIG += c++11
+CONFIG += serialport
 
 SOURCES += main.cpp\
         zenom.cpp \
@@ -70,7 +71,9 @@ SOURCES += main.cpp\
     utility/matlabstream.cpp \
     widget/linesizecombobox.cpp \
     camerascene.cpp \
-    robotmodedialog.cpp
+    robotmodedialog.cpp \
+    target/daq.cpp \
+    target/comboboxitemdelegate.cpp
 
 HEADERS  += zenom.h \
     messagelistenertask.h \
@@ -119,7 +122,9 @@ HEADERS  += zenom.h \
     utility/matlabstream.h \
     widget/linesizecombobox.h \
     camerascene.h \
-    robotmodedialog.h
+    robotmodedialog.h \
+    target/daq.h \
+    target/comboboxitemdelegate.h
 
 FORMS    += zenom.ui \
     controlvariableswidget.ui \
@@ -139,7 +144,8 @@ FORMS    += zenom.ui \
     plot/legenditem.ui \
     aboutdialog.ui \
     camerascene.ui \
-    robotmodedialog.ui
+    robotmodedialog.ui \
+    target/daq.ui
 
 RESOURCES += \
     zenom.qrc
@@ -162,7 +168,7 @@ LIBS += -L../../lib -lznm-tools
 # OpenSceneGraph
 INCLUDEPATH +=  $${OSG_HEADERS}
 DEPENDPATH += $${OSG_HEADERS}
-LIBS += -L$${OSG_LIBS} -losg -losgViewer -losgDB -losgGA -losgQt -losgSim -lOpenThreads
+LIBS += -L$${OSG_LIBS} -losg -losgViewer -losgUtil -losgText -losgWidget -losgDB -losgGA -losgQt -losgSim -lOpenThreads
 
 # build directory
 DESTDIR = ../../bin

@@ -26,6 +26,7 @@
 
 #include "camerascene.h"
 #include "robotmodedialog.h"
+#include "target/daq.h"
 
 #include <fstream>
 
@@ -169,6 +170,8 @@ private slots:
 
     void on_naoControlPanel_triggered();
 
+    void on_actionData_Aqusition_Board_triggered();
+
 private:
     Ui::Zenom *ui;
 
@@ -176,6 +179,7 @@ private:
     CameraScene *mCameraManager;
     // Nao Dialog
     RobotModeDialog *mRobotModeDialog;
+    daq *mDaq;
     /**
      * Arayuzde yer alan status bar aracıdır.
      */
