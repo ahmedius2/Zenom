@@ -7,3 +7,8 @@ Real-time HIL software.
 * HapticWand and Q8Driver include kernel and user space drivers for some devices.
 * Written in C++.
 * The first version ( with Xenomai ) authors are Cuneyt Ay and Husnu Karakucuk.
+
+## Target
+
+Zenom can communicate with external hardware via serial port. Currently a data
+aqusition board that also developed in GTU can be used with Zenom. 
